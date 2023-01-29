@@ -1,0 +1,1474 @@
+```{python}
+#| echo: false
+import warnings; warnings.filterwarnings('ignore')
+```
+
+# Programming concepts for data analysis {#sec-chap-programmingconcepts}
+
+**Abstract.**
+  This chapter introduces readers to the basics of programming, data types, control structures, and functions
+  in Python and R. It
+explains how to deal with objects, statements, expressions, variables
+and different types of data, and shows how to create and understand
+simple control structures such as loops and conditions.
+
+**Keywords.** basics of programming
+
+**Objectives:**
+
+-  Understand objects and data types
+ -  Write control structures
+ -  Use functions and methods
+
+::: {.callout-note icon=false collapse=true}
+## Packages used in this chapter
+
+This chapter focuses on the built-in capabilities of Python and R,
+  so it does not rely on many packages.
+  For R, only *glue* is used (which allows nice text formatting).
+  For Python, we only use the packages *numpy* and *pandas*
+  for data frame support.
+  If needed, you can install these packages with the code below
+  (see Section [-@sec-installing] for more details).
+
+::: {.panel-tabset}
+## Python code
+```{python chapter03install-python}
+#| eval: false
+!pip3 install numpy pandas
+```
+## R code
+```{r chapter03install-r}
+#| eval: false
+install.packages("glue")
+```
+:::
+ After installing, you need to import (activate) the packages every session:
+
+::: {.panel-tabset}
+## Python code
+```{python chapter03libraries-python}
+import numpy as np
+import pandas as pd
+
+```
+## R code
+```{r chapter03libraries-r}
+library(glue)
+```
+:::
+:::
+
+## About Objects and Data Types {#sec-datatypes}
+
+Now that you have seen what R and Python can do in Chapter [-@sec-chap-fundata],
+it is time to take a small step back and learn more about how it all actually works under the hood.
+
+In both languages, you write a
+*script* or *program* containing the commands for the
+computer.  But before we get to
+some real programming and exciting data analyses, we need to understand
+how data can be represented and stored.
+
+No matter whether you use R or Python, both store your data in memory as *objects*.
+Each of these objects has a name, and you create them by
+assigning a value to a name. For example, the command `x=10`
+creates a new object[^1], named `x`, and stores the value 10
+in it.  This object is now stored in memory and can be used in later
+commands. Objects can be simple values such as the number 10, but they can also
+be pieces of text, whole data frames (tables), or analysis results.
+We call this distinction the *type* or *class* of an
+object.
+
+::: {.callout-note icon=false collapse=true}
+## Objects, pointers, and variables.
+ In programming, a distinction is
+  often made between an object (such as the number 10) and the
+  variable in which it is stored (such as `x`). The latter is also called a "pointer".
+  However, this distinction is not very relevant for most of our
+  purposes. Moreover, in statistics, the word variable often refers to a
+  column of data, rather than to the name of, for instance, the object
+  containing the whole data frame (or table).  For that
+  reason, we will use the word *object* to refer to both the
+  actual object or value and its name. (If you want some extra food
+  for thought and want to challenge your brain
+  a bit, try to see the relationship between the idea of a pointer and
+  the discussion about mutable and immutable objects below.)
+:::
+
+Let us create an object that we call `a` (an arbitrary name, you can use
+whatever you want), assign the value 100 to it, and use the class
+function (R) or type function (Python) to check what kind of
+object we created (Example [-@exm-var1]).
+As you can see, R reports the type of the number as "numeric", while Python reports it
+as "int", short for integer or whole number.  Although they use
+different names, both languages offer very similar data types.
+Table [-@tbl-types] provides an overview of some common basic data types.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-var1}
+Determining the type of an object
+
+::: {.panel-tabset}
+## Python code
+```{python var1-python}
+a = 100
+print(type(a))
+
+```
+## R code
+```{r var1-r}
+a = 100
+print(class(a))
+```
+:::
+:::
+:::
+
+|Python| | R| | Description|
+|-|-|-|-|-|
+|
+|Name | Example | Name | Example|
+|int | `1` | integer | `1L` | whole numbers|
+|float | `1.3` | numeric | `1.3` | numbers with decimals|
+|str | `"Spam", 'ham'` | character | `"Spam", 'ham'` | textual data|
+|bool | `True, False` | logical | `TRUE, FALSE` | the truth values|
+: Most used basic data types in Python and R {#tbl-types}
+
+Let us have a closer look at the code in Example [-@exm-var1] above.
+The first line is a command to create the object *a* and store
+its value 100; and the second is illustrative and will give you the
+class of the created object, in this case "numeric". Notice that we
+are using two native functions of R, `print` and `class`, and
+including `a` as an argument of `class`, and the very same
+`class(a)` as an argument of `print`. The only difference
+between R and Python, here, is that the relevant Python function is
+called `type` instead of `class`.
+
+Once created, you can now perform multiple operations
+with `a` and other values or new variables as shown in Example [-@exm-var2]. For example, you
+could transform `a` by multiplying `a` by 2, create a new
+variable `b` of value 50 and then create another new object
+`c` with the result of `a + b`.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-var2}
+Some simple operations
+
+::: {.panel-tabset}
+## Python code
+```{python var2-python}
+a = 100
+a = a * 2  # equivalent to (shorter) a*=2
+b = 50
+c = a + b
+print(a, b, c)
+
+```
+## R code
+```{r var2-r}
+a = 100
+a = a*2
+b = 50
+c = a + b
+print(a)
+print(b)
+print(c)
+```
+:::
+:::
+:::
+
+### Storing Single Values: Integers, Floating-Point Numbers, Booleans
+
+When working with numbers, we distinguish between integers (whole
+numbers) and floating point numbers (numbers with a decimal point,
+called "numeric" in R). Both Python and R automatically determine the
+data type when creating an object, but differ in their default
+behavior when storing a number that can be represented as an int: R
+will store it as a float anyway and you need to force it to do
+otherwise, for Python it is the other way round
+(Example [-@exm-var3]). We can also convert between types later on,
+even though converting a float to an int might not be too good an idea,
+as you truncate your data.
+
+So why not just always use a float? First,
+floating point operations usually take more time than integer operations.
+Second, because floating point numbers are stored as a combination of
+a coefficient and an exponent (to the base of 2), many decimal fractions can only approximately be stored
+as a floating point number. Except for specific domains (such
+as finance), these inaccuracies are often not of much practical importance.
+But it explains why calculating `6*6/10` in Python returns 3.6, while
+`6*0.6` or `6*(6/10)` returns 3.5999999999999996. Therefore, if
+a value can logically only be a whole number (anything that is
+countable, in fact), it makes sense to restrict it to an integer.
+
+We also have a data type that is even more restricted and can take
+only two values: true or false. It is called "logical" (R) or "bool"
+(Python).  Just notice that boolean values are case sensitive:
+while in R you must capitalize the whole value (`TRUE`, `FALSE`), in
+Python we only capitalize the first letter: `True`, `False`.  As you can
+see in Example [-@exm-var3], such an object behaves exactly as an integer that
+is only allowed to be 0 or 1, and it can easily be converted to an
+integer.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-var3}
+Floating point numbers, integers, and boolean values.
+
+::: {.panel-tabset}
+## Python code
+```{python var3-python}
+d = 20
+print(type(d))
+# forcing python to treat 20 as a float
+d2 = 20.0
+print(type(d2))
+
+e = int(20.7)
+print(type(e))
+print(e)
+
+f = True
+print(type(f))
+print(int(f))
+print(int(False))
+
+```
+## R code
+```{r var3-r}
+d = 20
+print(class(d))
+# forcing R to treat 20 as an int
+d2 = 20L
+print(class(d2))
+
+e = as.integer(20.7)
+print(class(e))
+print(e)
+
+f = TRUE
+print(class(f))
+print(as.integer(f))
+print(as.integer(FALSE))
+```
+:::
+:::
+:::
+
+### Storing Text
+
+As a computational analyst of communication you will usually work with
+text objects or strings of characters. Commonly simply known as "strings",
+such text objects are also referred to as "character vector objects" in R.
+Every time you want to analyze a social-media message, or any other text, you will be dealing with such strings.
+
+::: {.callout-note appearance="simple" icon=false}
+::: {#exm-var4}
+Strings and bytes.
+
+::: {.panel-tabset}
+## Python code
+```{python var4-python}
+text1 = "This is a text"
+print(f"Type of text1: {type(text1)}")
+text2 = "Using 'single' and \"double\" quotes"
+text3 = 'Using "single" and "double" quotes'
+print(f"Are text2 and text3 equal?{text2==text3}")
+
+```
+## R code
+```{r var4-r}
+text1 = "This is a text"
+glue("Class of text1: {class(text1)}")
+text2 = "Using 'single' and \"double\" quotes"
+text3 = 'Using \'single\' and "double" quotes'
+glue("Are text2 and text3 equal? {text2==text3}")
+```
+:::
+
+::: {.panel-tabset}
+## Python code
+```{python var4b-python}
+somebytes = text1.encode("utf-8")
+print(type(somebytes))
+print(somebytes)
+
+```
+## R code
+```{r var4b-r}
+somebytes= charToRaw(text1)
+print(class(somebytes))
+print(somebytes)
+```
+:::
+:::
+:::
+
+As you see in Example [-@exm-var4], you can create a string by enclosing  text in quotation
+marks. You can use either double or single quotation marks, but you
+need to use the same mark to begin and end the string. This can be
+useful if you want to use quotation marks within a string, then you can
+use the other type to denote the beginning and end of the string.
+If you need to use a single quotation mark within a single-quoted string,
+you can *escape* the quotation mark by prepending it with a backslash (`\'`),
+and similarly for double-quoted strings.
+To include an actual backslash in a text, you also escape it with a backslash,
+so you end up with a double backslash (`\\`).
+
+The Python example also shows a concept introduced in Python 3.6:
+the f-string. These are strings that are prefixed with the letter `f` and are *formatted* strings.
+This means that these strings will automatically insert a value where curly brackets indicate that you wish to do so.
+This means that you can write: `print(f"The value of i is {i}")` in order to print "The value of i is 5" (given that `i` equals 5).
+In R, the *glue* package allows you to use an f-string-like syntax as well: `glue("The value of i is \{i\}")`.
+
+Although this will be explained in more detail in Section 5.2.2 [-@sec-unicode],
+it is good to introduce how computers store text in memory or files. 
+It is not too difficult to imagine how a computer internally
+handles *integers*: after all, even though the number may be displayed
+as a decimal number to us, it can be trivially converted and stored
+as a binary number (effectively, a series of zeros and ones)
+--- we do not have to care about that.
+But when we think about text, it is not
+immediately obvious how a string should be stored as a sequence of
+zeros and ones, especially given the huge variety of writing systems used for different languages.
+
+Indeed, there are several ways of how textual characters can be stored as bytes,
+which are called *encodings*. 
+The process of moving from bytes (numbers) to characters is called decoding,
+and the reverse process is called encoding. 
+Ideally, this is not something you should need to think of,
+and indeed strings (or character vectors) already represent decoded text.
+This means that often when you read from or write data to a file,
+you need to specify the encoding (usually UTF-8). 
+However, both Python and R also allow you to work with the raw data
+(e.g. before decoding) in the form of *bytes* (Python) or *raw* (R) data,
+which is sometimes necessary if there are encoding problems.
+This is shown briefly in the bottom part of *var4*.
+Note that while R shows the underlying hexadecimal byte values of the raw data (so 54 is `T`, 68 is `h` and so on) and Python 
+displays the bytes as text characters, in both cases the underlying data type is the same: raw (non-decoded) bytes.
+
+### Combining Multiple Values: Lists, Vectors, And Friends
+
+Until now, we have focused on the basic, initial data types or "vector
+objects", as they are called in R.  Often, however, we want to group
+a number of these objects. For example, we do not want to manually
+create thousands of objects called tweet0001, tweet0002, &hellip;,
+tweet9999 -- we'd rather have one list called tweets that contains all
+of them. You will encounter several names for such combined data
+structures: lists, vectors, arrays, series, and 
+more. 
+The core idea is always the same: we take multiple objects
+(be it numbers, strings, or anything else) and then create one object that combines all of them (Example [-@exm-1darray1]).
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-1darray1}
+Collections arrays (such as vectors in R or lists in Python) can contain multiple values
+
+::: {.panel-tabset}
+## Python code
+```{python 1darray1-python}
+scores = [8, 8, 7, 6, 9, 4, 9, 2, 8, 5]
+print(type(scores))
+countries = ["Netherlands", "Germany", "Spain"]
+print(type(countries))
+
+```
+## R code
+```{r 1darray1-r}
+scores = c(8, 8, 7, 6, 9, 4, 9, 2, 8, 5)
+print(class(scores))
+countries = c("Netherlands", "Germany", "Spain")
+print(class(countries))
+
+```
+:::
+:::
+:::
+
+As you see, we now have one name (such as `scores`) to refer to all of the scores.
+The Python object in Example [-@exm-1darray1] is called a *list*, the R object a *vector*.
+There are more  such combined data types, which have slightly different
+properties that can be important to know about: first, whether you can mix different
+types (say, integers and strings); second, what happens if you change the array.
+We will discuss both points below and show how this relates to different
+specific types of arrays in Python and R which you can choose from. But first,
+we will show how to work with them.
+
+**Operations on vectors and lists.**
+One of the most
+basic operations you can perform on all types of one-dimensional arrays
+is *indexing*. It lets you locate any given
+element or group of elements within a vector using its or their
+positions. The first item of a vector in R is called 1, the second 2, and so on;
+in Python, we begin counting with 0.  You can retrieve a specific element
+from a vector or list by simply putting the index between square brackets `[]` (Example [-@exm-1darray2]).
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-1darray2}
+Slicing vectors and converting data types
+
+::: {.panel-tabset}
+## Python code
+```{python 1darray2-python}
+scores = ["8", "8", "7", "6", "9", "4", "9", "2", "8", "5"]
+
+print(scores[4])
+print([scores[0], scores[9]])
+print(scores[0:4])
+
+# Convert the first 4 scores into numbers
+# Note the use of a list comprehension [.. for ..]
+# This will be explained in the section on loops
+scores_new = [int(e) for e in scores[1:4]]
+print(type(scores_new))
+print(scores_new)
+
+```
+## R code
+```{r 1darray2-r}
+scores=c("8","8","7","6","9","4","9","2","8","5")
+
+scores[5]
+scores[c(1, 10)]
+scores[1:4]
+
+# Convert the first 4 scores into numbers
+scores_new = as.numeric(scores[1:4])
+class(scores_new)
+scores_new
+```
+:::
+:::
+:::
+
+In the first case, we asked for the score of the 5th student ("9");
+in the second we asked for the 1st and 10th position ("8" "5"); and
+finally for all the elements between the 1st and 4th position ("8"
+"8" "7" "6"). We can directly indicate a range
+by using a `:`. After the colon, we provide the index of
+the last element (in R), while Python stops just *before* the index.[^2]
+If we want to pass multiple single index values instead of a range in R,
+we need to create a vector of these indices by using `c()` (Example [-@exm-1darray2]).
+Take a moment to compare the different ways of indexing between Python
+and R in Example [-@exm-1darray2]!
+
+Indexing is very useful to access elements and also to
+create new objects from a part of another one. The last line of our
+example shows how to create a new array with just the first four
+entries of `scores` and store them all as numbers. To do so, we
+use *slicing* to get the first four scores and then either change its class using the function
+as.numeric (in R) or convert the elements to integers one-by-one (Python)  (Example [-@exm-1darray2]).
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-1darray3}
+Some more operations on one-dimensional arrays
+
+::: {.panel-tabset}
+## Python code
+```{python 1darray3-python}
+# Appending a new value to a list:
+scores.append(7)
+
+# Create a new list instead of overwriting:
+scores4 = scores + [7]
+
+# Removing an entry:
+del scores[-10]
+
+# Creating a list containing various ranges
+list(range(1, 21))
+list(range(-5, 6))
+
+# A range of fractions: 0, 0.2, 0.4, ... 1.0
+# Because range only handles integers, we first
+#   make a range of 0, 2, etc, and divide by 10
+my_sequence = [e / 10 for e in range(0, 11, 2)]
+
+```
+## R code
+```{r 1darray3-r}
+# appending a new value to a vector
+scores = c(scores, 7)
+
+# Create a new list instead of overwriting:
+scores4 = c(scores, 7)
+
+# removing an entry from a vector
+scores = scores[-10]
+
+# Creating a vector containing various ranges
+range1 = 1:20
+range2 = -5:5
+
+# A range of fractions: 0, 0.2, 0.4, ... 1.0 
+my_sequence = seq(0,1, by=0.2)
+```
+:::
+:::
+:::
+
+We can do many other things like adding or removing values, or creating a vector from scratch by using a
+function (Example [-@exm-1darray3]). For instance, rather than just typing  a large number of values by hand, we often might
+wish to create a vector from an operator or a function, without typing
+each value. Using the operator `:` (R) or the functions `seq` (R) or `range` (Python), we 
+can create numeric vectors with
+a range of numbers.
+
+**Can we mix different types?.**
+There is a reason that the basic data types (numeric, character, etc.) we described above are called
+"vector objects" in R: The vector is a very important structure in
+R and consists of these objects. A vector can be easily created with the
+`c` function and can only combine elements of the same type (numeric, integer, complex,
+character, logical, raw).
+Because the data types within a vector correspond to only one class,
+when we create a vector with for example numeric data, the `class` function will display
+"numeric" and not "vector".
+
+If we try to
+create a vector with two different data types, R will 
+force some elements to be transformed, so that all elements belong to the same
+class. For example, if you re-build the vector of scores with a new student who has
+been graded with the letter *b* instead of a number (Example [-@exm-1darray1b]), your vector
+will become a character vector. If you print it, you will see that the
+values are now displayed surrounded by `"`.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-1darray1b}
+R enforces that all elements of a vector have the same data type
+## R code
+```{r 1darray1b-r}
+scores2 = c(8, 8, 7, 6, 9, 4, 9, 2, 8, 5, "b")
+print(class(scores2))
+print(scores2)
+```
+:::
+:::
+
+In contrast to a vector, a *list* is much less restricted: a list does not care
+whether you mix numbers and text. In Python, such lists are the most common type for creating
+a one-dimensional array. Because they
+can contain very different objects, running the `type` function on them
+does not return anything about the objects inside the list, but simply states that we
+are dealing with a list (Example [-@exm-1darray1]).
+In fact, lists can even contain other lists, or any other object for
+that matter.
+
+In R you can also use lists, even though they are much less popular in R than
+they are in Python, because vectors are better if all objects are of the same type.
+R lists are created in a similar way as vectors, except that we have to add the word `list`
+before declaring the values. Let us build a list with four different
+kinds of elements, a numeric object, a character object, a square root
+function (`sqrt`), and a numeric vector (Example [-@exm-1darray4]). In fact, you
+can use any of the elements in the list through indexing -- even the
+function `sqrt` that you stored in there to get the square root of
+16!
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-1darray4}
+Lists can store very different objects of multiple data types and even functions
+
+::: {.panel-tabset}
+## Python code
+```{python 1darray4-python}
+my_list = [33, "Twitter", np.sqrt, [1, 2, 3, 4]]
+print(type(my_list))
+
+# this resolves to sqrt(16):
+print(my_list[2](16))
+
+```
+## R code
+```{r 1darray4-r}
+my_list = list(33, "Twitter", sqrt, c(1,2,3,4))
+class(my_list)
+
+# this resolves to sqrt(16):
+my_list[[3]](16)
+```
+:::
+:::
+:::
+
+Python users often like the fact that lists give  a lot of flexibility, as they happily accept
+entries of very different types. But also Python users sometimes may want a stricter
+structure like R's vector. This may be especially interesting for
+high-performance calculations, and therefore, such a structure is
+available from the *numpy* (which stands for Numbers in Python)
+package: the numpy array.
+This will be discussed in more detail when we deal with data frames in Chapter [-@sec-chap-filetodata].
+
+::: {.callout-note icon=false collapse=true}
+## Object references and mutable objects.
+
+A subtle difference between Python and R is how they deal with copying objects.
+  Suppose we define $x$ containing the numbers $1,2,3$ (`x=[1,2,3]` in Python or `x=c(1,2,3)` in R)
+  and then define an object $y$ to equal $x$ (`y=x`).
+  In R, both objects are kept separate, so changing $x$ does not affect $y$,
+  which is probably what you expect.
+  In Python, however, we now have two variables (names) that both point to or *reference* the same object,
+  and if we change $x$ we also change $y$ and vice versa, which can be quite unexpected.
+  Note that if you really want to copy an object in Python, you can run `x.copy()`.
+  See Example [-@exm-mutable] for an example.
+
+Note that this is only important for *mutable* objects, that is,
+  objects that can be changed.
+  For example, lists in Python and R and vectors in R are mutable because you can replace or append members.
+  Strings and numbers, on the other hand, are immutable:
+  you cannot change a number or string, a statement such as `x=x*2` creates a new object containing the value of `x*2` and stores it under the name `x`.
+:::
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-mutable}
+The (unexpected) behavior of mutable objects
+
+::: {.panel-tabset}
+## Python code
+```{python mutable-python}
+x = [1, 2, 3]
+y = x
+y[0] = 99
+print(x)
+
+```
+## R code
+```{r mutable-r}
+x = c(1,2,3)
+y = x
+y[1] = 99
+print(x)
+```
+:::
+:::
+:::
+
+**Sets and Tuples.**
+The *vector* (R) and *list* (Python) are the most frequently used collections
+for storing multiple objects. 
+In Python there are two more collection types you are likely to encounter.
+First, *tuples* are very similar to lists, but they cannot be changed after creating them
+(they are *immutable*).
+You can create a tuple by replacing the square brackets by regular parentheses:
+`x=(1,2,3)`.
+
+Second, in Python there is an object type called a *set*.
+A set is a mutable collection of *unique* elements (you cannot repeat a value) with
+no order. As it is not properly ordered, you cannot run any indexing
+or slicing operation on it.
+Although R does not have an explicit set type,
+it does have functions for the various set operations,
+the most useful of which is probably the function `unique` which removes all duplicate values in a vector.
+Example [-@exm-sets] shows a number of set operations in Python and R,
+which can be very useful,  e.g. finding all elements that occur in two lists.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-sets}
+Sets
+
+::: {.panel-tabset}
+## Python code
+```{python sets-python}
+a = {3, 4, 5}
+my_list = [3, 2, 3, 2, 1]
+b = set(my_list)
+print(f"Set a: {a}; b: {b}")
+print(f"intersect:  a & b = {a & b}")
+print(f"union:      a | b = {a | b}")
+print(f"difference: a - b = {a - b}")
+
+```
+## R code
+```{r sets-r}
+a = c(3, 4, 5)
+my_vector = c(3, 2, 3, 2, 1)
+b = unique(my_vector)
+print(b)
+print(intersect(a,b))
+print(union(a,b))
+print(setdiff(a,b))
+```
+:::
+:::
+:::
+
+### Dictionaries
+
+Python *dictionaries* are a very powerful and versatile data type.
+Dictionaries contain unordered[^3] and mutable collections of objects that
+contain certain information in another object. Python generates this
+data type in the form of `{key : value}` pairs in order
+to map any object by its key and not by its relative position in the
+collection. Unlike in a list, in which you index with an integer denoting
+the position in a list, you can index a dictionary using the key.
+This is the case shown in Example [-@exm-dict], in which we want to get the values of the object "positive" in the
+dictionary *sentiments* and of the object "A" in the dictionary
+*grades*. You will
+find dictionaries very useful in your journey as a computational
+scientist or practitioner, since they are flexible ways to store and
+retrieve structured information. We can create them using the curly
+brackets \{\} and including each key-value pair as an element of the
+collection (Example [-@exm-dict]).
+
+In R, the closest you can get to a Python dictionary is to use lists with named elements.
+This allows you to assign and retrieve values by key,
+however the key is restricted to names, while in Python most objects can be used as keys.
+You create a named list with `d = list(name=value)` and access individual elements with either
+`d$name` or `d[["name"]]`.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-dict}
+Key-value pairs in Python dictionaries and R named lists
+
+::: {.panel-tabset}
+## Python code
+```{python dict-python}
+sentiments = {"positive": 1, "neutral": 0, "negative": -1}
+print(type(sentiments))
+print("Sentiment for positive:", sentiments["positive"])
+
+grades = {}
+grades["A"] = 4
+grades["B"] = 3
+grades["C"] = 2
+grades["D"] = 1
+
+print(f"Grade for A: {grades['A']}")
+print(grades)
+
+```
+## R code
+```{r dict-r}
+sentiments = list(positive=1, neutral=0, 
+                  negative=-1)
+print(class(sentiments))
+print(glue("Sentiment for positive: ",
+           sentiments$positive))
+
+grades =  list()
+grades$A = 4
+grades$B = 3
+grades$C = 2
+grades$D = 1
+# Note: grades[["A"]] is equivalent to grades$A
+print(glue("Grade for A: {grades[['A']]}"))
+print(glue("Grade for A: {grades$A}"))
+print(grades)
+```
+:::
+:::
+:::
+
+A good analogy for a dictionary is a telephone book (imagine a paper
+one, but it actually often holds true for digital phone books as
+well): the names are the keys, and the associated phone numbers the
+values. If you know someone's name (the key), it is *very easy*
+to look up the corresponding values: even in a phone book of thousands
+of pages, it takes you maybe 10 or 20 seconds to look up the name
+(key). But if you know someone's phone number (the value) instead and
+want to look up the name, that's very inefficient: you need to read
+the whole phone book until you find the number.
+
+Just as the elements of a list can be of *any* type, and you can
+have lists of lists, you can also nest dictionaries to get dicts of
+dicts. Think of our phone book example: rather than storing just a
+phone number as value, we could store another dict with the keys
+"office phone", "mobile phone", etc. This is very often done, and you
+will come across many examples dealing with such data structures.
+You have one restriction, though: the keys in a dictionary (as opposed
+to the values) are not allowed to be mutable. After all, imagine that
+you could use a list as a key in a dictionary, and if at the same time,
+some other pointer to that very same list could just change it, this
+would lead to a quite confusing situation.
+
+### From One to More Dimensions: Matrices and $n$-Dimensional Arrays
+
+Matrices are two-dimensional rectangular datasets that include values
+in rows and columns. This is the kind of data you will have to deal
+with in many analyses shown in this book, such as those related to
+machine learning. Often, we can generalize to higher dimensions.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-2darray}
+Working with two- or $n$-dimensional arrays
+
+::: {.panel-tabset}
+## Python code
+```{python 2darray-python}
+matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+print(matrix)
+
+array2d = np.array(matrix)
+print(array2d)
+
+```
+## R code
+```{r 2darray-r}
+my_matrix = matrix(c(0, 0, 1, 1, 0, 1), 
+    nrow = 2, ncol = 3, byrow = TRUE)
+print(dim(my_matrix))
+print(my_matrix)
+
+my_matrix2 = matrix(c(0, 0, 1, 1, 0, 1), 
+    nrow = 2, ncol = 3, byrow = FALSE)
+print(my_matrix2)
+```
+:::
+:::
+:::
+
+In Python, the easiest representation is to simply construct a list of
+lists. This is, in fact, often done, but has the disadvantage that
+there are no easy ways to get, for instance, the dimensions (the
+shape) of the table, or to print it in a neat(er) format. To get all
+that, one can transform the list of lists into an `array`, a
+datastructure provided by the package *numpy* (see Chapter 5 for more details).
+
+To create a matrix in R, you have to use the function `matrix` and
+create a vector of values with the indication of how many rows and
+columns will be on it. We also have to tell R if the order of the
+values is determined by the row or not. In Example [-@exm-2darray], we create
+two matrices in which we vary the `byrow` argument to be TRUE and
+FALSE, respectively, to illustrate how it changes the values of the
+matrix, even when the shape ($2 \times3$) remains identical. As you may
+imagine, we can operate with matrices, such as adding up two of them.
+
+### Making Life Easier: Data Frames
+
+So far, we have discussed the general built-in collections that you find in most programming languages
+such as the list and array.
+However, in data science and statistics you are very likely to encounter a specific collection type that we haven't discussed yet: the `Data frame`.
+Data frames are discussed in detail in Chapter [-@sec-chap-filetodata],
+but for completeness we will also introduce them briefly here.
+
+Data frames are user-friendly data structures that look very much like
+what you find in SPSS, Stata, or Excel. They will help you in a wide
+range of statistical analysis.  A
+data frame is a tabular data object that includes rows (usually the
+instances or cases) and columns (the variables). In a three-column data frame,
+the first variable can be *numeric*, the second *character*
+and the third *logical*, but the important thing is that each
+variable is a vector and that all these vectors must be of the same
+length. We create data frames from scratch using the data.frame()
+function.  Let’s generate a simple data frame of three instances (each
+case is an author of this book) and three variables of the types
+numeric (*age*), character (*country* where they obtained their
+master degree) and logic (*living abroad*, whether they currently
+live outside the country in which they were born) (Example [-@exm-dataframe1]).
+Notice that you have the label of the variables at the top of each column and that it creates an automatic numbering for indexing the rows.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-dataframe1}
+Creating a simple data frame
+
+::: {.panel-tabset}
+## Python code
+```{python dataframe1-python}
+authors = pd.DataFrame(
+    {
+        "age": [38, 36, 39],
+        "countries": ["Netherlands", "Germany", "Spain"],
+        "living_abroad": [False, True, True],
+    }
+)
+print(authors)
+
+```
+## R code
+```{r dataframe1-r}
+authors = data.frame(age = c(38, 36, 39), 
+  countries = c("Netherlands","Germany","Spain"), 
+  living_abroad= c(FALSE, TRUE, TRUE))
+print(authors)
+```
+:::
+:::
+:::
+
+## Simple Control Structures: Loops and Conditions {#sec-controlstructures}
+
+::: {.callout-note icon=false collapse=true}
+## Control structures in Python and R.
+
+This section and the next explain the working of control structures
+  such as loops, conditions, and functions.
+  These exist (and are very useful) in both Python and R.
+  In R, however, you do not need them as much because most functions
+  can work on whole columns in one go, while in Python you often run things
+  on each row of a column and sometimes do not use data frames at all.
+  Thus, if you are primarily interested in using R you could consider skipping
+  the remainder of this chapter for now and returning later when you are ready to learn more.
+  If you are learning Python, we strongly recommend continuing with this chapter, as
+  control structures are used in many of the examples in the book.
+:::
+
+Having a clear understanding of objects and data types is a first step
+towards comprehending how object-orientated languages such as R and Python work,
+but now we need to get some literacy in writing code and *interacting*
+with the computer and the objects we created. Learning a programming
+language is just like learning any new language.  Imagine you want to
+speak Italian or you want to learn how to play the piano. The first thing
+will be to learn some words or musical notes, and to get familiarized
+with some examples or basic structures -- just as we did in Chapter [-@sec-chap-fundata]. In the
+case of Italian or the piano, you would then have to learn  some grammar:
+how to form sentences, how play some chords; or, more generally,
+how to reproduce patterns. And this is exactly how we 
+now move on to acquiring computational literacy: by learning some
+rules to make the computer do exactly what you want.
+
+Remember that you can interact with R and Python directly on their
+consoles just by typing any given command. However, when
+you begin to use several of these commands and combine them
+you will need to put all these instructions into a
+script that you can then run partially or entirely. Recall Section [-@sec-installing],
+where we showed how IDEs such as RStudio (and Pycharm) offer both a
+console for directly typing single commands and a larger window
+for writing longer scripts.
+
+Both R and Python are *interpreted* languages (as opposed to
+*compiled* languages), which means that interacting with
+them is very straightforward: You provide your computer with some
+*statements* (directly or from a script), and your computer
+reacts. We call a sequence of these statements a *computer program*.
+When we created objects by writing, for instance,
+`a = 100`,  we already dealt with a very basic statement, the *assignment statement*. But of course the statements can be more complex.
+
+In particular, we may want to say more about how and when
+statements need to be executed. Maybe we want to repeat
+the calculation of a value for each item on a list, or maybe
+we want to do this only if some condition is fulfilled.
+
+Both R and Python have such *loops* and *conditional statements*, which will
+make your coding journey much easier and with more sophisticated
+results because you can control the way your statements are
+executed. By controlling the flow of instructions you can deal with a
+lot of challenges in computer programming such as iterating over
+unlimited cases or executing part of your code as a function of new
+inputs.
+
+In your script, you usually indicate such loops and conditions
+visually by using *indentation*. Logical empty spaces -- two in R and four in
+Python -- depict blocks and sub-blocks on your code structure.
+As you will see in the next section, in R, using indentation
+is optional, and curly brackets will indicate the beginning (`{`)
+and end (`}`) of a code block; whereas in Python, indentation
+is mandatory and tells your interpreter where the block
+starts and ends.
+
+### Loops
+
+Loops can be used to repeat a block of statements.
+They are executed once, indefinitely, or
+until a certain condition is reached. This means that you can operate
+over a set of objects as many times as you want just by giving one
+instruction. The most common types of loops are *for*,
+*while*, and *repeat* (do-while), but we will be mostly
+concerned with so-called for-loops. Imagine you have a list of
+headlines as an object and you want a simple script
+to print the length of each message. Of course you can go headline
+by headline using indexing, but you will get bored or will not
+have  enough time if you have thousands of cases. Thus, the idea is to
+operate a loop in the list so you can get all the results, from the
+first until the last element, with just one instruction. The syntax
+of the for-loop is:
+
+::: {.panel-tabset}
+## Python code
+```{python forsyntax-python}
+#| eval: false
+for val in sequence:
+    statement1
+    statement2
+    statement3
+
+```
+## R code
+```{r forsyntax-r}
+#| eval: false
+for (val in sequence) {
+    statement1 
+    statement2 
+    statement3
+}
+```
+:::
+
+As Example [-@exm-forloop] illustrates, every time you find yourself
+*repeating* something, for instance printing each element from a
+list, you can get the same results easier by *iterating* or
+*looping* over the elements of the list, in this case.  Notice
+that you get the same results, but with the loop you can automate your
+operation writing few lines of code. As we will stress in this
+book, a good practice in coding is to be efficient and harmonious in
+the amount of code we write, which is another justification for using
+loops.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-forloop}
+For-loops let you repeat operations.
+
+::: {.panel-tabset}
+## Python code
+```{python forloop-python}
+headlines = [
+    "US condemns terrorist attacks",
+    "New elections forces UK to go back to the UE",
+    "Venezuelan president is dismissed",
+]
+# Manually counting each element
+print("manual results:")
+print(len(headlines[0]))
+print(len(headlines[1]))
+print(len(headlines[2]))
+# and the second is using a for-loop
+print("for-loop results:")
+for x in headlines:
+    print(len(x))
+
+```
+## R code
+```{r forloop-r}
+headlines = list("US condemns terrorist attacks", 
+  "New elections forces UK to go back to the UE",
+  "Venezuelan president is dismissed")
+# Manually counting each element
+print("manual results:  ")
+print(nchar(headlines[1]))
+print(nchar(headlines[2]))
+print(nchar(headlines[3]))
+# Using a for-loop
+print("for-loop results:")
+for (x in headlines){
+  print(nchar(x))
+}
+```
+:::
+:::
+:::
+
+::: {.callout-note icon=false collapse=true}
+## Don't repeat yourself!
+
+You may be used to copy-pasting
+  syntax and slightly changing it when working with some statistics
+  program: you run an analysis and then you want to repeat the same
+  analysis with different datasets or different specifications. But
+  this is error-prone and hard to maintain, as it involves a lot of
+  extra work if you want to change something. In many cases where you
+  find yourself pasting multiple versions of your code, you would
+  probably be better using a for-loop instead.
+:::
+
+Another way to iterate in Python is using list comprehensions  (not available natively in R), which are a stylish way to create list of elements automatically even with conditional clauses. This is the syntax:
+
+```
+newlist  = [expression for item in list if conditional]
+```
+
+In Example [-@exm-listcomprehensions] we provide a simple example (without any
+conditional clause) that creates a list with the number of characters
+of each headline. As this example illustrates, list comprehensions
+allow you to essentially write a whole for-loop in one
+line. Therefore, list comprehensions are very popular in Python.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-listcomprehensions}
+List comprehensions are very popular in Python
+## Python code
+```{python listcomprehensions-python}
+len_headlines = [len(x) for x in headlines]
+print(len_headlines)
+
+# Note: the "list comprehension" above is
+#   equivalent to the more verbose code below:
+len_headlines = []
+for x in headlines:
+    len_headlines.append(len(x))
+print(len_headlines)
+
+```
+:::
+:::
+
+### Conditional Statements
+
+Conditional statements will allow you to control the flow and order of
+the commands you give the computer. This means you can tell the
+computer to do this or that, depending on a given circumstance. These
+statements use logic operators to test *if* your condition is met
+(True) or not (False) and execute an instruction accordingly. Both in
+R and Python, we use the clauses *if*, *else if*
+(*elif* in Python), and *else* to write the syntax of the
+conditional statements. Let's begin showing you the basic structure of
+the conditional statement:
+
+::: {.panel-tabset}
+## Python code
+```{python ifsyntax-python}
+#| eval: false
+if condition:
+    statement1
+elif other_condition:
+    statement2
+else:
+    statement3
+
+```
+## R code
+```{r ifsyntax-r}
+#| eval: false
+if (condition) {
+    statement1
+} else if (other_condition) {
+    statement2
+} else {
+    statement3
+}
+```
+:::
+
+Suppose you want to print the headlines of Example [-@exm-forloop] only if the text is less than 40 characters long.
+To do this, we can include the conditional statement in the loop, executing the body only if the condition is met (Example [-@exm-if1])
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-if1}
+A simple conditional control structure
+
+::: {.panel-tabset}
+## Python code
+```{python if1-python}
+for x in headlines:
+    if len(x) < 40:
+        print(x)
+
+```
+## R code
+```{r if1-r}
+for (x in headlines){
+  if (nchar(x)<40) {
+    print(x)}
+  }
+
+```
+:::
+:::
+:::
+
+We could also make it a bit more complicated: first check whether the length is smaller than 40,
+then check whether it is exactly 44 (`elif` / `else if`), and finally specify what to do if none of the conditions was met (`else`).
+
+In Example [-@exm-if2], we will print the headline if it is shorter than 40 characters,
+print the string "What a coincidence!" if it is exactly 44 characters, and print "Too Low" in all other cases.
+Notice that we have included the clause *elif* in the structure (in R it is noted *else if*).
+*elif* is a combination of *else* and *if*: if the previous condition is not satisfied,
+this condition is checked and the corresponding code block (or *else* block) is executed.
+This avoids having to nest the second *if* within the *else*, but otherwise the reasoning behind the control flow statements remains the same.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-if2}
+A more complex conditional control structure
+
+::: {.panel-tabset}
+## Python code
+```{python if2-python}
+for x in headlines:
+    if len(x) < 30:
+        print(x)
+    elif len(x) == 44:
+        print("What a coincidence!")
+    else:
+        print("Too low")
+
+```
+## R code
+```{r if2-r}
+for (x in headlines) {
+  if (nchar(x)<30) {
+    print(x)
+  } else if (nchar(x)==44) {
+      print("What a coincidence!")
+  } else {
+      print("Too low")
+  }
+}
+
+```
+:::
+:::
+:::
+
+## Functions and Methods {#sec-functions}
+
+*Functions* and *methods* are fundamental concepts in
+writing code in object-orientated programming. Both are objects that
+we use to store a set of statements and operations that we can use later
+without having to write the whole syntax again. This makes our code
+simpler and more powerful.
+
+We have already used some built-in functions, such as `length` and
+`class` (R) and `len` and `type` (Python) to get the length
+of an object and the class to which it belongs. But, as you will learn
+in this chapter, you can also write your own functions. In essence, a
+function takes some input (the *arguments* supplied between
+brackets) and returns some output.  Methods and functions are very
+similar concepts. The difference between them is that the functions
+are defined independently from the object, while methods are created
+based on a class, meaning that they are associated with an object. For
+example, in Python, each string has an associated method `lower`,
+so that writing `'HELLO'.lower()` will return 'hello'. In R, in
+contrast, one uses a function, `tolower('HELLO')`. For now, it is not
+really important to know why some things are implemented as a method
+and some are implemented as a function; it is partly an arbitrary
+choice that the developers made, and to fully understand it, you need
+to dive into the concept of `class`es, which is beyond the scope of
+this book.
+
+::: {.callout-note icon=false collapse=true}
+## Tab completion.
+ Because methods are associated with an object, you have a very
+  useful trick at your disposal to find out which methods (and other
+  properties of an object) there are: TAB completion. In Jupyter, just
+  type the name of an object followed by a dot (e.g., `a.<TAB>` in case you
+  have an object called a) and hit the TAB key. This will open a
+  drop-down menu to choose from.
+:::
+
+We will illustrate how to create simple functions in R and Python, so you
+will have a better understanding of how they work. Imagine you want to
+create two functions: one that computes the 60\% of any given number
+and another that estimates this percentage only if the given argument
+is above the threshold of 5.
+The general structure of a function in R and Python is:
+
+::: {.panel-tabset}
+## Python code
+```{python functionsyntax-python}
+#| eval: false
+def f(par1, par2=0):
+    statements
+    return return_value
+
+result = f(arg1, arg2)
+result = f(par1=arg1, par2=arg2)
+result = f(arg1, par2=arg2)
+result = f(arg1)
+
+```
+## R code
+```{r functionsyntax-r}
+#| eval: false
+f = function(par1, par2=0) {
+   statements 
+   return_value
+}
+result = f(arg1, arg2)
+result = f(par1=arg1, par2=arg2)
+result = f(arg1, par2=arg2)
+result = f(arg1)
+```
+:::
+
+In both cases, this defines a function called `f`,
+with two *arguments*, `arg_1` and `arg_2`.
+When you call the function, you specify the values for these parameters (the arguments) between brackets after the function name.
+You can then store the result of the function as an object as normal.
+
+As you can see in the syntax above, you have some choices when specifying the arguments.
+First, you can specify them *by name* or *by position*.
+If you include the name (`f(param1=arg1)`) you explicitly bind that argument to that parameter.
+If you don't include the name (`f(arg1, arg2)`) the first argument matches the first parameter and so on.
+Note that you can mix and match these choices, specifying some parameters by name and others by position.
+
+Second, some functions have *optional parameters*, for which they provide a default value.
+In this case, `par2` is optional, with default value `0`.
+This means that if you don't specify the parameter it will use the default value instead.
+Usually, the mandatory parameters are the main objects used by the function to do its work,
+while the optional parameters are additional options or settings.
+It is recommended to generally specify these options by name when you call a function,
+as that increases the readability of the code.
+Whether to specify the mandatory arguments by name depends on the function:
+if it's obvious what the argument does, you can specify it by position,
+but if in doubt it's often better to specify them by name.
+
+Finally, note that in Python you explicitly indicate the result value of the function with
+`return value`.
+In R, the value of the last expression is automatically returned,
+although you can also explicitly call `return(value)`.
+
+Example [-@exm-functions] shows how to write our function and how to use it.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-functions}
+Writing functions
+
+::: {.panel-tabset}
+## Python code
+```{python functions-python}
+# The first function just computes 60% of the value
+def perc_60(x):
+    return x * 0.6
+
+print(perc_60(10))
+print(perc_60(4))
+
+# The second function only computes 60% it the
+#  value is bigger than 5
+def perc_60_cond(x):
+    if x > 5:
+        return x * 0.6
+    else:
+        return x
+
+print(perc_60_cond(10))
+print(perc_60_cond(4))
+
+```
+## R code
+```{r functions-r}
+#The first function just computes 60% of the value
+perc_60 = function(x) x*0.6
+
+print(perc_60(10))
+print(perc_60(4))
+
+# The second function only computes 60% it the
+#  value is bigger than 5
+perc_60_cond = function(x) {
+  if (x>5) {
+    return(x*0.6)
+  } else {
+    return(x)
+  }
+}
+print(perc_60_cond(10))
+print(perc_60_cond(4))
+```
+:::
+:::
+:::
+
+The power of functions, though, lies in scenarios where they are used
+repeatedly.  Imagine that you have a list of 5 (or 5 million!) scores
+and you wish to apply the function `perc_60_cond` to all the scores at
+once using a loop. This costs you only two extra lines of code
+(Example [-@exm-functions2]).
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-functions2}
+Functions are particular useful when used repeatedly
+
+::: {.panel-tabset}
+## Python code
+```{python functions2-python}
+# Apply the function in a for-loop
+scores = [3, 4, 5, 7]
+for x in scores:
+    print(perc_60_cond(x))
+
+```
+## R code
+```{r functions2-r}
+# Apply the function in a for-loop
+scores = list(3,4,5,6,7)
+for (x in scores) {
+  print(perc_60_cond(x))
+}
+```
+:::
+:::
+:::
+
+::: {.callout-note icon=false collapse=true}
+
+A specific type of Python function that you may come across at some point (for instance, in Section [-@sec-crawling]) is the `generator`. 
+  Think of a function that returns a list of multiple values. Often, you do not need all values at once: you may only 
+  need the *next* value at a time. This is especially interesting when calculating the whole list would take a lot of time or a lot 
+  of memory. Rather than waiting for all values to be calculated, you can immediately begin processing the first value before the next arrives; or 
+  you can work with data so large that it doesn't all fit into your memory at the same time.  You recognize a generator by 
+  the `yield` keyword instead of a `return` keyword (Example [-@exm-generators])
+:::
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-generators}
+Generators behave like lists in that you can iterate (loop) over them, but each element is only 
+  calculated when it is needed. Hence, they do not have a length.
+## Python code
+```{python generators-python}
+mylist = [35, 2, 464, 4]
+
+def square1(somelist):
+    listofsquares = []
+    for i in somelist:
+        listofsquares.append(i**2)
+    return listofsquares
+
+mysquares = square1(mylist)
+print(
+    f"""As a list:
+type: {type(mysquares)}
+representation: {mysquares}
+entries: {[x for x in mysquares]}
+second pass: {[x for x in mysquares]}
+length: {len(mysquares)}"""
+)
+
+def square2(somelist):
+    for i in somelist:
+        yield i**2
+
+mysquares = square2(mylist)
+print(
+    f"""As a generator:
+type: {type(mysquares)}
+representation: {mysquares}
+entries: {[x for x in mysquares]}
+second pass: {[x for x in mysquares]}"""
+)
+# This throws an error (generators have no length)
+# print(f"length: {len(mysquares)}")
+
+```
+:::
+:::
+
+So far you have taken your first steps as a programmer, but there are many
+more advanced things to learn that are beyond the scope of this
+book. You can find a lot of literature, online documentation and even
+wonderful Youtube tutorials to keep learning. We can recommend the
+books by @crawley2012r and @vanderplas2016python to have
+more insights into R and Python, respectively. In the next chapter, we
+will go deeper into the world of code in order to learn how and why
+you should re-use existing code, what to do if you get stuck during your
+programming journey and what are the best practices when coding.
+[^1]: In both R and Python, the equals
+  sign (`=`) can be used to assign values. In R, however, the
+  traditional way of doing this is using an arrow (`<-`). In
+  this book we will use the equals sign for assignment in both
+  languages, but remember that for R, `x=10` and
+  `x<-10` are essentially the same.
+
+[^2]: This is related to the
+reason why Python starts counting with zero. If you are interested
+in this, have a look at [www.cs.utexas.edu/users/EWD/transcriptions/EWD08xx/EWD831.html](https://www.cs.utexas.edu/users/EWD/transcriptions/EWD08xx/EWD831.html)
+
+[^3]: Newer versions of Python actually do remember the order in which items are inserted into a dictionary. However, for the purpose of this introduction, you can assume that you hardly ever care about the order of elements in a dictionary.
+

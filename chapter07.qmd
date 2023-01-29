@@ -1,0 +1,1461 @@
+```{python}
+#| echo: false
+import warnings; warnings.filterwarnings('ignore')
+```
+
+# Exploratory data analysis {#sec-chap-eda}
+
+**Abstract.** This chapter explains how to use data analysis and visualization techniques to understand and communicate the structure and story of our data.  It first introduces the reader to exploratory statistics and data visualization in R and Python. Then, it discusses how unsupervised machine learning, in particular clustering and dimensionality reduction techniques, can be used to group similar cases or to decrease the number of features in a dataset.
+
+**Keywords.** descriptive statistics, visualization, unsupervised machine learning, clustering, dimensionality reduction
+
+**Objectives:**
+
+-  Be able to conduct an exploratory data analysis
+ -  Understand the principles of unsupervised machine learning
+ -  Be able to conduct a cluster analysis
+ -  Be able to apply dimension reduction techniques
+
+::: {.callout-note icon=false collapse=true}
+
+In this chapter we use the R packages *tidyverse*, *maps* and *factoextra* for data analysis and visualization. For Python we use *pandas* and *numpy* for data analysis and *matplotlib*, *seaborn* and *geopandas* for visualization. Additionally, in Python we use *scikit-learn* and *scipy* for cluster analysis. You can install these packages with the code below if needed
+  (see Section [-@sec-installing] for more details):
+
+::: {.panel-tabset}
+## Python code
+```{python chapter07install-python}
+#| eval: false
+!pip3 install pandas matplotlib seaborn geopandas 
+!pip3 install scikit-learn scipy bioinfokit 
+!pip3 install descartes
+```
+## R code
+```{r chapter07install-r}
+#| eval: false
+install.packages(c("tidyverse", "glue", "maps", 
+                   "factoextra"))
+```
+:::
+ After installing, you need to import (activate) the packages every session:
+
+::: {.panel-tabset}
+## Python code
+```{python chapter07library-python}
+# General packages
+import itertools
+import pandas as pd
+import numpy as np
+
+# Packages for visualizing
+import matplotlib.pyplot as plt
+import seaborn as sns
+import geopandas as gpd
+
+# Packages for clustering
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import KMeans, AgglomerativeClustering
+import scipy.cluster.hierarchy as sch
+from sklearn.decomposition import PCA
+import bioinfokit.visuz
+
+```
+## R code
+```{r chapter07library-r}
+library(tidyverse)
+library(glue)
+library(maps)
+library(factoextra)
+```
+:::
+:::
+
+## Simple Exploratory Data Analysis {#sec-simpleeda}
+
+Now that you are familiar with data structures (Chapter [-@sec-chap-filetodata]) and data wrangling (Chapter [-@sec-chap-datawrangling]) you are probably eager to get some real insights into your data beyond the basic techniques we briefly introduced in Chapter [-@sec-chap-fundata].
+
+As we outlined in Chapter [-@sec-chap-introduction], the computational analysis
+of communication can be  bottom-up or top-down, inductive or
+deductive.  Just as in traditional research methods @Bryman2012, sometimes, an inductive
+bottom-up approach is a goal in itself: after all, explorative
+analyses are invaluable for generating hypotheses that can be tested
+in follow-up research. But even when you are conducting a deductive,
+hypothesis-testing study, it is a good idea to start by
+*describing* your dataset using the tools of exploratory data
+analysis to get a better picture of your data. In fact, we could even
+go as far as saying that obtaining details like frequency tables,
+cross-tabulations, and summary statistics (mean, median, mode, etc.)
+is always necessary, even if your research questions or hypotheses
+require further complex analysis. For the computational analysis of
+communication, a significant amount of time may actually be invested
+at this stage.
+
+Exploratory data analysis (EDA), as originally conceived by @tukey1977exploratory, can be a very powerful framework to prepare and evaluate data, as well as to understand its properties and generate insights at any stage of your research.
+It is mandatory to do some EDA before any sophisticated analysis to know if the data is clean enough, if there are missing values and outliers, and how the distributions are shaped.
+Furthermore, before making any multivariate or inferential analysis we might want to know the specific frequencies for each variable, their measures of central tendency, their dispersion, and so on. We might also want to integrate frequencies of different variables into a single table to have an initial picture of their interrelations.
+
+To illustrate how to do this in R and Python, we will use existing representative survey data to analyze how support for migrants or refugees in Europe changes over time and differs per country.
+ The Eurobarometer (freely available at the Leibniz Institute for the Social Sciences -- GESIS) has contained these specific questions since 2015. We might pose questions about the variation of a single variable or also describe the covariation of different variables to find patterns in our data. In this section, we will compute basic statistics to answer  these questions and in the next section we will visualize them by plotting *within* and *between* variable behaviors of a selected group of features of the Eurobarometer conducted in November 2017 to 33193 Europeans.
+
+For most of the EDA we will use *tidyverse* in R and *pandas* as well as *numpy* and *scipy* in Python (Example 7.1). After loading a clean version of the survey data[^1]  stored in a csv file (using the *tidyverse* function `read_csv` in R and the *pandas* function `read_csv` in R), checking the dimensions of our data frame (33193 x 17), we probably want to get a global picture of each of our variables by getting a frequency table. This table shows the frequency of different outcomes for every case in a distribution. This means that we can know how many cases we have for each number or category in the distribution of every variable, which is useful in order to have an initial understanding of our data.
+
+::: {.callout-note icon=false collapse=true}
+## pandas versus pure numpy/scipy
+ In this book, we use pandas
+  data frames a lot: they make our lives easier compared to native
+  data types (Section [-@sec-datatypes]), and they already integrate a lot of
+  functionality of underlying math and statistics packages such as
+  *numpy* and *scipy*. However, you do not have to force your
+  data into a data frame if a different structure makes more sense in
+  your script. *numpy* and *scipy* will happily calculate
+  mean, media, skewness, and kurtosis of the values in a list, or the
+  correlation between two lists. It's up to you.
+:::
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-load}
+Load data from Eurobarometer survey and select some variables
+
+::: {.panel-tabset}
+## Python code
+```{python load-python}
+url = "https://cssbook.net/d/eurobarom_nov_2017.csv"
+d2 = pd.read_csv(url)
+print("Shape of my filtered data =", d2.shape)
+print(d2.columns)
+
+```
+## R code
+```{r load-r}
+url="https://cssbook.net/d/eurobarom_nov_2017.csv"
+d2= read_csv(url, col_names = TRUE)
+glue("{nrow(d2)} row x {ncol(d2)} columns")
+colnames(d2)
+```
+:::
+:::
+:::
+
+Let us first get the distribution of the categorical variable *gender* by creating tables that include absolute and relative frequencies. The frequency tables (using the `dplyr` functions `group_by` and `summarize` in R, and *pandas* function `value_counts` in Python) reveals that 17716 (53.38\%) women and 15477 (46.63\%) men answered this survey (Example 7.2). We can do the same with the level of support of refugees [*support_refugees*] (*To what extent do you agree or disagree with the following statement: our country should help refugees*) and obtain that 4957 (14.93\%) persons totally agreed with this statement, 12695 (38.25\%) tended to agree, 5931 (16.24\%) tended to disagree and 3574 (10.77\%) totally disagreed.
+
+::: {.callout-note appearance="simple" icon=false}
+::: {#exm-frequency2}
+Absolute and relative frequencies of support of refugees and gender.
+
+::: {.panel-tabset}
+## Python code
+```{python frequency-python}
+print(d2["gender"].value_counts())
+print(d2["gender"].value_counts(normalize=True))
+
+```
+## R code
+```{r frequency-r}
+d2 %>%
+  group_by(gender) %>%
+  summarise(frequency = n()) %>%
+  mutate(rel_freq = frequency / sum(frequency))   
+```
+:::
+
+::: {.panel-tabset}
+## Python code
+```{python frequency2-python}
+print(d2["support_refugees"].value_counts())
+print(d2["support_refugees"].value_counts(normalize=True, dropna=False))
+
+```
+## R code
+```{r frequency2-r}
+d2 %>%
+  group_by(support_refugees) %>%
+  summarise(frequency = n()) %>%
+  mutate(rel_freq = frequency / sum(frequency)) 
+```
+:::
+:::
+:::
+
+Before diving any further into any *between* variables analysis, you might have noticed that there might be some missing values in the data. These values represent an important amount of data in many real social and communication analysis (just remember that you cannot be forced to answer  every question in a telephone or face-to-face survey!). From a statistical point of view, we can have many approaches to address missing values: For example, we can drop either the rows or columns that contain any of them, or we can impute the missing values by predicting them based on their relation with other variables -- as we did in Section [-@sec-calculate] by replacing the missing values with the column mean. It goes beyond the scope of this chapter to explain all the imputation methods (and, in fact, mean imputation has some serious drawbacks when used in subsequent analysis), but at least we need to know how to identify the missing values in our data and how to drop the cases that contain them from our dataset.
+
+In the case of the variable *support_refugees* we can count its missing data (6576 cases) with base R function `is.na` and the pandas method `isna`[^2]. Then we may decide to drop all the records that contain these values in our dataset using the *tidyr* function `drop_na` in R and the *Pandas* function `dropna` in Python[^3] (Example 7.3). By doing this we get a cleaner dataset and can continue with a more sophisticated EDA with cross-tabulation and summary statistics for the group of cases.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-na}
+Drop missing values
+
+::: {.panel-tabset}
+## Python code
+```{python na-python}
+n_miss = d2["support_refugees"].isna().sum()
+print(f"# of missing values: {n_miss}")
+
+d2 = d2.dropna()
+print(f"Shape after dropping NAs: {d2.shape}")
+
+```
+## R code
+```{r na-r}
+n_miss = sum(is.na(d2$support_refugees))
+print(glue("# of missing values: {n_miss}"))
+
+d2 = d2 %>% drop_na()
+print(glue("Rows after dropping NAs: {nrow(d2)}"))
+```
+:::
+:::
+:::
+
+Now let us cross tabulate the *gender* and *support_refugees* to have an initial idea of what the relationship between these two variables might be. With this purpose we create a contingency table or cross-tabulation to get the frequencies in each combination of categories (using *dplyr* functions `group_by`, `summarize` and `spread` in R, and the *pandas* function `crosstab` in Python; example 7.4). From this table you can easily see that 2178 women totally supported helping refugees and 1524 men totally did not.  Furthermore, other interesting questions about our data might now arise if we compute summary statistics for a group of cases (using again *dplyr* functions `group_by`, `summarize` and `spread`, and base `mean` in R; and *pandas* function `groupby` and base `mean` in Python). For example, you might wonder what  the average ages of the women were that totally supported (52.42) or not (53.2) to help  refugees.  This approach will open a huge amount of possible analysis by grouping variables and estimating different statistics beyond the mean, such as count, sum, median, mode, minimum or maximum, among others.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-cross}
+Cross tabulation of support of refugees and gender, and summary statistics
+
+::: {.panel-tabset}
+## Python code
+```{python cross-python}
+print("Crosstab gender and support_refugees:")
+print(pd.crosstab(d2["support_refugees"], d2["gender"]))
+
+print("Summary statistics for group of cases:")
+print(d2.groupby(["support_refugees", "gender"])["age"].mean())
+
+```
+## R code
+```{r cross-r}
+print("Crosstab gender and support_refugees:")
+d2 %>%
+  group_by(gender, support_refugees)%>%
+  summarise(n=n())%>%
+  pivot_wider(values_from="n",names_from="gender")
+
+print("Summary statistics for group of cases:")
+d2 %>%
+  group_by(support_refugees, gender)%>%
+  summarise(mean_age=mean(age, na.rm = TRUE))
+```
+:::
+:::
+:::
+
+## Visualizing Data {#sec-visualization}
+
+Data visualization is a powerful technique for both understanding data yourself and communicating the story of your data to others. Based on *ggplot2* in R and *matplotlib* and *seaborn* in Python, this section covers histograms, line and bar graphs, scatterplots and heatmaps. It touches on combining multiple graphs, communicating uncertainty with boxplots and ribbons, and plotting geospatial data.  In fact, visualizing data is an important stage in both EDA and advanced analytics, and we can use graphs to obtain important insights into our data. For example, if we want to visualize the age and the support for refugees of European citizens, we can plot a histogram and a bar graph, respectively.
+
+::: {.callout-note icon=false collapse=true}
+## R: GGPlot syntax
+
+One of the nicest features of using R for data exploration is the *ggplot2* package for data visualization. This is a package that brings a unified method for visualizing with generally good defaults but that can be customized in every way if desired. The syntax, however, can look a little strange at first.
+Let's consider the command from Example [-@exm-bar]:
+```
+ggplot (data=d2) + geom_bar(mapping=aes(x= support_refugees), fill="blue")
+```
+What you can see here is that every ggplot is composed of multiple sub-commands that are added together with the plus sign.
+At a minimum, every ggplot needs two sub-commands: `ggplot`,
+which initiates the plot and can be seen as an empty canvas,
+and one or more `geom` commands which add *geometries* to the plot,
+such as bars, lines, or points.
+Moreover, each geometry needs a *data* source, and an *aesthetic mapping*
+which tells ggplot how to map columns in the data (in this case the `support_refugees` column) to graphical (aesthetic) elements of the plot,
+in this case the $x$ position of each bar.
+Graphical elements can also be set to a constant value rather than mapped to a column,
+in which case the argument is placed outside the `aes` function, as in the `fill="blue"` above.
+
+Each aesthetic mapping is assigned a *scale*.
+This scale is initialized with a sensible default which depends on the data type.
+For example, the color of the lines in Example [-@exm-combine2] are mapped to the `group` column.
+Since that is a nominal value (character column), ggplot automatically assigns colors to each group,
+in this case blue and red.
+In Example [-@exm-heatmap], on the other hand, the fill color is mapped to the `score` column, which is numerical (interval) data, to which ggplot by default assigns a color range of white to blue.
+
+Almost every aspect of ggplot can be customized by adding more subcommands.
+For example, you can specify the title and axis labels by adding `+ labs(title="Title", x="Axis Label")` to the plot,
+and you can completely alter the look of the graph by applying a theme.
+For example, the *ggthemes* package defines an Economist theme, so by simply adding `+ theme_economist()` to your plot you get the characteristic layout of plots from that magazine.
+You can also customize the way scales are mapped using the various `scale_variable_mapping` functions.
+For example, Example [-@exm-map2] uses `scale_fill_viridis_c(option = "B")` to use the *viridis* scale for the *fill* aesthetic, specifying that scale B should be used. Similar commands can be used to e.g. change the colors of color ranges, the size of points, etc.
+
+Because all geometries start with `geom_`, all scales start with `scale_`, all themes start with `theme_`, etc.,
+you can use the RStudio autocompletion to browse through the complete list of options:
+simply type `geom_`, press tab or control+space, and you get a list of the options with a short description, and you can press F1 to get help on each option. The help for every geometry also lists all aesthetic elements that can or must be supplied.
+
+Besides the built-in help, there are a number of great (online) resources to learn more. Specifically, we recommend the book *Data Visualization: A practical introduction* by Kieran Healy[^4]. Another great resource is the R Graph Gallery[^5], which has an enormous list of possible visualizations, all with R code included and most of them based on *ggplot*. Finally, we recommend the Data-to-Viz[^6] website, which allows you to explore a number of graph types depending on your data, lists the do's and don'ts for each graph, and links to the Graph Gallery for concrete examples.
+:::
+
+### Plotting Frequencies and Distributions
+In the case of nominal data, the most straightforward way to visualize them is to simply count the frequency of value and then plot them as a bar chart. For instance, when we depict the support to help refugees (Example [-@exm-bar]) you can quickly get that the option "tend to agree" is the most frequently voiced answer.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-bar}
+Barplot of support for refugees
+
+::: {.panel-tabset}
+## Python code
+```{python bar-python}
+#| results: hide
+d2["support_refugees"].value_counts().plot(kind="bar")
+plt.show()
+
+```
+## R code
+```{r bar-r}
+ggplot(data=d2) +
+  geom_bar(mapping = aes(x= support_refugees))
+```
+:::
+:::
+:::
+
+If we have continuous variables, however, having such a bar chart would lead to too many bars: we may lose oversight (and creating the graph may be resource-intensive). Instead, we want to group the data into *bins*, such as age groups.
+Hence, a histogram is used to examine the distribution of a continuous variable (*ggplot2* function geom_histogram in R and *pandas* function `hist` in Python) and a bar graph to inspect the distribution of a categorical one (*ggplot2* function geom_bar() in R and *matplotlib* function `plot` in Python). In Example [-@exm-hist] you can easily see the shape of the distribution of the variable age, with many values close to the average and a slightly bigger tail to the right (not that far from the normal distribution!).
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-hist}
+Histogram of Age
+
+::: {.panel-tabset}
+## Python code
+```{python hist-python}
+#| results: hide
+d2.hist(column="age", bins=15)
+plt.show()
+
+```
+## R code
+```{r hist-r}
+ggplot(data=d2) +
+  geom_histogram(mapping = aes(x= age), bins = 15)
+```
+:::
+:::
+:::
+
+Another way to show distributions is using bloxplots, which are powerful representations of the distribution of our variables through the use of quartiles that are marked with the 25th, 50th (median) and 75th percentiles of any given variable. By examining the lower and upper levels of two or more distributions you can compare their variability and even detect possible outliers. You can generate multiple boxplots to compare the ages of the surveyed citizens by country and quickly see that in terms of age the distributions of Spain and Greece are quite similar, but we can identify some differences between Croatia and the Netherlands. In R we use the base function `geom_boxplot`, while in Python we use the *seaborn* function `boxplot`.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-boxplots}
+Bloxplots of age by country
+
+::: {.panel-tabset}
+## Python code
+```{python boxplots-python}
+#| results: hide
+d2 = d2.sort_values(by="country")
+plt.figure(figsize=(8, 8))
+sns.boxplot(x="age", y="country", data=d2)
+plt.show()
+
+```
+## R code
+```{r boxplots-r}
+ggplot(d2, aes(y=fct_rev(country), x=age))+
+  geom_boxplot()
+```
+:::
+:::
+:::
+
+### Plotting Relationships
+
+After having inspected distributions of single variables, you may want to check how two variables are related. We are going to discuss two ways of doing so: plotting data over time, and scatterplots to illustrate the relationship between two continuous variables.
+
+The Eurobarometer collects data for 15 days (in the example from November 5 to 19, 2017) and you may wonder if the level of support to refugees or even to general migrants changes over the time. This is actually a simple time series and you can use a line graph to represent it. Firstly you must use a numerical variable for the level of support (*support_refugees_n*, which ranges from 1 to 4, 4 being the maximum support) and group it by day in order to get the average for each day. In the case of R, you can plot the two series using the base function `plot`, or you can use the *ggplot2* function `geom_line`. In the case of Python you can use the *matplotlib* function `plot` or the *seaborn* function `lineplot`. To start, Example [-@exm-line] shows how to create a graph for the average support for refugees by day.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-line}
+Line graph of average support for refugees by day
+
+::: {.panel-tabset}
+## Python code
+```{python line-python}
+#| results: hide
+support_refugees = d2.groupby(["date_n"])["support_refugees_n"].mean()
+support_refugees = support_refugees.to_frame()
+
+plt.plot(support_refugees.index, support_refugees["support_refugees_n"])
+plt.xlabel("Day")
+plt.ylabel("Support for refugees")
+plt.show()
+
+```
+## R code
+```{r line-r}
+support_refugees = d2 %>%
+  group_by(date_n) %>%
+  summarise(support=mean(support_refugees_n, 
+                         na.rm = TRUE))
+ggplot(support_refugees,aes(x=date_n, y=support))+
+  geom_line() + 
+  xlab("Day") + 
+  ylab("Support for refugees")
+```
+:::
+:::
+:::
+
+To also plot the support for migrants, you can combine multiple subgraphs in a single plot,
+giving the reader a broader and more comparative perspective (Example [-@exm-combine2]).
+In R, the `geom_line` also takes a color aesthetic, but this requires the data to be in long format.
+So, we first reshape the data and also change the factor labels to get a better legend (see Section [-@sec-pivot]).
+In Python, you can plot the two lines as separate figures  and add the *pyplot* function `show` to display an integrated figure.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-combine2}
+Plotting multiple lines in one graph
+
+::: {.panel-tabset}
+## Python code
+```{python combine2-python}
+#| results: hide
+# Combine data
+support_combined = d2.groupby(["date_n"]).agg(
+    refugees=("support_refugees_n", "mean"),
+    migrants=("support_migrants_n", "mean"),
+)
+
+# plot
+sns.lineplot(x="date_n", y="refugees", data=support_combined, color="blue")
+sns.lineplot(x="date_n", y="migrants", data=support_combined, color="red")
+plt.xlabel("Day")
+plt.ylabel("Level of support")
+plt.title("Support of refugees and migrants")
+plt.show()
+
+```
+## R code
+```{r combine2-r}
+# Combine data
+support_combined = d2 %>% group_by(date_n) %>%
+ summarise(
+  refugees=mean(support_refugees_n, na.rm = TRUE),
+  migrants=mean(support_migrants_n, na.rm = TRUE))
+
+# Pivot to long format and plot 
+support_long = support_combined %>% 
+  pivot_longer(-date_n, names_to="group", 
+               values_to="support")
+ggplot(support_long, 
+       aes(x=date_n, y=support, colour=group)) +
+  geom_line(size = 1.5) +
+  labs(title="Support for refugees and migrants", 
+       x="Day", y="Level of Support") 
+```
+:::
+:::
+:::
+
+Alternatively, you can create multiple subplots, one for each group that you want to show (Example [-@exm-combine]).
+In *ggplot* (R), you can use the `facet_grid` function to automatically create subplots that each show one of the groups. In the case of Python you can use the *matplotlib* function `subplots` that allows you to configure multiple plots in a single one.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-combine}
+Creating subfigures)
+
+::: {.panel-tabset}
+## Python code
+```{python combine-python}
+#| results: hide
+f, axes = plt.subplots(2, 1)
+sns.lineplot(x="date_n", y="refugees", data=support_combined, ax=axes[0])
+sns.lineplot(x="date_n", y="migrants", data=support_combined, ax=axes[1])
+
+sns.lineplot(x="date_n", y="support_refugees_n", data=d2, ci=0, ax=axes[0])
+sns.lineplot(x="date_n", y="support_migrants_n", data=d2, ci=0, ax=axes[1])
+plt.show()
+
+```
+## R code
+```{r combine-r}
+ggplot(support_long, aes(x=date_n, y=support)) +  
+  geom_line() + facet_grid(rows=vars(group)) +
+  xlab("Day") + ylab("Support")
+```
+:::
+:::
+:::
+
+Now if you want to explore the possible correlation between the average support for refugees (`mean_support_refugees_by_day`) and the average support to migrants by year (`mean_support_migrants_by_day`), you might need a scatterplot, which is a better way to visualize the type and strength of this relationship *scatter*.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-scatter}
+Scatterplot of average support for refugees and migrants by year
+
+::: {.panel-tabset}
+## Python code
+```{python scatter-python}
+#| results: hide
+sns.scatterplot(data=support_combined, x="refugees", y="migrants")
+
+```
+## R code
+```{r scatter-r}
+ggplot(support_combined, 
+       aes(x=refugees, y=migrants))+
+  geom_point()
+```
+:::
+:::
+:::
+
+A scatterplot uses dots to depict the values of two variables in a Cartesian plane (with coordinates for the axes $x$ and $y$). You can easily plot this figure in R using the *ggplot2* function `geom_point` (and `geom_smooth` to display a regression line!), or in Python using *seaborn* function `scatterplot` (`lmplot` to include the regression line as shown in Example [-@exm-scatter2]).
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-scatter2}
+Scatterplot with regression line
+
+::: {.panel-tabset}
+## Python code
+```{python scatter2-python}
+#| results: hide
+sns.lmplot(data=support_combined, x="refugees", y="migrants")
+plt.show()
+
+```
+## R code
+```{r scatter2-r}
+ggplot(support_combined,
+       aes(x=refugees, y= migrants))+
+  geom_point()+
+  geom_smooth(method = lm)
+```
+:::
+:::
+:::
+
+Looking at the dispersion of points in the provided example you can infer that there might be a positive correlation between the two variables, or in other words, the more the average support to refugees the more the average support to migrants over time.
+
+We can check and measure the existence of this correlation by computing the Pearson correlation coefficient or Pearson's *r*, which is the most well-known correlation function. As you probably remember from your statistics class, a correlation refers to a relationship between two continuous variables and is usually applied to measure linear relationships (although there  also exist nonlinear correlation coefficients, such as Spearman's $\rho$). Specifically, Pearson's $r$  measures the linear correlation between two variables (*X* and *Y*) producing a value between $-1$ and $+1$, where 0 depicts the absence of correlation and values near to 1 a strong correlation. The signs ($+$ or $-$) represent the direction of the relationship (being positive if two variables variate in the same direction, and negative if they vary in the opposite direction). The correlation coefficient is usually represented with *r* or the Greek letter $\rho$ and mathematically expressed as:
+
+You can estimate this correlation coefficient with the *pandas* function `corr` in Python and the base R function `cor` in R. As shown in Example [-@exm-corr] the two variables plotted above are highly correlated with a coefficient of 0.95.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-corr}
+Pearson correlation coefficient
+
+::: {.panel-tabset}
+## Python code
+```{python corr-python}
+print(
+    support_combined["refugees"].corr(
+        support_combined["migrants"], method="pearson"
+    )
+)
+
+```
+## R code
+```{r corr-r}
+cor.test(support_combined$refugees, 
+         support_combined$migrants, 
+         method = "pearson")
+```
+:::
+:::
+:::
+
+Another useful representation is the heatmap. This figure can help you plot a continuous variable using a color scale and shows its relation with another two variables.  This means that you represent your data as colors, which might be useful for understanding patterns. For example, we may wonder what  the level of support for refugees is given the nationality and the gender of the individuals. For this visualization, it is necessary to create a proper data frame (Example [-@exm-pivot]) to plot the heatmap, in which each number of your continuous variable *_refugees_n* is included in a table where each axis (x= gender, y=country) represents the categorical variables. This pivoted table stored in an object called `pivot_data` can be generated using some of the already explained commands.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-pivot}
+Create a data frame to plot the heatmap
+
+::: {.panel-tabset}
+## Python code
+```{python pivot-python}
+pivot_data = pd.pivot_table(
+    d2, values="support_refugees_n", index=["country"], columns="gender"
+)
+
+```
+## R code
+```{r pivot-r}
+pivot_data= d2 %>% 
+  select(gender, country, support_refugees_n) %>%
+  group_by(country, gender) %>%
+  summarise(score = mean(support_refugees_n))
+```
+:::
+:::
+:::
+
+In the first resulting figure proposed in Example [-@exm-heatmap], the lighter the blue the greater the support in each combination of country $\times$ gender. You can see that level of support is similar in countries such as Slovenia or Spain, and is different in the Czech Republic or Austria. It also seems that women have a higher level of support. For this default heatmap we can use the *ggplot2* function `geom_tile` in R and *seaborn* function `heatmap` in Python.  To personalize the scale colors (e.g. if we want a scale of blues) we can use the *ggplot2* function `scale_fill_gradient` in R or the parameter `cmap` of the *seaborn* function `heatmap` in Python.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-heatmap}
+Heatmap of country gender and support for refugees
+
+::: {.panel-tabset}
+## Python code
+```{python heatmap-python}
+#| results: hide
+plt.figure(figsize=(10, 6))
+sns.heatmap(pivot_data, cmap="Blues", cbar_kws={"label": "support_refugees_n"})
+plt.show()
+
+```
+## R code
+```{r heatmap-r}
+ggplot(pivot_data, aes(x = gender, 
+    y = fct_rev(country), fill = score)) + 
+  geom_tile()+
+  scale_fill_gradient2(low="white", high="blue")
+```
+:::
+:::
+:::
+
+As you will notice, one of the goals of EDA is exploring the variance of our variables, which includes some uncertainty about their behavior. We will introduce you to two basic plots to visually communicate this uncertainty. Firstly, ribbons and area plots can help us to clearly identify a predefined interval of a variable in order to interpret its variance over some cases. Let us mark this interval in 0.15 points in the above-mentioned plots of the average support to refugees or migrants by day, and we can see that the lines tend to converge more on the very last day and are more separated by day four. This simple representation can be conducted in R using the *ggplot2* function `geom_ribbon` and in Python using the parameter `ci` of the *seaborn* function `lineplot`.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-ribbons}
+Add ribbons to the graph lines of support to refugees and migrants
+
+::: {.panel-tabset}
+## Python code
+```{python ribbons-python}
+#| results: hide
+sns.lineplot(
+    x="date_n",
+    y="support_refugees_n",
+    data=d2,
+    color="blue",
+    ci=100,
+    label="Refugees",
+)
+sns.lineplot(
+    x="date_n",
+    y="support_migrants_n",
+    data=d2,
+    color="red",
+    ci=100,
+    label="Migrants",
+)
+plt.xlabel("Day")
+plt.ylabel("Level of support")
+plt.title("Support for refugees and migrants")
+plt.show()
+
+```
+## R code
+```{r ribbons-r}
+ggplot(support_long, 
+       aes(x=date_n, y=support, color=group)) + 
+  geom_line(size=1.5) + 
+  geom_ribbon(aes(fill=group, ymin=support-0.15,
+                  ymax=support+0.15),
+              alpha=.1, lty=0) +
+  ggtitle("Support for refugees and migrants")
+```
+:::
+:::
+:::
+
+### Plotting Geospatial Data
+
+Plotting geospatial data is a more powerful tool to compare countries or other regions.  Maps are very easy to understand and can have greater impact to all kinds of readers, which make them a useful representation for a wide range of studies that any computational analyst has to deal with. Geospatial data is based on the specific location of any country, region, city or geographical area, marked by its coordinates, latitude and longitude, that can later build points and polygon areas. The coordinates are normally mandatory to plot any data on a map, but are not always provided in our raw data. In those cases, we must join the geographical information we have (i.e. the name of a country) with its coordinates in order to have an accurate data frame for plotting geospatial data. Some libraries in R and Python might directly read and interpret different kinds of geospatial information by recognizing strings such as "France" or "Paris", but in the end they will be converted into coordinates.
+
+Using the very same data 
+as our example, we might want to plot in a map the level of support to European refugees by country. Firstly, we should create a data frame with the average level of support to refugees by country (`supports_country`). Secondly, we must install an existing library that provides you with accurate geospatial information. In the case of R, we recommend the package *maps* which contains the function `map_data` that helps you generate an object with geospatial information of specific areas, countries or regions, that can be easily read and plotted by *ggplot2*. Even if not explained in this book, we also recommend *ggmap* in R (Kahle and Wickham, 2013). When working with Python we recommend *geopandas* that works very well with *pandas* and *matplotlib* (it will also need some additional packages such as *descartes*).
+
+In Example [-@exm-map] we illustrate how to plot a world map (from existing geographical information).
+We then save a partial map into the object `some_eu_maps` containing the European countries that participated in the survey. After we merge `supports_country` and `some_eu_maps` (by region) and get a complete data frame called `support_map` with coordinates for each country (Example [-@exm-countries]).
+Finally, we plot it using the *ggplot2* function `geom_polygon` in R and the *geopandas* method `plot` in Python (Example [-@exm-map2]). Voilà: a nice and comprehensible representation of our data with a scale of colors!
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-map}
+Simple world map
+
+::: {.panel-tabset}
+## Python code
+```{python map-python}
+#| results: hide
+supports_country = (
+    d2.groupby(["country"])["support_refugees_n"]
+    .mean()
+    .to_frame()
+    .reset_index()
+)
+
+# Load a world map and plot it
+wmap = gpd.read_file(gpd.datasets.get_path("naturalearth_lowres"))
+wmap = wmap.rename(columns={"name": "country"})
+wmap.plot()
+
+```
+## R code
+```{r map-r}
+supports_country = d2 %>%
+  group_by(country) %>%
+  summarise(m=mean(support_refugees_n,na.rm=TRUE))
+
+#Load a world map and plot it
+wmap = map_data("world")
+ggplot(wmap, aes(x=long,y=lat,group=group)) +
+  geom_polygon(fill="lightgray", colour = "white")
+```
+:::
+:::
+:::
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-countries}
+Select EU countries and joint the map with Eurobarometer data
+
+::: {.panel-tabset}
+## Python code
+```{python countries-python}
+countries = [
+    "Portugal",
+    "Spain",
+    "France",
+    "Germany",
+    "Austria",
+    "Belgium",
+    "Netherlands",
+    "Ireland",
+    "Denmark",
+    "Poland",
+    "UK",
+    "Latvia",
+    "Cyprus",
+    "Croatia",
+    "Slovenia",
+    "Hungary",
+    "Slovakia",
+    "Czech republic",
+    "Greece",
+    "Finland",
+    "Italy",
+    "Luxemburg",
+    "Sweden",
+    "Sweden",
+    "Bulgaria",
+    "Estonia",
+    "Lithuania",
+    "Malta",
+    "Romania",
+]
+m = wmap.loc[wmap["country"].isin(countries)]
+m = pd.merge(supports_country, m, on="country")
+
+```
+## R code
+```{r countries-r}
+countries = c(
+  "Portugal", "Spain", "France", "Germany",
+  "Austria", "Belgium", "Netherlands", "Ireland",
+  "Denmark", "Poland", "UK", "Latvia", "Cyprus",
+  "Croatia", "Slovenia", "Hungary", "Slovakia",
+  "Czech republic", "Greece", "Finland", "Italy",
+  "Luxemburg", "Sweden", "Sweden", "Bulgaria", 
+  "Estonia", "Lithuania", "Malta", "Romania")
+m = wmap %>% rename(country=region) %>% 
+  filter(country %in% countries) %>%
+  left_join(supports_country, by="country")
+```
+:::
+:::
+:::
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-map2}
+Map of Europe with the average level of support for refugees by country
+
+::: {.panel-tabset}
+## Python code
+```{python map2-python}
+#| results: hide
+m = gpd.GeoDataFrame(m, geometry=m["geometry"])
+m.plot(
+    column="support_refugees_n",
+    legend=True,
+    cmap="OrRd",
+    legend_kwds={"label": "Level of suppport"},
+).set_title("Support of refugees by country")
+
+```
+## R code
+```{r map2-r}
+ggplot(m, aes(long, lat, group=group))+
+  geom_polygon(aes(fill = m), color="white")+
+  scale_fill_viridis_c(option="B")+
+  labs(title="Support for refugees by country", 
+       fill="Level of support")
+```
+:::
+:::
+:::
+
+### Other Possibilities
+
+There are many other ways of visualizing data. For EDA we have covered in this chapter only some of the most used techniques but they might be still limited for your future work. There are many books that cover data visualization in detail, such as @tufte2006beautiful, @cairo2019charts, and @Kirk2016.  There are also many online resources, such as the Python Graph Gallery [^7] and the R Graph Gallery [^8], which introduce you to other useful plot types.  These sites include code examples, many using the *ggplot*, *matplotlib* and *seaborn* packages introduced here, but also using other packages such as *bokeh* or *plotly* for interactive plots.
+
+## Clustering and Dimensionality Reduction {#sec-clustering}
+
+So far, we have reviewed traditional statistical exploratory and
+visualization techniques that any social scientist should be able to apply. A more
+computational next step in your EDA workflow is using machine learning
+(ML) to let your computer "learn" about our data and in turn give 
+more initial insights.  ML is a branch of artificial intelligence that
+uses algorithms to interact with data and obtain some patterns or
+rules that characterize that data. We normally distinguish between
+supervised machine learning (SML) and unsupervised machine learning
+(UML). In Chapter [-@sec-chap-introsml], we will come back to this distinction.
+For now, it may suffice to say that the main characteristic of
+unsupervised methods is that we do not have any measurement available
+for a dependent variable, label, or categorization, which we want
+to predict. Instead, we want to identify
+*patterns* in the data without knowing in advance what these may
+look like. In this, unsupervised machine learning is very much of a
+inductive, bottom-up technique (see Chapter [-@sec-chap-introduction] and
+@Boumans2016).
+
+In this chapter, we will focus on UML as a means of finding groups and
+latent dimensions in our data, which can also help to reduce our
+number of variables. Specifically, we will use base R and Python's
+*scikit-learn* to conduct $k$-means clustering, hierarchical
+clustering, and principal component analysis (PCA) as well as the
+closely related singular value decomposition (SVD).
+
+In data mining, we use clustering as a UML technique that aims to find
+the relationship between a set of descriptive variables. By doing
+cluster analysis we can identify underlying groups in our data that we
+will call *clusters*. Imagine we want to explore how European
+countries can be grouped based on their average support to
+refugees/migrants, age and educational level. We might create some
+*a priori* groups (such as southern versus northern countries),
+but cluster analysis would be a great method to let the data "talk"
+and then create the most appropriate groups for this specific case. As
+in all UML, the groups will come unlabeled and the computational
+analyst will be in charge of finding an appropriate and meaningful
+label for each cluster to better communicate the results.
+
+### $k$-means Clustering
+
+$k$-means is a very frequently used algorithm to perform cluster
+analysis. Its main advantage is that, compared to the hierarchical
+clustering methods we will discuss later, it is very fast and does not
+consume many resources. This makes it especially useful for larger
+datasets.
+
+$k$-means cluster analysis is a method that takes any number of observations (cases) and groups them into a given number of clusters based on the proximity of each observation to the mean of the formed cluster (centroid).  Mathematically, we measure this proximity as the distance of any given point to its cluster center, and can be expressed as
+
+where $\|x_n - \mu_k\|$ is the distance between the data point $x_n$ and the center of the cluster $\mu_k$.
+
+Instead of taking the mean, some variations of this algorithm take the median ($k$-medians) or a representative observation, also called medoid ($k$-medoids or partitioning around medoids, PAM) as a way to optimize the initial method.
+
+Because $k$-means clustering calculates *distances* between cases,
+these distances need to be meaningful -- which is only the cases if
+the scales on which the variables are measured are comparable. If all
+your variables are measured on the same (continuous) scale with the
+same endpoints, you may be fine. In most cases, you need to normalize
+your data by transforming them into, for instance, $z$-scores[^9], or a
+scale from 0 to 1.
+
+Hence, the first thing we do in our example, is to prepare a proper
+dataset with only continuous variables, scaling the data (for
+comparability) and avoiding missing values (drop or impute). In
+Example [-@exm-elbow], we will use the variables support to refugees
+(*support_refugees_n*), support to
+migrants (*support_migrants_n*), age (*age*) and
+educational level (number of years of education)
+(*educational_n*) and will create a data frame `d3` with the
+mean of all these variables for each *country* (each observation
+will be a country). $k$-means requires us to specify the number of
+clusters, $k$, in advance. This is a tricky question, and (besides 
+arbitrarily deciding $k$!), you essentially need to re-estimate your
+model multiple times with different $k$s.
+
+The simplest method to obtain the optimal number of clusters is to
+estimate the variability within the groups for different runs. This
+means that we must run $k$-means for different number of clusters
+(e.g. 1 to 15 clusters) and then choose the number of clusters that
+decreases the variability maintaining the highest number of
+clusters. When you generate and plot a vector with the variability,
+or more technically, the within-cluster sum of squares (WSS)
+obtained after each execution, it is easy to identify the optimal
+number: just look at the bend (*knee* or *elbow*) and
+you will find the point where it decreases the most and then get the
+optimal number of clusters (three clusters in our example).
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-elbow}
+Getting the optimal number of clusters
+
+::: {.panel-tabset}
+## Python code
+```{python elbow-python}
+#| results: hide
+# Average variables by country and scale
+d3 = d2.groupby(["country"])[
+    ["support_refugees_n", "support_migrants_n", "age", "educational_n"]
+].mean()
+
+scaler = StandardScaler()
+d3_s = scaler.fit_transform(d3)
+
+# Store sum of squares for 1..15 clusters
+wss = []
+for i in range(1, 15):
+    km_out = KMeans(n_clusters=i, n_init=20)
+    km_out.fit(d3_s)
+    wss.append(km_out.inertia_)
+
+plt.plot(range(1, 15), wss, marker="o")
+plt.xlabel("Number of clusters")
+plt.ylabel("Within groups sum of squares")
+plt.show()
+
+```
+## R code
+```{r elbow-r}
+# Average variables by country and scale
+d3_s = d2%>%
+  group_by(country)%>%
+  summarise(
+    m_refugees=mean(support_refugees_n, na.rm=T), 
+    m_migrants=mean(support_migrants_n, na.rm=T),
+    m_age=mean(age, na.rm=T),
+    m_edu=mean(educational_n, na.rm=T)) %>%
+  column_to_rownames(var="country") %>%
+  scale()
+# Store sum of squares for 1..15 clusters
+wss = list()
+for (i in 1:15) {
+  km.out = kmeans(d3_s, centers=i, nstart=25)
+  wss[[i]] = tibble(k=i, ss=km.out$tot.withinss)
+}
+wss = bind_rows(wss)
+ggplot(wss, aes(x=k, y=ss)) + 
+  geom_line() + geom_point() + 
+  xlab("Number of Clusters") + 
+  ylab("Within groups sum of squares")
+```
+:::
+:::
+:::
+
+Now we can estimate our final model (Example [-@exm-kmeans]). We generate 25
+initial random centroids (the algorithm will choose the one that
+optimizes the cost). The default of this parameter is 1, but it is
+recommended to set it with a higher number (i.e. 20 to 50) to guarantee
+the maximum benefit of the method. The base R function `kmeans` and
+*scikit-learn* function `KMeans` in Python will produce the
+clustering. You can observe the mean (scaled) for each variable in
+each cluster, as well as the corresponding cluster for each
+observation.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-kmeans}
+Using Kmeans to group countries based on the average support of refugees and migrants, age, and educational level
+
+::: {.panel-tabset}
+## Python code
+```{python kmeans-python}
+# Compute k-means with k = 3
+km_res = KMeans(n_clusters=3, n_init=25).fit(d3_s)
+print(km_res)
+print("K-means cluste sizes:", np.bincount(km_res.labels_[km_res.labels_ >= 0]))
+print(f"Cluster means: {km_res.cluster_centers_}")
+print("Clustering vector:")
+print(np.column_stack((d3.index, km_res.labels_)))
+print("Within cluster sum of squares:")
+print(km_res.inertia_)
+
+```
+## R code
+```{r kmeans-r}
+set.seed(123)
+km.res = kmeans(d3_s, 3, nstart=25)
+print(km.res)
+```
+:::
+:::
+:::
+
+Using the function `fviz_cluster` of the library *factoextra* in R, or the *pyplot* function `scatter` in Python, you can get a visualization of the clusters. In Example [-@exm-kmeans2] you can clearly identify that the clusters correspond to Nordic countries (more support to foreigners, more education and age), Central and Southern European countries (middle support, lower education and age), and Eastern European countries (less support, lower education and age)[^10] .
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-kmeans2}
+Visualization of clusters
+
+::: {.panel-tabset}
+## Python code
+```{python kmeans2-python}
+#| results: hide
+for cluster in range(km_res.n_clusters):
+    plt.scatter(
+        d3_s[km_res.labels_ == cluster, 0], d3_s[km_res.labels_ == cluster, 1]
+    )
+plt.scatter(
+    km_res.cluster_centers_[:, 0],
+    km_res.cluster_centers_[:, 1],
+    s=250,
+    marker="*",
+)
+plt.legend(scatterpoints=1)
+plt.show()
+
+```
+## R code
+```{r kmeans2-r}
+fviz_cluster(km.res, d3_s, ellipse.type="norm")
+```
+:::
+:::
+:::
+
+### Hierarchical Clustering
+
+Another method to conduct a cluster analysis is hierarchical clustering, which builds a hierarchy of clusters that we can visualize in a dendogram.  This algorithm has two versions: a bottom-up approach (observations begin in their own clusters), also called *agglomerative*, and a top-down approach (all observations begin in one cluster), also called *divisive*. We will follow the bottom-up approach in this chapter and when you  look at the dendogram you will realize how this strategy repeatedly combines the two *nearest* clusters at the bottom into a larger one in the top. The distance between clusters is initially estimated for every pair of observation points and then put every point in its own cluster in order to get the closest pair of points and iteratively compute the distance between each new cluster and the previous ones. This is the internal rule of the algorithm and we must choose a specific linkage method (complete, single, average or centroid, or Ward's linkage). Ward's linkage is a good default choice: it minimizes the variance of the clusters being merged. In doing so, it tends to produce roughly evenly sized clusters and is less sensitive to noise and outliers than some of the other methods.
+In Example [-@exm-hc] we will use the function `hcut` of the package *factoextra* in R and *scikit-learn* function `AgglomerativeClustering` in Python, to compute the hierarchical clustering.
+
+A big advantage of hierarchical clustering is that, once estimated,
+you can freely choose the number of clusters in which to group your
+cases without re-estimating the model. If you decide, for instance, to
+use four instead of three clusters, then the cases in one of
+your three clusters are divided into two subgroups. With $k$-means, in
+contrast, a three-cluster solution can be completely different from a
+four-cluster solution. However, this comes at a big cost: hierarchical
+clustering requires a lot more computing resources and may therefore
+not be feasible for large datasets.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-hc}
+Using hierarchical clustering to group countries based on the average support of refugees and migrants, age and educational level
+
+::: {.panel-tabset}
+## Python code
+```{python hc-python}
+hc_res = AgglomerativeClustering(affinity="euclidean", linkage="complete")
+hc_res.fit_predict(d3_s)
+print(hc_res)
+
+```
+## R code
+```{r hc-r}
+hc.res <- hcut(d3_s, hc_method="complete")
+summary(hc.res)
+```
+:::
+:::
+:::
+
+We can then plot the dendogram  with base R function `plot` and *scipy* (module `cluster.hierarchy`) function `dendogram` in Python. The summary of the initial model suggest  two clusters (size=2) but by looking at the dendogram you can choose the number of clusters you want to work with by choosing a height (for example four to get three clusters).
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-dendogram}
+Dendogram to visualize the hierarchical clustering
+
+::: {.panel-tabset}
+## Python code
+```{python dendogram-python}
+#| results: hide
+dendrogram = sch.dendrogram(
+    sch.linkage(d3_s, method="complete"),
+    labels=list(d3.index),
+    leaf_rotation=90,
+)
+
+```
+## R code
+```{r dendogram-r}
+plot(hc.res, cex=0.5)
+```
+:::
+:::
+:::
+
+If you re-run the hierarchical clustering for three clusters (Example [-@exm-hc3]) and visualize it (Example [-@exm-vishc3]) you will get a graph similar to the one produced by $k$-means.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-hc3}
+Re-run hierarchical clustering with three clusters
+
+::: {.panel-tabset}
+## Python code
+```{python hc3-python}
+hc_res = AgglomerativeClustering(
+    n_clusters=3, affinity="euclidean", linkage="ward"
+)
+hc_res.fit_predict(d3_s)
+print(hc_res)
+
+```
+## R code
+```{r hc3-r}
+hc.res = hcut(d3_s, k=3, hc_method="complete") 
+summary(hc.res)
+```
+:::
+:::
+:::
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-vishc3}
+Re-run hierarchical clustering with three clusters
+
+::: {.panel-tabset}
+## Python code
+```{python vishc3-python}
+#| results: hide
+for cluster in range(hc_res.n_clusters):
+    plt.scatter(
+        d3_s[hc_res.labels_ == cluster, 0], d3_s[hc_res.labels_ == cluster, 1]
+    )
+plt.legend(scatterpoints=1)
+plt.show()
+
+```
+## R code
+```{r vishc3-r}
+fviz_cluster(hc.res, d3_s, ellipse.type="convex")
+```
+:::
+:::
+:::
+
+### Principal Component Analysis and Singular Value Decomposition
+
+Cluster analyses are in principle used to group similar
+cases. Sometimes, we want to group similar variables instead.  A
+well-known method for this is principal component analysis (PCA)[^11]. This
+unsupervised method is useful to reduce the dimensionality of your
+data by creating new uncorrelated variables or *components*
+that describe the original dataset. PCA uses linear transformations to
+create principal components that are ordered by the level of explained
+variance (the first component will catch the largest variance). We
+will get as many principal components as number of variables we have
+in the dataset, but when we look at the cumulative variance we can
+easily select only few of these components to explain most of the
+variance and thus work with a smaller and summarized data frame that
+might be more convenient for many tasks (i.e. those that require
+avoiding multicollinearity or just need to be more computationally
+efficient). By simplifying the complexity of our data we can have a
+first understanding of how our variables are related and also of how
+our observations might be grouped. All components have specific loadings
+for each original variable, which can tell you how the old variables
+are represented in the new components. This statistical technique is
+especially useful in EDA when working with high dimensional datasets
+but it can be used in many other situations.
+
+The mathematics behind PCA can be relatively easy to
+understand. However, for the sake of simplicity, we will just say that
+in order to obtain the principal components the algorithm firstly has
+to compute the mean of each variable and then compute the covariance
+matrix of the data. This matrix contains the covariance between the
+elements of a vector and the output will be a square matrix with an 
+identical number of rows and columns, corresponding to the total
+number of dimensions of the original dataset. Specifically, we can
+calculate the covariance matrix of the variables *X* and *y*
+with the formula:
+
+Secondly, using the covariance matrix the algorithm computes the eigenvectors and their corresponding eigenvalues, and then drop the eigenvectors with the lowest eigenvalues. With this reduced matrix it transforms the original values to the new subspace in order to obtain the principal components that will synthesize the original dataset.
+
+Let us now conduct a PCA over the Eurobarometer data.  In Example [-@exm-pca] we will re-use the sub-data frame *d3* containing the means of 4 variables (support to refugees, support to migrants, age and educational level) for each of the 30 European countries. The question is  can we have a new data frame containing less than 4 variables but that explains most of the variance, or in other words, that represents our original dataset well enough, but with fewer dimensions? As long as our features are measured on different scales, it is normally suggested to center (to mean 0) and scale (to standard deviation 1) the data. You may also know this transformation as "calculating $z$-scores". We can perform the PCA in R using the base function `prcomp` and in Python using the function `PCA` of the module `decomposition` of *scikit-learn*.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-pca}
+Principal component analysis (PCA) of a data frame with 30 records and 4 variables
+
+::: {.panel-tabset}
+## Python code
+```{python pca-python}
+pca_m = PCA()
+pca = pca_m.fit(d3_s)
+pca_n = PCA()
+pca = pca_n.fit_transform(d3_s)
+pca_df = pd.DataFrame(data=pca, columns=["PC1", "PC2", "PC3", "PC4"])
+pca_df.index = d3.index
+print(pca_df.head())
+
+pca_df_2 = pd.DataFrame(
+    data=pca_n.components_.T, columns=["PC1", "PC2", "PC3", "PC4"]
+)
+pca_df_2.index = d3.columns
+print(pca_df_2)
+
+```
+## R code
+```{r pca-r}
+pca = prcomp(d3_s, scale=TRUE)
+head(pca$x)
+pca$rotation
+```
+:::
+:::
+:::
+
+The generated object with the PCA contains different elements (in R `sdev`, `rotation`, `center`, `scale` and `x`) or attributes in Python (`components_`, `explained_variance_`, `explained_variance_ratio`, `singular_values_`, `mean_`, `n_components_`, `n_features_`, `n_samples_`, and `noise_variance_`). In the resulting object we can see the values of four principal components of each country, and the values of the loadings, technically called *eigenvalues*, for the variables in each principal component.  In our example we can see that support for refugees and migrants are more represented on PC1, while age and educational level are more represented on PC2. If we plot the first two principal components using base function `biplot` in R and the library *bioinfokit* in Python (Example [-@exm-plot_pca]), we can clearly see how the variables are associated with either PC1 or with PC2 (we might also want to plot any pair of the four components!). But we can also get a picture of how countries are grouped based only in these two new variables.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-plot_pca}
+Plot PC1 and PC2
+
+::: {.panel-tabset}
+## Python code
+```{python plot_pca-python}
+#| results: hide
+var1 = round(pca_n.explained_variance_ratio_[0], 2)
+var2 = round(pca_n.explained_variance_ratio_[1], 2)
+bioinfokit.visuz.cluster.biplot(
+    cscore=pca,
+    loadings=pca_n.components_,
+    labels=pca_df_2.index.values,
+    var1=var1,
+    var2=var2,
+    show=True,
+)
+
+```
+## R code
+```{r plot_pca-r}
+biplot(x = pca, scale = 0, cex = 0.6, 
+       col = c("blue4", "brown3"))
+```
+:::
+:::
+:::
+
+So far we are not sure  how many components are enough to accurately represent our data, so we need to know how much variance (which is the square of the standard deviation) is explained by each component. We can get the values (Example [-@exm-prop]) and plot  the proportion of explained variance (Example [-@exm-prop2]). We get that the first component explains 57.85\% of the variance, the second 27.97\%, the third 10.34\% and the fourth just 3.83\%.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-prop}
+Proportion of variance explained
+
+::: {.panel-tabset}
+## Python code
+```{python prop-python}
+print("Proportion of variance explained:")
+print(pca_n.explained_variance_ratio_)
+
+```
+## R code
+```{r prop-r}
+print("Proportion of variance explained:")
+prop_var = tibble(pc=1:4,
+    var=pca$sdev^2 / sum(pca$sdev^2))
+prop_var
+```
+:::
+:::
+:::
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-prop2}
+Plot of the proportion of variance explained
+
+::: {.panel-tabset}
+## Python code
+```{python prop2-python}
+#| results: hide
+plt.bar([1, 2, 3, 4], pca_n.explained_variance_ratio_)
+plt.ylabel("Proportion of variance explained")
+plt.xlabel("Principal component")
+plt.xticks([1, 2, 3, 4])
+plt.show()
+
+```
+## R code
+```{r prop2-r}
+ggplot(prop_var, aes(x=pc, y=var)) +
+  geom_col() +
+  scale_y_continuous(limits = c(0,1)) +
+  xlab("Principal component") + 
+  ylab("Proportion of variance explained")
+```
+:::
+:::
+:::
+
+When we estimate (Example [-@exm-acum]) and plot (Example [-@exm-acum2]) the cumulative explained variance it is easy to identify that with just the two first components we explain 88.82\% of the variance. It might now seem a good deal to reduce our dataset from four to two variables, or let’s say half of the data, but retaining most of the original information.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-acum}
+Cumulative explained variance
+
+::: {.panel-tabset}
+## Python code
+```{python acum-python}
+cvar = np.cumsum(pca_n.explained_variance_ratio_)
+cvar
+
+```
+## R code
+```{r acum-r}
+cvar = cumsum(prop_var)
+cvar
+```
+:::
+:::
+:::
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-acum2}
+Plot of the cumulative explained variance
+
+::: {.panel-tabset}
+## Python code
+```{python acum2-python}
+#| results: hide
+plt.plot(cvar)
+plt.xlabel("number of components")
+plt.xticks(np.arange(len(cvar)), np.arange(1, len(cvar) + 1))
+plt.ylabel("cumulative explained variance")
+plt.show()
+
+```
+## R code
+```{r acum2-r}
+ggplot(cvar, aes(x=pc, y=var)) +
+  geom_point() +
+  geom_line() +
+  theme_bw() +
+  xlab("Principal component") +
+  ylab("Cumulative explained variance")
+```
+:::
+:::
+:::
+
+And what if we want to use this PCA and deploy a clustering (as explained above) with just these two new variables instead of the four original ones?  Just repeat the $k$-means procedure but now using a new smaller data frame selecting PC1 and PC2 from the PCA. After estimating the optimal number of clusters (three again!) we can compute and visualize the clusters, and get a very similar picture to the one obtained in the previous examples, with little differences such as the change of cluster of the Netherlands (more similar now to the Nordic countries!). This last exercise is a good example of how to combine different techniques in EDA.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-new}
+Combining PCA to reduce dimensionality and $k$-means to group countries
+
+::: {.panel-tabset}
+## Python code
+```{python new-python}
+# Generate a new dataset with first components
+d5 = pca[:, 0:2]
+d5[0:5]
+
+# Get optimal number of clusters
+wss = []
+for i in range(1, 15):
+    km_out = KMeans(n_clusters=i, n_init=20)
+    km_out.fit(d5)
+    wss.append(km_out.inertia_)
+
+# Plot sum of squares vs. number of clusters
+plt.plot(range(1, 15), wss, marker="o")
+plt.xlabel("Number of clusters")
+plt.ylabel("Within groups sum of squares")
+plt.show()
+
+# Compute again with k = 3 and visualize
+km_res_5 = KMeans(n_clusters=3, n_init=25).fit(d5)
+for cluster in range(km_res_5.n_clusters):
+    plt.scatter(
+        d3_s[km_res_5.labels_ == cluster, 0],
+        d3_s[km_res_5.labels_ == cluster, 1],
+    )
+plt.scatter(
+    km_res_5.cluster_centers_[:, 0],
+    km_res_5.cluster_centers_[:, 1],
+    s=250,
+    marker="*",
+)
+plt.legend(scatterpoints=1)
+plt.show()
+
+```
+## R code
+```{r new-r}
+#Generate a new dataset with first components
+d5 = pca$x[, c("PC1", "PC2")]
+head(d5)
+
+#Get optimal number of clusters
+wss = list()
+for (i in 1:15) {
+  km.out = kmeans(d5, centers = i, nstart = 20)
+  wss[[i]] = tibble(k=i, ss=km.out$tot.withinss)
+}
+wss = bind_rows(wss)
+
+# Plot sum of squares vs. number of clusters
+ggplot(wss, aes(x=k, y=ss)) + geom_line() + 
+     xlab("Number of Clusters") + 
+     ylab("Within groups sum of squares")
+
+# Compute again with k = 3 and visualize
+set.seed(123)
+km.res_5 <- kmeans(d5, 3, nstart = 25)
+fviz_cluster(km.res_5, d5, ellipse.type = "norm")
+```
+:::
+:::
+:::
+
+When your dataset gets bigger, though, you may actually not use PCA
+but the very much related singular value decomposition, SVD. They are
+closely interrelated, and in fact SVD can be used "under the hood"
+to estimate a PCA. While PCA is taught in a lot of classical textbooks
+for statistics in the social sciences, SVD is usually not. Yet, it has
+a great advantage: in the way that it is implemented in
+*scikit-learn*, it does not require to store the (dense)
+covariance matrix in memory (see the feature box
+in @sec-workflow for more information on sparse versus dense
+matrices). This means that once your dataset grows bigger than
+typical survey datasets, a PCA maybe quickly become impossible to estimate,
+whereas the SVD can still be estimated without much resource
+required. Therefore, especially when you are working with textual data,
+you will see that SVD is used instead of PCA. For all practical
+purposes, the way that  you can use and interpret the results stays the
+same.
+
+[^1]: Original data ZA6928_v1-0-0.csv was cleaned and prepared for the exercise. The preparation of the data are in the notebooks cleaning_eurobarometer_py.ipynb and cleaning_eurobarometer_r.ipynb.
+
+[^2]: See https://cssbook.net/datasets" for more information.
+
+[^3]: We may also use: dropna(axis='columns') if you want to drop columns instead of rows.
+
+[^4]: Freely available at [socviz.co/](https://socviz.co/)
+
+[^5]: [www.r-graph-gallery.com/](https://www.r-graph-gallery.com/)
+
+[^6]: [www.data-to-viz.com/](https://www.data-to-viz.com/)
+
+[^7]: [www.python-graph-gallery.com/](https://www.python-graph-gallery.com/)
+
+[^8]: [r-graph-gallery.com/](https://r-graph-gallery.com/)
+
+[^9]: A $z$-transformation means rescaling data to a mean of 0 and a standard deviation of 1
+
+[^10]: We can re-run this cluster analysis using $k$-medoids or partitioning around medoids (PAM) and get similar results (the three medoids are: Slovakia,  Belgium and Denmark), both in data and visualization. In R you must install the package *cluster* than contains the function `pam`, and in Python the package *scikit-learn-extra* with the function `Kmedoids`.
+
+[^11]: If you had to learn statistics using SPSS, you have almost certainly already conducted a PCA. Quite counter-intuitively, the default analysis that is run when clicking on the "Factor" menu in SPSS, is a PCA.
+

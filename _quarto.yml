@@ -1,0 +1,35 @@
+project:
+  type: book
+
+book:
+  title: "cssbook_quarto"
+  author: "Wouter van Atteveldt, Damian Trilling & Carlos Arcila"
+  date: "2023-01-01"
+  chapters:
+    - index.qmd
+    - chapter01.qmd
+    - chapter02.qmd
+    - chapter03.qmd
+    - chapter04.qmd
+    - chapter05.qmd
+    - chapter06.qmd
+    - chapter07.qmd
+    
+    - references.qmd
+
+bibliography: references.bib
+
+format:
+  html:
+    theme: cosmo
+  pdf:
+    documentclass: scrreprt
+  epub:
+    cover-image: cover.png
+
+editor: visual
+
+engine: knitr
+execute:
+  warning: false
+  freeze: auto
