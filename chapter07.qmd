@@ -1,9 +1,9 @@
+# Exploratory data analysis {#sec-chap-eda}
+
 ```{python}
 #| echo: false
 import warnings; warnings.filterwarnings('ignore')
 ```
-
-# Exploratory data analysis {#sec-chap-eda}
 
 **Abstract.** This chapter explains how to use data analysis and visualization techniques to understand and communicate the structure and story of our data.  It first introduces the reader to exploratory statistics and data visualization in R and Python. Then, it discusses how unsupervised machine learning, in particular clustering and dimensionality reduction techniques, can be used to group similar cases or to decrease the number of features in a dataset.
 

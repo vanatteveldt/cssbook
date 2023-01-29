@@ -1,9 +1,9 @@
+# Getting started: Fun with data and visualizations {#sec-chap-fundata}
+
 ```{python}
 #| echo: false
 import warnings; warnings.filterwarnings('ignore')
 ```
-
-# Getting started: Fun with data and visualizations {#sec-chap-fundata}
 
 **Abstract.**
   This chapter is a lightning tour of some of the cool (and informative) things you can do with R and Python.

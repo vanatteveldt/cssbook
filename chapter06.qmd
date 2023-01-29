@@ -1,9 +1,9 @@
+# Data Wrangling {#sec-chap-datawrangling}
+
 ```{python}
 #| echo: false
 import warnings; warnings.filterwarnings('ignore')
 ```
-
-# Data Wrangling {#sec-chap-datawrangling}
 
 **Abstract.**
 This chapter shows you how to do "data wrangling" in R and Python.

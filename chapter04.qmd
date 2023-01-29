@@ -1,10 +1,10 @@
+
+# How to write code {#sec-chap-worldcode}
+
 ```{python}
 #| echo: false
 import warnings; warnings.filterwarnings('ignore')
 ```
-
-
-# How to write code {#sec-chap-worldcode}
 
 **Abstract.**
 Programming is no longer a solitary activity, and almost all questions, problems, and error messages have been encountered and solved before. This chapter explains the most common forms of collaboration and sources of outside help, as well as outlining best practice on how to write and share code yourself.

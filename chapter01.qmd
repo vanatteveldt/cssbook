@@ -1,9 +1,9 @@
+# Introduction {#sec-chap-introduction}
+
 ```{python}
 #| echo: false
 import warnings; warnings.filterwarnings('ignore')
 ```
-
-# Introduction {#sec-chap-introduction}
 
 **Abstract.**
 This chapter explains how the methods outlined in this book are

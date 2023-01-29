@@ -1,9 +1,9 @@
+# Programming concepts for data analysis {#sec-chap-programmingconcepts}
+
 ```{python}
 #| echo: false
 import warnings; warnings.filterwarnings('ignore')
 ```
-
-# Programming concepts for data analysis {#sec-chap-programmingconcepts}
 
 **Abstract.**
   This chapter introduces readers to the basics of programming, data types, control structures, and functions

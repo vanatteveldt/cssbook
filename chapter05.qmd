@@ -1,9 +1,9 @@
+# From file to data frame and back {#sec-chap-filetodata}
+
 ```{python}
 #| echo: false
 import warnings; warnings.filterwarnings('ignore')
 ```
-
-# From file to data frame and back {#sec-chap-filetodata}
 
 **Abstract.**
   This chapter teaches you the basics of file handling, such as different file formats and encodings. It introduces csv files, json files, plain text files, and binary file formats. We discuss different approaches to organizing data in files, and how to write data frames to and read them from these files.  Finally, we provide guidance for retrieving example datasets.
