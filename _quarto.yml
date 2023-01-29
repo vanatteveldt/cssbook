@@ -2,7 +2,6 @@ project:
   type: book
   output-dir: docs
 
-
 book:
   title: "cssbook_quarto"
   author: "Wouter van Atteveldt, Damian Trilling & Carlos Arcila"
@@ -16,6 +15,7 @@ book:
     - chapter05.qmd
     - chapter06.qmd
     - chapter07.qmd
+    - chapter08.qmd
     
     - references.qmd
 

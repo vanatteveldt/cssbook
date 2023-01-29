@@ -112,7 +112,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./references.html" rel="next">
+<link href="./chapter08.html" rel="next">
 <link href="./chapter06.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -214,6 +214,11 @@ div.csl-indent {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./chapter07.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Exploratory data analysis</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter08.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Statistical Modeling and Supervised Machine Learning</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -1385,7 +1390,7 @@ sample estimates:
 </section>
 <section id="sec-clustering" class="level2" data-number="7.3">
 <h2 data-number="7.3" class="anchored" data-anchor-id="sec-clustering"><span class="header-section-number">7.3</span> Clustering and Dimensionality Reduction</h2>
-<p>So far, we have reviewed traditional statistical exploratory and visualization techniques that any social scientist should be able to apply. A more computational next step in your EDA workflow is using machine learning (ML) to let your computer “learn” about our data and in turn give more initial insights. ML is a branch of artificial intelligence that uses algorithms to interact with data and obtain some patterns or rules that characterize that data. We normally distinguish between supervised machine learning (SML) and unsupervised machine learning (UML). In Chapter <span class="quarto-unresolved-ref">?sec-chap-introsml</span>, we will come back to this distinction. For now, it may suffice to say that the main characteristic of unsupervised methods is that we do not have any measurement available for a dependent variable, label, or categorization, which we want to predict. Instead, we want to identify <em>patterns</em> in the data without knowing in advance what these may look like. In this, unsupervised machine learning is very much of a inductive, bottom-up technique (see Chapter <a href="chapter01.html"><span>1</span></a> and <span class="citation" data-cites="Boumans2016">Boumans and Trilling (<a href="references.html#ref-Boumans2016" role="doc-biblioref">2016</a>)</span>).</p>
+<p>So far, we have reviewed traditional statistical exploratory and visualization techniques that any social scientist should be able to apply. A more computational next step in your EDA workflow is using machine learning (ML) to let your computer “learn” about our data and in turn give more initial insights. ML is a branch of artificial intelligence that uses algorithms to interact with data and obtain some patterns or rules that characterize that data. We normally distinguish between supervised machine learning (SML) and unsupervised machine learning (UML). In Chapter <a href="chapter08.html"><span>8</span></a>, we will come back to this distinction. For now, it may suffice to say that the main characteristic of unsupervised methods is that we do not have any measurement available for a dependent variable, label, or categorization, which we want to predict. Instead, we want to identify <em>patterns</em> in the data without knowing in advance what these may look like. In this, unsupervised machine learning is very much of a inductive, bottom-up technique (see Chapter <a href="chapter01.html"><span>1</span></a> and <span class="citation" data-cites="Boumans2016">Boumans and Trilling (<a href="references.html#ref-Boumans2016" role="doc-biblioref">2016</a>)</span>).</p>
 <p>In this chapter, we will focus on UML as a means of finding groups and latent dimensions in our data, which can also help to reduce our number of variables. Specifically, we will use base R and Python’s <em>scikit-learn</em> to conduct <span class="math inline">\(k\)</span>-means clustering, hierarchical clustering, and principal component analysis (PCA) as well as the closely related singular value decomposition (SVD).</p>
 <p>In data mining, we use clustering as a UML technique that aims to find the relationship between a set of descriptive variables. By doing cluster analysis we can identify underlying groups in our data that we will call <em>clusters</em>. Imagine we want to explore how European countries can be grouped based on their average support to refugees/migrants, age and educational level. We might create some <em>a priori</em> groups (such as southern versus northern countries), but cluster analysis would be a great method to let the data “talk” and then create the most appropriate groups for this specific case. As in all UML, the groups will come unlabeled and the computational analyst will be in charge of finding an appropriate and meaningful label for each cluster to better communicate the results.</p>
 <section id="k-means-clustering" class="level3" data-number="7.3.1">
@@ -2409,8 +2414,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./references.html" class="pagination-link">
-        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./chapter08.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Statistical Modeling and Supervised Machine Learning</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>
