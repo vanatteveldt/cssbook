@@ -14,9 +14,12 @@ Steps needed to render the book:
 On my system, the following works for these steps:
 
 ```
-# Install quarto
+# Install quarto 
 wget https://github.com/quarto-dev/quarto-cli/releases/download/v1.2.313/quarto-1.2.313-linux-amd64.deb
 sudo apt install ./quarto-1.2.313-linux-amd64.deb
+
+# Install prerequisites for R packages (might be incomplete, please add if you find more requirements)
+sudo apt install gfortran cmake liblapack-dev libgsl-dev libpng-dev
 
 # Clone the repository
 git clone git@github.com:vanatteveldt/cssbook
@@ -24,12 +27,6 @@ cd cssbook
 
 # Activate the renv
 Rscript renv/install.R
-```
-
-Note that on linux you might have to install some libraries for the R packages to compile, e.g.:
-
-```
-sudo apt install gfortran cmake liblapack-dev libgsl-dev libpng-dev
 ```
 
 # Render the book 
