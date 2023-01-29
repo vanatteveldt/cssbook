@@ -26,6 +26,12 @@ cd cssbook
 Rscript renv/install.R
 ```
 
+Note that on linux you might have to install some libraries for the R packages to compile, e.g.:
+
+```
+sudo apt install gfortran cmake liblapack-dev libgsl-dev libpng-dev
+```
+
 # Render the book 
 
 ```
