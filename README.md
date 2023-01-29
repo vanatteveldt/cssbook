@@ -9,7 +9,7 @@ When it is finished, it should replace the latex and html versions of the book a
 Steps needed to render the book:
  - Install quarto
  - Clone this repository
- - Set up a pythoon virtual env and install the `requirements.txt` file
+ - Activate the `renv` R virtual environment, e.g. using [renv/install.R]
 
 On my system, the following works for these steps:
 
@@ -22,13 +22,12 @@ sudo apt install ./quarto-1.2.313-linux-amd64.deb
 git clone git@github.com:vanatteveldt/cssbook
 cd cssbook
 
-# Set up python virtual environment
-python -m venv env
-env/bin/pip install -r requirements.txt
+# Activate the renv
+Rscript renv/install.R
 ```
 
-# Render the book
+# Render the book 
 
 ```
-RETICULATE_PYTHON=env/bin/python quarto render --to html
+quarto render
 ```
