@@ -1,7 +1,6 @@
 /_freeze/
 env
 /.quarto/
-/renv/
 
 # some files created by the example code in the book
 mynewcsvfile.csv
