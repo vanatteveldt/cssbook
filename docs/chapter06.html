@@ -223,6 +223,11 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./chapter09.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Processing text</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
   </div>
 </li>
@@ -531,7 +536,7 @@ Note
 </div>
 </div>
 </div>
-<p>To illustrate some of the many possibilities, <a href="#exm-mutate">Example&nbsp;<span>6.2</span></a> has code for cleaning a version of the gun polls in which we intentionally introduced two problems: we added some typos to the <em>rep</em> column and introduced a missing value in the <em>Support</em> column. To clean this, we perform three steps: First, we remove all non-numeric characters using a regular expression (see Section <span class="quarto-unresolved-ref">?sec-regular</span> for more information on text handling and regular expressions). Next, we need to explicitly convert the resulting column into a numeric column so we can later use it in calculations. Finally, we replace the missing value by the column mean (of course, it is doubtful that that is the best strategy for imputing missing values here, we do it mainly to show how one can deal with missing values technically. You will find some more discussion about missing values in Section <a href="chapter07.html#sec-simpleeda"><span>7.1</span></a>).</p>
+<p>To illustrate some of the many possibilities, <a href="#exm-mutate">Example&nbsp;<span>6.2</span></a> has code for cleaning a version of the gun polls in which we intentionally introduced two problems: we added some typos to the <em>rep</em> column and introduced a missing value in the <em>Support</em> column. To clean this, we perform three steps: First, we remove all non-numeric characters using a regular expression (see Section <a href="chapter09.html#sec-regular"><span>9.2</span></a> for more information on text handling and regular expressions). Next, we need to explicitly convert the resulting column into a numeric column so we can later use it in calculations. Finally, we replace the missing value by the column mean (of course, it is doubtful that that is the best strategy for imputing missing values here, we do it mainly to show how one can deal with missing values technically. You will find some more discussion about missing values in Section <a href="chapter07.html#sec-simpleeda"><span>7.1</span></a>).</p>
 <p>The cleaning process is actually performed twice: lines 5-10 use direct assignment, while lines 12-19 use the <code>mutate</code>/<code>assign</code> function. Finally, lines 21-27 show how you can define and apply a custom function to combine the first two cleaning steps. This can be quite useful if you use the same cleaning steps in multiple places, since it reduces the repetition of code and hence the possibility of introducing bugs or inconsistencies.</p>
 <p>Note that all these versions work fine and produce the same result. In the end, it is up to the researcher to determine which feels most natural given the circumstances. As noted above, in R we would generally prefer <code>mutate</code> over direct assignment, mostly because it fits nicely into the <em>tidyverse</em> workflow and you do not need to repeat the data frame name. In Python, we would generally prefer the direct assignment, unless a copy of the data with the changes made is convenient, in which case <code>assign</code> can be more useful.</p>
 </section>

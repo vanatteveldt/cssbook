@@ -1,0 +1,724 @@
+# Processing text {#sec-chap-protext}
+
+```{python}
+#| echo: false
+import warnings; warnings.filterwarnings('ignore')
+```
+
+
+**Abstract.**
+Many datasets that are relevant for social science consist of textual data, from political discussions and newspaper archives to open-ended survey questions and reviews. This chapter gives an introduction to dealing with textual data using base functions in Python and (mostly) the *stringr* package in R.
+
+**Keywords.** text representation, text cleaning, regular expressions
+
+**Objectives:**
+
+-  Understand how text is represented in the computer
+ -  Be able to clean up and alter text
+ -  Understand and be able to use regular expressions
+
+::: {.callout-note icon=false collapse=true}
+## Packages used in this chapter
+
+This chapter introduces the packages for handling textual data.
+  For R, this is mainly the *stringr* package (included in *tidyverse*).
+  In Python, most functions are built-in, but will show how to use these functions in *pandas* and also introduce the *regex* package, an alternative to built-in regular expressions.
+You can install these packages with the code below if needed  (see Section [-@sec-installing] for more details):
+
+::: {.panel-tabset}
+## Python code
+```{python chapter09install-python}
+#| eval: false
+!pip3 install regex pandas
+```
+## R code
+```{r chapter09install-r}
+#| eval: false
+install.packages(c("glue", "tidyverse"))
+```
+:::
+ After installing, you need to import (activate) the packages every session:
+
+::: {.panel-tabset}
+## Python code
+```{python chapter09library-python}
+import regex
+import re
+import pandas as pd
+
+```
+## R code
+```{r chapter09library-r}
+library(glue)
+library(tidyverse)
+```
+:::
+:::
+
+When dealing with textual data, an important step is to normalize the data. Such preprocessing ensures that noise is removed, and reduces the amount of data to deal with. In Section [-@sec-encodings] we explained how to read data from different formats, such as txt, csv or json that can include textual data, and we also mentioned some of the challenges when reading text (e.g., encoding/decoding from/to Unicode). In this section we cover typical cleaning steps such as lowercasing and removing punctuation, HTML tags and boilerplate.
+
+As a computational communication scientist you will come across many sources of text that range from electronic versions of newspapers in HTML to parliamentary speeches in PDF. Moreover, most of the contents in their original shape will include data that will not be of interest for the analysis but, instead,  will produce noise that might negatively affect the quality of the research. You have to decide which parts of the raw text should be considered for analysis and determine the shape of these contents in order to have a good input in the analytical process.
+
+As the difference between useful information and noise is determined by your research question,
+there is not a fixed list of steps to take that can guide you in this preprocessing stage.
+It is highly likely that you will have to test different combinations of steps and assess what  the best options are.
+For example, in some cases keeping capital letters within a chat conversation or a news comment might be valuable to detect the tone of the message, but in more formal speeches transforming the whole text to lowercases would help to normalize the content.
+However, it is true that there are some typical challenges to reducing the noise from the text.
+
+This chapter and the next will show you how to clean and manipulate text to transform the raw strings of letters into useful data.
+This chapter focuses on dealing with the text as characters and especially shows you how to use *regular expressions* to search and replace textual content.
+The next chapter will focus on text as words and shows how you can represent text in a suitable format for further computational analysis.
+
+## Text as a String of Characters {#sec-unicode}
+
+::: {.callout-note icon=false collapse=true}
+## Important: Unicode and Encodings
+
+Technically speaking, text is represented as bytes (numbers) rather than characters.
+  The  Unicode standard determines how these bytes should be interpreted or "decoded".
+  This chapter assumes that the bytes in a file are already "decoded" into characters (or Unicode code points),
+  and we can just work with the characters.
+  Especially if you are not working with English text, it is very important to make sure you understand Unicode and encodings
+  and check that the texts you work with are decoded properly.
+  Please see Section [-@sec-encodings] for more information on how this works.
+:::
+
+When we think about text, we might think of sentences or words, but the computer only "thinks" about letters:
+text is represented internally as a string of characters.
+This is reflected of course in the type name, with R calling it a *character* vector and Python a *string*.
+
+::: {.callout-note appearance="simple" icon=false}
+::: {#exm-text}
+Internal representation and of single and multiple texts.
+
+::: {.panel-tabset}
+## Python code
+```{python string-python}
+text = "This is text."
+print(f"type(text): {type(text)}")
+print(f"len(text): {len(text)}")
+print(f"text[0]: '{text[0]}'")
+print(f"text[5:7]: '{text[5:7]}'")
+print(f"text[-1]: '{text[-1]}'")
+print(f"text[-4:]: '{text[-5:]}'")
+
+```
+## R code
+```{r string-r}
+text = "This is text."
+glue("class(text): {class(text)}")
+glue("length(text): {length(text)}")
+glue("text[1]: {text[1]}")
+glue("str_length(text): {str_length(text)}")
+glue("str_sub(text, 6,7): {str_sub(text, 6,7)}")
+
+```
+:::
+
+::: {.panel-tabset}
+## Python code
+```{python manystrings-python}
+words = ["These", "are", "words"]
+print(f"type(words): {type(words)}")
+print(f"len(words): {len(words)}")
+print(f"words[0]: '{words[0]}'")
+print(f"words[1:3]: '{words[1:3]}'")
+
+```
+## R code
+```{r manystrings-r}
+words = c("These", "are", "words")
+glue("class(words): {class(words)}")
+print("length(words): {length(words)}")
+glue("words[1]: {words[1]}")
+# Note: use collapse to convert to single value
+words_2_3 = str_c(words[2:3], collapse=", ")
+glue("words[2:3]: {words_2_3}")
+```
+:::
+:::
+:::
+
+As a simple example, the figure at the top of Example [-@exm-text] shows how the text "This is text." is represented.
+This text is split into separate characters, with each character representing a letter (or space,  punctuation, emoji, or Chinese character).
+These characters are indexed starting from the first one, with (as always) R counting from one, but Python counting from zero.
+
+In Python, texts are represented as `str` (string) objects, in which we can directly address the individual characters by their position:
+`text[0]` is the first character of `text`, and so on.
+In R, however, texts (like all objects) represent columns (or vectors) rather than individual values.
+Thus, `text[1]` in R is the first text in a series of text.
+To access individual characters in a text, you have to use a function such as `str_length` and `str_sub` that will be discussed in more detail below.
+This also means that in Python, if you have a column (or list) of strings that you need to apply an operation to,
+you either need to use one of /textitPandas' methods shown below or use a *for loop* or *list comprehension* to iterate over all the strings (see also section 3.2).
+
+### Methods for Dealing With Text {#sec-textmethods}
+
+::: {.callout-note icon=false collapse=true}
+## Stringi, stringr, and base string operations in R
+
+As is so often the case, R has multiple packages that partially replicate functionality for basic text handling.
+  In this book we will mainly use the *stringr* package, which is part of *tidyverse*.
+  This is not because that package is necessarily better or easier than the alternative *stringi* package
+  or the built-in (*base*) methods.
+  However, the methods are well-documented, clearly named, and consistent with other tidyverse functions,
+  so for now it is easiest to stick to *stringr*.
+  In particular, *stringr* is very similar to *stringi* (and in fact is partially based on it).
+  So, to give one example, the function `str_detect` is more or less the same as `stringi::str_detect` and `base::grepl`.
+:::
+
+The first thing to keep in mind is that once you load any text in R or Python, you usually store this content as a *character* or *string* object (you may also often use *lists* or *dictionaries*, but they will have strings inside them), which means that basic operations and conditions of this data type apply, such as indexing or slicing to access individual characters or substrings (see Section [-@sec-datatypes]). In fact, base strings operations are very powerful to clean your text and eliminate a large amount of noise.  Table [-@tbl-stringoperations] summarizes some useful operations on strings in R and Python that will help you in this stage.
+
+```{r}
+#| echo: false
+fnre = '<a href="#fnre" class="footnote-ref" role="doc-noteref" aria-expanded="false"><sup>*</sup></a>'
+```
+
+
+|String operation | R (*stringr*) | Python | Pandas|
+|-|-|-|-|-|
+ | |(whole column) | (single string) | (whole column)|
+|Count characters in s | `str_length(s)` | `len(s)` | `s.str.len()`|
+|Extract a substring | `str_sub(s, n1, n2)` | `s[n1:n2]` | `s.str.slice(n1, n2)`|
+|Test if s contains s2 | `str_detect(s, s2)``r fnre` | `s2 in s` | `s.str.match(s2)``r fnre`|
+|Strip spaces | `trimws(s)` | `s.strip()` | `s.str.strip()`|
+|Convert to lowercase | `tolower(s)` | `s.lower()` | `s.str.lower()`|
+|Convert to uppercase | `toupper(s)` | `s.upper()` | `s.str.upper()`|
+|Find s1 and replace by s2 | `str_replace(s, s1, s2)``r fnre` | `s.replace(s1, s2)` | `s.str.replace(s1, s2)``r fnre`|
+: Useful strings operations in R and Python to clean noise. {#tbl-stringoperations}
+
+
+#### Table notes {.unnumbered}
+
+\*) <span id="fninv">The R functions `str_detect` and `str_replace` and the Pandas function `s.str.match` and `s.str.replace` use *regular expressions* to define what to find and replace. See Section [-@sec-regular] below for more information.</span>
+
+<hr />
+
+Let us apply some of these functions/methods to a simple Wikipedia
+text that contains HTML tags, or boilerplate, and upper/lower
+case letters.
+Using the *stringr* function `str_replace_all` in R
+and `replace` in Python we can do a find-and-replace and replace substrings
+by others (in our case, replace `<b>` with a space, for instance).
+To remove unnecessary double spaces we apply the `str_squish` function provided by *stringr* and in Python,
+we first chunk our string into a list of words by using the `split` string method, before we use the `join` method
+to join them again with now a single space.
+In the case of converting letters from upper to lower case, we use the base R function `tolower` and the string
+method `lower` in Python.
+Finally, the base R function `trimws` and the
+Python string method `strip` remove the white space from the beginning
+and end of the string.
+Example [-@exm-clean] shows how to conduct this cleaning process.
+
+While you can get quite far with these techniques, there are more advanced and flexible approaches possible.
+For instance, you probably do not want to list *all possible* HTML tags in separate `replace` methods or `str_replace_all` functions. In the next section, we therefore show how to use so-called *regular expressions* to formulate such generalizable patterns.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-clean}
+Some basic text cleaning approaches
+
+::: {.panel-tabset}
+## Python code
+```{python clean-python}
+text = """   <b>Communication</b>    
+    (from Latin communicare, meaning to share) """
+# remove tags:
+cleaned = text.replace("<b>", "").replace("</b>", "")
+# normalize white space
+cleaned = " ".join(cleaned.split())
+# lower case
+cleaned = cleaned.lower()
+# trim spaces from start and end
+cleaned = cleaned.strip()
+
+print(cleaned)
+
+```
+## R code
+```{r clean-r}
+text = "    <b>Communication</b>    
+     (from Latin communicare, meaning to share)  "
+cleaned = text %>% 
+  # remove HTML tags:
+  str_replace_all("<b>", " ")  %>% 
+  str_replace_all("</b>", " ")  %>% 
+  # normalize white space 
+  str_squish() %>%
+  # lower case
+  tolower()  %>% 
+  # trim spaces at start and end
+  trimws()
+
+glue(cleaned)
+```
+:::
+:::
+:::
+
+::: {.callout-note icon=false collapse=true}
+## To regex or not to regex in Python
+
+You may wonder why we introduce basic string methods like `replace` or the `split`-then-`join` trick, if everything can be done with regular expressions anyway. There are a couple of reasons for still using these methods: first, they are easy and don't have any dependencies. If you just want to replace a single thing, then you don't need to import any additional module. Second, regular expressions are considerably slower than string methods -- in most cases, you won't notice, but if you do a lot of replacements (think in thousands per news article, for a million  articles), then this may matter. Third, you can use the `join` trick also for other things like punctuation removal -- in this case, by generating a list of all characters in a string called `text` provided they are no punctuation characters, and then joining them directly to each other:
+`from string import punctuation; "".join([c for c in text if c not in punctuation])`
+:::
+
+## Regular Expressions {#sec-regular}
+
+A *regular expression* or *regex* is a powerful language to locate strings that conform to a given pattern. For instance, we can extract usernames or email-addresses from text, or normalize spelling variations and improve the cleaning methods covered in the previous section. Specifically, regular expressions are a sequence of characters that we can use to design a pattern and then use this pattern to *find* strings (identify or extract) and also *replace* those strings by new ones.
+
+Regular expressions look complicated, and in fact they take time to get used to initially.
+For example, a relatively simple (and not totally correct) expression to match an email address is `[\w\.-]+@[\w\.-]+\.\w\w+`,
+which doesn't look like anything at all unless you know what you are looking for.
+The good news is that regular expression syntax is the same in R and Python (and many other languages),
+so once you learn regular expressions you will have acquired a powerful and versatile tool for text processing.
+
+In the next section, we will first review general expression syntax without reference to running them in Python or R.
+Subsequently, you will see how you can apply these expressions to inspect and clean texts in both languages.
+
+### Regular Expression Syntax {#sec-regex}
+
+At its core, regular expressions are patters for matching sequences of characters.
+In the simplest case, a regular letter just matches that letter, so the pattern "cat" matches the text "cat".
+Next, there are various wildcards, or ways to match different letters.
+For example, the period (`.`) matches any character, so `c.t` matches both "cat" and "cot".
+You can place multiple letters between square brackets to create a *character class* that matches all the specified letters, so `c[au]t` matches "cat" and "cut", but not "cot".
+There are also a number of pre-defined classes, such as `\w` which matches "word characters" (letters, digits, and (curiously) underscores).
+
+Finally, for each character or group of characters you can specify how often it should occur.
+For example, `a+` means one or more a's while `a?` means zero or one a, so `lo+l` matches `lol', `lool', etc.,
+and `lo?l` matches `lol' or `ll'.
+This raises the question, of course, of how to look for actual occurrences of a plus, question mark, or period.
+The solution is to *escape* these special symbols by placing a backslash (`\`) before them:
+`a\+` matches the literal text "a+", and `\\w` (with a double backslash) matches the literal text "\w".
+
+Now, we can have another look at the example email address pattern given above.
+The first part, `[\w\.-]` creates a character class containing word characters, (literal) periods, and dashes.
+Thus, `[\w\.-]+@[\w\.-]+` means one or more letters, digits, underscores, periods, or dashes, followed by an at sign,
+followed by one or more letters, digits, etc.
+Finally, the last part `\.\w\w+` means a literal period, a word character, and one or more word characters.
+In other words, we are looking for a name (possibly containing dashes or periods) before the at sign,
+followed by a domain, followed by a top level domain (like `.com`) of at least two characters.
+
+In essence, thinking in terms of what you want to match and how often
+you want to match it is all there is to regular expressions.
+However, it will take some practice to get comfortable with turning something sensible (such as an email address) into a correct regular expression pattern.
+The next subsection will explain regular expression syntax in more detail, followed by an explanation of grouping,
+and in the final subsection we will see how to use these regular expressions in R and Python to do text cleaning.
+
+```{r}
+#| echo: false
+fninv = '<a href="#fninv" class="footnote-ref" role="doc-noteref" aria-expanded="false"><sup>*</sup></a>'
+fnuni = '<a href="#fninv" class="footnote-ref" role="doc-noteref" aria-expanded="false"><sup>†</sup></a>'
+```
+
+|Function| Syntax | Example | Matches|
+|-----|-|-|-|-|
+|**Specifier: What to match**||||
+|All characters except for new lines | `.` | `d.g` | <code>d**i**g</code>,<code>d**!**g</code>|
+|Word characters`r fninv`(letters, digits,_) | `\w` | `d\wg` | `dig`,`dog`|
+|Digits`r fninv`(0 to 9) | `\d` | `202\d` | `2020`,`2021`|
+|Whitespace`r fninv`(space, tab, newline) | `\s`|
+|Newline | `\n` | |
+|Beginning of the string | `\^` | `\^go` | <code>**go**<span class='gray'></span>go go</code>|
+|Ending of the string | `\$` | `go\$` | <code><span class='gray'></span>go go**go**</code>|
+|Beginning or end of word | `\b` | `\bword\b` | <code><span class='gray'>a</span> **word**<span class='gray'></span>!</code>|
+|Either first or second option | `…|…` | `cat|dog` | `cat`,`dog`|
+|<span style="white-space:nowrap">**Quantifier: How many to match**</span>||
+|Zero or more | `*` | `d.*g` | `dg`,`drag`,`d = g`|
+|Zero or more (non-greedy) | `*?` | `d.*?g` | <code>**dog**<span class='gray'></span>g</code>|
+|One or more | `+` | `\d+%` | `1%`,`200%`|
+|One or more (non-greedy) | `+?` | `\d+%` | <code><span class='gray'></span>20**0\%**</code>|
+|Zero or one | `?` | `colou?r` | `color`,`colour`|
+|Exactly *n* times | `{n}` | `\d{4}` | `1940`,`2020`|
+|At least *n* times | `{n,}`|
+|Between *n* and *m* times | `{n,m}`|
+|**Other constructs**||
+|Groups | `(…)` | `'(bla )+'` | `'bla bla bla'`|
+|Selection of characters | `[…]` | `d[iuo]g` | `dig`,`dug`,`dog`|
+|Range of characters in selection | `[a-z]`|
+|Everything except selection | `[\^...]`|
+|Escape special character | `\` | `3\.14` | `3.14`|
+|**Unicode character properties**`r fnuni`||||
+|Letters`r fninv` | `\p{LETTER}`| | `words`,<code>&#21336;&#35486;</code>|
+|Punctuation`r fninv` | `\p{PUNCTUATION}`| | `.` `,` `:`|
+|Quotation marks`r fninv` | `\p{QUOTATION MARK}`| | `'` <code>\`</code> `"` `«`|
+|Emoji`r fninv` | `\p{EMOJI}`| | &#x1F60A;|
+|Specific scripts, e.g. Hangul`r fninv` | `\p{HANG}`| | <code>&#54620;&#44544;</code>|
+
+: Regular expression syntax {#tbl-regex}
+
+#### Table notes {.unnumbered}
+
+\*) <span id="fninv">These selectors can be inverted by changing them into  capital letters.   Thus, `\W` matches everything except word characters, and `\P\{PUNCTUATION\}` matches everything except punctuation.</span>
+
+†) <span id="fnuni">See [www.unicode.org/reports/tr44/\#Property\_Index](https://www.unicode.org/reports/tr44/\#Property\_Index) for a full list of Unicode properties. Note that when using Python, these are only available if you use *regex*, which is a drop-in replacement for the more common *re*.</span>
+
+<hr />
+
+In Table [-@tbl-regex] you will find an overview of the most important parts of regular expression syntax.[^1]
+ The first part shows a number of common specifiers for determining what to match, e.g. letters, digits, etc.,
+followed by the quantifiers available to determine how often something should be matched.
+These quantifiers always follow a specifier, i.e. you first say what you're looking for, and then how many of those you need.
+Note that by default quantifiers are *greedy*, meaning they match as many characters as possible.
+For example, `<.*>` will match everything between angle brackets, but if you have something like `<p>a paragraph</p>`
+it will happily match everything from the first opening bracket to the last closing bracket.
+By appending a question mark (`?`) to the quantifier, it becomes *non-greedy*.
+so, `<.*?>` will match the individual `<p>` and `</p>` substrings.
+
+The third section discusses other constructs.
+`Groups` are formed using parentheses `()` and are useful in at least three ways.
+First, by default a quantifier applies to the letter directly before it, so `no+` matches "no", "nooo", etc.
+If you group a number of characters you can apply a quantifier to the group. So, `that's( not)? good` matches either "that's not good" or 	"that's good".
+Second, when using a vertical bar (|) to have multiple options, you very often want to put them into a group so you can use it as part of a larger pattern.
+For example, `a( great| fantastic)? victory` matches either "a victory", "a great victory", or "a fantastic victory".
+Third, as will be discussed below in Section [-@sec-regextract], you can use groups to capture (extract) a specific part of a string, e.g. to get only the domain part of a web address.
+
+The other important construct are *character classes*, formed using square brackets `[]`.
+Within a character class, you can specify a number of different characters that you want to match, using a dash (`-`) to indicate a range.
+You can add as many characters as you want: `[A-F0-9]` matches digits and capital letters A through F.
+You can also invert this selection using an initial caret: `[^a-z]` matches everything except for lowercase Latin letters.
+Finally, you sometimes need to match a control character  (e.g. `+`, `?`, `\`). Since those characters have a special meaning within a regular expressing, they cannot be used directly. The solution is to add a backslash (`\`) behind them to *escape* them:
+`.` matches any character, but `\.` matches an actual period. `\\` matches an actual backslash.
+
+### Example Patterns {#sec-regexamples}
+
+Using the syntax explained in the previous section, we can now make patterns for common tasks in cleaning and analyzing text.
+Table [-@tbl-regexample] lists a number of regular expressions for common tasks such as finding dates or stripping HTML artifacts.
+
+|Goal | Pattern | Example|
+|-|-|-|
+|US Zip Code | `\d{5}` | `90210`|
+|US Phone number | `(\d{3}-)?\d{3}-\d{4}` | `202-456-1111`,`456-1111`|
+|Dutch Postcode | `\d{4} ?[A-Za-z]{2}` | `1015 GK`|
+|ISO Date | `\d{4}-\d{2}-\d{2}` | `2020-07-20`|
+|German Date | `\d{1,2}\.\d{1,2}\.\d{4}` | `25.6.1988`|
+|International phone number | `\+(\d[-]?){7,}\d` | `+1 555-1234567`|
+|URL | `https?://\S+` | `https://example.com?a=b`|
+|E-mail address | `[\w\.-]+@[\w\.-]+\.\w+` | `me@example.com`|
+|HTML tags | `</?\w[^>]*>` | `</html>`|
+|HTML Character escapes | `&[^;]+;` | `&nbsp;`|
+: Regular expression syntax in Python and R {#tbl-regexample}
+
+Please note that most of these patterns do not correctly distinguish all edge cases (and hence may lead to false negatives and/or false positives) and are provided for educational purposes only.
+
+We start with a number of relatively simple patterns for Zip codes and phone numbers.
+Starting with the simplest example, US Zip codes are simply five consecutive numbers.
+Next, a US phone number can be written down as three groups of numbers separated by parentheses,
+where the first group is made optional for local phone numbers using parentheses to group these numbers so the question mark applies to the whole group.
+Next, Dutch postal codes are simply four numbers followed by two letters, and we allow an optional space in between.
+Similarly simple, dates in ISO format are three groups of numbers separated by dashes.
+German dates follow a different order, use periods as separator, and allow for single-digit day and month numbers.
+Note that these patterns do not check for the validity of dates.
+A simple addition would be to restrict months to 01-12, e.g. using `(0[1-9]|1[0-2])`.
+However, in general validation is better left to specialized libraries, as properly validating the day number would require taking the month (and leap years) into account.
+
+A slightly more complicated pattern is the one given for international phone numbers.
+They always start with a plus sign and contain at least eight numbers, but can contain dashes and spaces depending on the country.
+So, after the literal `+` (which we need to escape since `+` is a control character),
+we look for seven or more numbers, optionally followed by a single dash or space, and end with a single number.
+This allows dashes and spaces at any position except the start and end, but does not allow for e.g. double dashes.
+It also makes sure that there are at least eight numbers regardless of how many dashes or spaces there are.
+
+The final four examples are patterns for common notations found online.
+For URLs, we look for `http://` or `https://` and take everything until the next space or end of the string.
+For email addresses, we define a character class for letters, periods, or dashes and look for it before and after the at sign.
+Then, there needs to be at least one period and a top level domain containing only letters.
+Note that the dash within the character class does not need to be escaped because it is the final character in the class, so it cannot form a range.
+For HTML tags and character escapes, we anchor the start (`<` and `&`) and end (`>` and `;`) and allow any characters except for the ending character in between
+using an inverted character class.
+
+Note that these example patterns would also match if the text is enclosed in a larger text.
+For example, the zip code pattern would happily match the first five numbers of a 10-digit number.
+If you want to check that an input value is a valid zip code (or email address, etc.),
+you probably want to check that it only contains that code by surrounding it with start-of-text and end-of-text markers: `^\d{5}$`.
+If you want to extract e.g. zip codes from a longer document, it is often useful to surround them with word boundary markers: `\b\d{5}\b`.
+
+Please note that many of those patterns are not necessarily fully complete and correct, especially the final patterns for online notations.
+For example, email addresses can contain plus signs in the first part, but not in the domain name, while domain names are not allowed to start with a dash -- a completely correct regular expression to match email addresses is over 400 characters long!
+Even worse, complete HTML tags are probably not even possible to describe using regular expressions, because HTML tags frequently contain comments and nested escapes within attributes.
+For a better way to deal with analyzing HTML, please see Chapter [-@sec-chap-scraping]. In the end, patterns like these are fine for a (somewhat) noisy analysis of (often also somewhat noisy) source texts as long as you understand the limitations.
+
+## Using Regular Expressions in Python and R {#sec-regextract}
+
+Now that you hopefully have a firm grasp of the syntax of regular expressions,
+it is relatively easy to use these patterns in Python or R (or most other languages).
+Table [-@tbl-regextract] lists the commands for four of the most common use cases:
+identifying matching texts, removing and replacing all matching text, extracting matched groups, and splitting texts.
+
+|Operation | R (*stringr*) | Python | Pandas|
+|-|-|-|-|
+ | |(whole column) | (single string) | (whole column)|
+|Does pattern p occur in text t? | `str_detect(t, p)` | `re.search(p, t)` | `t.str.contains(p)`|
+|Does text t start with pattern p? | `str_detect(t, "\^p")` | `re.match(p, t)` | `t.str.match(p)`|
+|Count occurrences of p in t | `str_count(t, "\^p")` | `re.match(p, t)` | `t.str.count(p)`|
+|Remove all occurences of p in t | `str_remove_all(t, p)` | `re.sub(p, "", t)` | `t.str.replace(p, "")`|
+|Replace p by r in text t | `str_replace_all(t, p, r)` | `re.sub(p, r, t)` | `t.str.replace(p, r)`|
+|Extract the first match of p in t | `str_extract(t, p)` | `re.search(p, t).group(1)` | `t.str.extract(p)`|
+|Extract all matches of p in t | `str_extract_all(t, p)` | `re.findall(p, t)` | `t.str.extractall(p)`|
+|Split t on matches of p | `str_split(t, p)` | `re.split(p, t)` | `t.str.split(p)`|
+: Regular expression syntax {#tbl-regextract}
+
+Note: if using Unicode character properties (`\p`), use the same functions in package *regex* instead of *re*
+
+For R, we again use the functions from the *stringr* package.
+For Python, you can use either the *re* or *regex* package,
+which both support the same functions and syntax so you can just import one or the other.
+The *re* package is more common and significantly faster, but does not support Unicode character properties (`\p`).
+We also list the corresponding commands for *pandas*, which are run on a whole column instead of a single text
+(but note that *pandas* does not support Unicode character properties.)
+
+Finally, a small but important note about *escaping* special characters by placing a backslash (`\`) before them.
+The regular expression patterns are used *within* another language (in this case, Python or R), but these languages have their own
+special characters which are also escaped. In Python, you can create a *raw string* by putting a single `r` before the opening quotation mark:
+`r"\d+"` creates the regular expression pattern `\d`.
+From version 4.0 (released in spring 2020), R has a similar construct: `r"(\d+)"`. In R, the parentheses are part of the string delimiters, but you can use more parentheses within the string without a problem.
+The only thing you cannot include in a string is the closing sequence `)"`, but as you are also allowed to use square or curly brackets instead of parentheses and single instead of double quotes to delimit the raw string you can generally avoid this problem:
+to create the pattern `"(cat|dog)"` (i.e. cat or dog enclosed in quotation marks), you can use `r"{"(cat|dog)"}"` or `r'("(cat|dog)")'`
+(or even more legible: `r'{"(cat|dog)"}'`).
+
+Unfortunately, in earlier versions of R (and in any case if you don't use raw strings), you need to escape special characters twice:
+first for the regular expression, and then for R. So, the pattern `\d` becomes `"\\d"`. To match a literal backslash you would use the pattern `\\`,
+which would then be represented in R as `"\\\\"`!
+
+Example [-@exm-reclean] cleans the same text as Example [-@exm-clean] above, this time using regular expressions.
+First, it uses `<[^>+]>` to match all HTML tags: an angular opening bracket, followed by anything except for a closing angular bracket (`[^>]`), repeated one or more times (`+`),
+finally followed by a closing bracket.
+Next, it replaces one or more whitespace characters (`\s+`) by a single space.
+Finally, it uses a vertical bar to select either space at the start of the string (`^\s+`), or at the end  (`\s+$`), and removes it. 
+As you can see, you can express a lot of patterns using regular expressions in this way, making for more generic (but sometimes less readable) clean-up code.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-reclean}
+Using regular expressions to clean a text
+
+::: {.panel-tabset}
+## Python code
+```{python reclean-python}
+text = """   <b>Communication</b>    
+    (from Latin communicare, meaning to share) """
+# remove tags:
+cleaned = re.sub("<[^>]+>", "", text)
+# normalize white space
+cleaned = re.sub("\s+", " ", cleaned)
+# trim spaces from start and end
+cleaned = re.sub("^\s+|\s+$", "", cleaned)
+cleaned = cleaned.strip()
+
+print(cleaned)
+
+```
+## R code
+```{r reclean-r}
+text = "    <b>Communication</b>    
+     (from Latin communicare, meaning to share)  "
+cleaned = text %>% 
+  # remove HTML tags:
+  str_replace_all("<[^>]+>", " ")  %>% 
+  # normalize white space 
+  str_replace_all("\\p{space}+", " ")  %>% 
+  # trim spaces at start and end
+  str_remove_all("^\\s+|\\s+$")
+
+cleaned
+```
+:::
+:::
+:::
+
+Finally, Example [-@exm-cleanpandas] shows how you can run the various commands on a whole column of text rather than on individual strings,
+using  a small set of made-up tweets to showcase various operations.
+First, we determine whether a pattern occurs, in this case for detecting hashtags.
+This is very useful for e.g. subsetting a data frame to only rows that contain this pattern.
+Next, we count how many at-mentions are contained in the text, where we require that the character before the mention needs to be either whitespace or the start of the string (`^`), to exclude email addresses and other non-mentions that do contain at signs.
+Then, we extract the (first) url found in the text, if any, using the pattern discussed above.
+Finally, we extract the plain text of the tweet in two chained operations:
+first, we remove every word starting with an at-sign, hash, or http, removing everything up to the next whitespace character.
+Then, we replace everything that is not a letter by a single space.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-cleanpandas}
+Using regular expressions on a data frame
+
+::: {.panel-tabset}
+## Python code
+```{python}
+#| echo: false
+pd.set_option('display.max_colwidth', 40)
+```
+```{python cleanpandas-python}
+url = "https://cssbook.net/d/example_tweets.csv"
+tweets = pd.read_csv(url, index_col="id")
+# identify tweets with hashtags
+tweets["tag"] = tweets.text.str.contains(r"#\w+")
+# How many at-mentions are there?
+tweets["at"] = tweets.text.str.count(r"(^|\s)@\w+")
+# Extract first url
+tweets["url"] = tweets.text.str.extract(r"(https?://\S+)")
+# Remove urls, tags, and @-mentions
+expr = r"(^|\s)(@|#|https?://)\S+"
+tweets["plain2"] = tweets.text.str.replace(expr, " ", regex=True).replace(
+    r"\W+", " "
+)
+tweets
+
+```
+## R code
+```{r cleanpandas-r}
+library(tidyverse)
+url="https://cssbook.net/d/example_tweets.csv"
+tweets = read_csv(url)
+tweets = tweets %>% mutate(
+    # identify tweets with hashtags
+    has_tag=str_detect(text, "#\\w+"),
+    # How many at-mentions are there?
+    n_at = str_count(text, "(^|\\s)@\\w+"),
+    # Extract first url
+    url = str_extract(text, "(https?://\\S+)"),
+    # Remove at-mentions, tags, and urls
+    plain2 = str_replace_all(text, 
+       "(^|\\s)(@|#|https?://)\\S+", " ") %>% 
+             str_replace_all("\\W+", " ")
+    )
+tweets
+```
+:::
+:::
+:::
+
+### Splitting and Joining Strings, and Extracting Multiple Matches {#sec-regexadvanced}
+
+So far, the operations we used all took a single string object and returned a single value,
+either a cleaned version of the string or e.g. a boolean indicating whether there is a match.
+This is convenient when using data frames, as you can transform a single column into another column.
+There are three common operations, however, that complicate matters:
+you can *split* a string into multiple substrings, or *extract* multiple matches from a string,
+and you can *join* multiple matches together.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-split}
+Splitting extracting and joining a single text
+
+::: {.panel-tabset}
+## Python code
+```{python split-python}
+text = "apples, pears, oranges"
+# Three ways to achieve the same thing:
+items = text.split(", ")
+items = regex.split(r"\p{PUNCTUATION}\s*", text)
+items = regex.findall(r"\p{LETTER}+", text)
+print(f"Split text into items: {items}")
+joined = " & ".join(items)
+print(joined)
+
+```
+## R code
+```{r split-r}
+text = "apples, pears, oranges"
+items=strsplit(text,", ", fixed=T)[[1]]
+items=str_split(text,"\\p{PUNCTUATION}\\s*")[[1]]
+items=str_extract_all(text,"\\p{LETTER}+")[[1]]
+print(items)
+joined = str_c(items, collapse=" & ")
+print(joined)
+```
+:::
+:::
+:::
+
+Example [-@exm-split] shows the "easier" case of splitting up a single text and joining the result back together.
+We show three different ways to split: using a fixed pattern to split on (in this case, a comma plus space);
+using a regular expression (in this case, any punctuation followed by any space);
+and by matching the items we are interested in (letters) rather than the separator.
+Finally, we join these items together again using `join` (Python) and `str_c` (R).
+
+One thing to note in the previous example is the use of the index `[[1]]` in R to select the first element in a list.
+This is needed because in R, splitting a text actually splits all the given texts, returning a `list` containing all the matches for each input text.
+If there is only a single input text, it still returns a list, so we select the first element of the list.
+
+In many cases, however, you are not working on a single text but rather on a series of texts loaded into a data frame,
+from tweets to news articles and open survey questions.
+In the example above, we extracted only the first url from each tweet.
+If we  want to extract e.g. all hash tags from each tweet, we cannot simply add a "tags" column,
+as there can be multiple tags in each tweet.
+Essentially, the problem is that the URLs per tweet are now nested in each row,
+creating a non-rectangular data structure.
+
+Although there are multiple ways of dealing with this,
+if you are working with data frames our advice is to normalize the data structure to a long format.
+In the example, that would mean that each tweet is now represented by multiple rows,
+namely one for each hash tag.
+Example [-@exm-splitlong] shows how this can be achieved in both R and Pandas.
+One thing to note is that in pandas,
+`t.str.extractall` automatically returns the desired long format,
+but it is essential that the index of the data frame actually contains the identifier (in this case, the tweet (status) id).
+`t.str.split`, however, returns a data frame with a column containing lists,
+similar to how both R functions return a list containing character vectors.
+We can normalize this to a long data frame using `t.explode` (pandas) and `pivot_longer` (R).
+After this, we can use all regular data frame operations, for example to join and summarize the data.
+
+A final thing to note is that  while you normally use a function like `mean` to summarize the values in a group,
+you can also join strings together as a summarization.
+The only requirement for a summarization function is that it returns a single value for a group of values,
+which of course is exactly what joining a multiple string together does.
+This is shown in the final line of the example, where we split a tweet into words and then reconstruct the tweet from the individual words.
+
+::: {.callout-note appearance="simple" icon=false}
+::: {#exm-splitlong}
+Applying split and extract \_ all on text columns
+
+::: {.panel-tabset}
+## Python code
+```{python splitlong1-python}
+tags = tweets.text.str.extractall("(#\\w+)")
+tags.merge(tweets, left_on="id", right_on="id")
+
+```
+## R code
+```{r splitlong1-r}
+tags = tweets %>% mutate(
+    tag=str_extract_all(tweets$text,"(#\\w+)"))%>%
+  select(id, tag)
+tags_long = tags  %>% unnest(tag)
+left_join(tags_long, tweets)
+```
+:::
+
+::: {.panel-tabset}
+## Python code
+```{python splitlong2-python}
+words = tweets.text.str.split("\\W+")
+words_long = words.explode()
+
+```
+## R code
+```{r splitlong2-r}
+words = tweets %>% mutate(
+    word=str_split(tweets$text, "\\W+")) %>% 
+  select(id, word)
+words_long = words %>% unnest(word)
+head(words_long)
+```
+:::
+
+::: {.panel-tabset}
+## Python code
+```{python splitlong3-python}
+words_long.groupby("id").agg("_".join)
+
+```
+## R code
+```{r splitlong3-r}
+words_long %>% 
+  group_by(id) %>% 
+  summarize(joined=str_c(word, collapse="_"))
+```
+:::
+:::
+:::
+
+[^1]: 
+  Note that this is not a full review of everything that is possible with regular expressions, but this includes the most used options and should be enough for the majority of cases. Moreover, if you descend into the more specialized aspects of regular expressions (with beautiful names such as "negative lookbehind assertions") you will also run into differences between Python, R, and other languages, while the features used in this chapter should function in most implementations you come across unless specifically noted.
+

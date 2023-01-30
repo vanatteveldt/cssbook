@@ -223,6 +223,11 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./chapter09.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Processing text</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
   </div>
 </li>
@@ -239,7 +244,7 @@ div.csl-indent {
   <li><a href="#sec-reading" id="toc-sec-reading" class="nav-link" data-scroll-target="#sec-reading"><span class="toc-section-number">5.2</span>  Reading and Saving Data</a>
   <ul class="collapse">
   <li><a href="#the-role-of-files" id="toc-the-role-of-files" class="nav-link" data-scroll-target="#the-role-of-files"><span class="toc-section-number">5.2.1</span>  The Role of Files</a></li>
-  <li><a href="#encodings-and-dialects" id="toc-encodings-and-dialects" class="nav-link" data-scroll-target="#encodings-and-dialects"><span class="toc-section-number">5.2.2</span>  Encodings and Dialects</a></li>
+  <li><a href="#sec-encodings" id="toc-sec-encodings" class="nav-link" data-scroll-target="#sec-encodings"><span class="toc-section-number">5.2.2</span>  Encodings and Dialects</a></li>
   <li><a href="#file-handling-beyond-data-frames" id="toc-file-handling-beyond-data-frames" class="nav-link" data-scroll-target="#file-handling-beyond-data-frames"><span class="toc-section-number">5.2.3</span>  File handling beyond data frames</a></li>
   </ul></li>
   <li><a href="#sec-gathering" id="toc-sec-gathering" class="nav-link" data-scroll-target="#sec-gathering"><span class="toc-section-number">5.3</span>  Data from online sources</a></li>
@@ -507,8 +512,8 @@ Packages used in this chapter
 </table>
 </div>
 </section>
-<section id="encodings-and-dialects" class="level3" data-number="5.2.2">
-<h3 data-number="5.2.2" class="anchored" data-anchor-id="encodings-and-dialects"><span class="header-section-number">5.2.2</span> Encodings and Dialects</h3>
+<section id="sec-encodings" class="level3" data-number="5.2.2">
+<h3 data-number="5.2.2" class="anchored" data-anchor-id="sec-encodings"><span class="header-section-number">5.2.2</span> Encodings and Dialects</h3>
 <p>Plain <code>txt</code> files, <code>csv</code> files, and <code>json</code> files are all files that are based on text. Unlike binary file formats, you can read them in any text editor. Try it yourself to understand what is going on under the hood.</p>
 <p>Download a csv file (such as <a href="https://cssbook.net/d/gun-polls.csv">cssbook.net/d/gun-polls.csv</a>) and open it in a text editor of your choice. Some people swear that their preferred editor is the best (google to learn about the vi versus emacs war for some entertainment), but if you have no strong feeling, then Notepad++, Atom, or Sublime may be good choices that you may want to look into.</p>
 <p>As you will see (Figure <a href="#fig-csv-in-editor"><span>5.1</span></a>), a csv file internally just looks like a bunch of text in which each line represents a row and in which the columns are separated by a comma (hence the name comma separated values (csv)). Looking at the data in a text editor is a very good way to find out what happens if reading your files into a data frame does not work as expected – which can happen more frequently than you would expect.</p>
@@ -579,7 +584,7 @@ Packages used in this chapter
 </section>
 <section id="file-handling-beyond-data-frames" class="level3" data-number="5.2.3">
 <h3 data-number="5.2.3" class="anchored" data-anchor-id="file-handling-beyond-data-frames"><span class="header-section-number">5.2.3</span> File handling beyond data frames</h3>
-<p>Data frames are a very useful data structure for organizing and analyzing data, and will occur in many examples in this book. However, not all things that we might want to read from a file needs to go into a data frame. Imagine if we have a list of words that we later want to remove from some texts (so-called stopwords, see Chapter <span class="quarto-unresolved-ref">?sec-chap-protext</span>). We could make a list (or vector) of such words directly in our code. But if we have more than a couple of such words, it is easier and more readable to keep them in an external file. We could create a file <code>stopwords.txt</code> in a text editor with one of such words per line:</p>
+<p>Data frames are a very useful data structure for organizing and analyzing data, and will occur in many examples in this book. However, not all things that we might want to read from a file needs to go into a data frame. Imagine if we have a list of words that we later want to remove from some texts (so-called stopwords, see Chapter <a href="chapter09.html"><span>9</span></a>). We could make a list (or vector) of such words directly in our code. But if we have more than a couple of such words, it is easier and more readable to keep them in an external file. We could create a file <code>stopwords.txt</code> in a text editor with one of such words per line:</p>
 <pre><code>and
 or
 a
@@ -606,7 +611,7 @@ an</code></pre>
 <span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://cssbook.net/d/stopwords.txt"</span></span>
 <span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>urllib.request.urlretrieve(url, <span class="st">"stopwords.txt"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>('stopwords.txt', &lt;http.client.HTTPMessage object at 0x7f70280e2ce0&gt;)</code></pre>
+<pre><code>('stopwords.txt', &lt;http.client.HTTPMessage object at 0x7f14cf336ce0&gt;)</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"stopwords.txt"</span>) <span class="im">as</span> f:</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    stopwords <span class="op">=</span> [w.strip() <span class="cf">for</span> w <span class="kw">in</span> f]</span>

@@ -190,7 +190,7 @@ For the sake of completeness, we also listed the native Python and R formats pic
 |RDS/RDA | R objects | yes | no|
 :  Basics of data frame handling {#tbl-fileformats}
 
-### Encodings and Dialects
+### Encodings and Dialects {#sec-encodings}
 
 Plain `txt` files, `csv` files, and `json` files are all files that are based on text. Unlike binary file formats, you can read them in any text editor. Try it yourself to understand what is going on under the hood.
 
