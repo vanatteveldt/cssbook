@@ -208,6 +208,11 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./chapter10.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Text as data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
   </div>
 </li>
@@ -428,7 +433,7 @@ Packages used in this chapter
 </section>
 <section id="sec-funtext" class="level2" data-number="2.2">
 <h2 data-number="2.2" class="anchored" data-anchor-id="sec-funtext"><span class="header-section-number">2.2</span> Fun With Textual Data</h2>
-<p><strong>Corpus Analysis.</strong> Next, we can analyze which hashtags are most frequently used in this dataset. Example <a href="#exm-funcloud"><span>2.3</span></a> does this by creating a <em>document-term matrix</em> using the package <em>quanteda</em> (in R) or by manually counting the words using a defaultdict (in Python). The code shows a number of steps that are made to create the final results, each of which represent researcher choices about which data to keep and which to discard as noise. In this case, we select English tweets, convert text to lower case, remove stop words, and keep only words that start with #, while dropping words starting with <code>#corona</code> and <code>#covid</code>. To play around with this example, see if you can adjust the code to e.g.&nbsp;include all words or only at-mentions instead of the hashtags and make a different selection of tweets, for example Spanish language tweets or only popular (retweeted) tweets. Please see Chapter <span class="quarto-unresolved-ref">?sec-chap-dtm</span> if you want to learn more about corpus analysis, and see Chapter <a href="chapter06.html"><span>6</span></a> for more information on how to select subsets of your data.</p>
+<p><strong>Corpus Analysis.</strong> Next, we can analyze which hashtags are most frequently used in this dataset. Example <a href="#exm-funcloud"><span>2.3</span></a> does this by creating a <em>document-term matrix</em> using the package <em>quanteda</em> (in R) or by manually counting the words using a defaultdict (in Python). The code shows a number of steps that are made to create the final results, each of which represent researcher choices about which data to keep and which to discard as noise. In this case, we select English tweets, convert text to lower case, remove stop words, and keep only words that start with #, while dropping words starting with <code>#corona</code> and <code>#covid</code>. To play around with this example, see if you can adjust the code to e.g.&nbsp;include all words or only at-mentions instead of the hashtags and make a different selection of tweets, for example Spanish language tweets or only popular (retweeted) tweets. Please see Chapter <a href="chapter10.html"><span>10</span></a> if you want to learn more about corpus analysis, and see Chapter <a href="chapter06.html"><span>6</span></a> for more information on how to select subsets of your data.</p>
 <div class="callout-note callout callout-style-simple no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
