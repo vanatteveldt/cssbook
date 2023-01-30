@@ -1379,18 +1379,18 @@ y_test     non-user user
 </div>
 <div class="sourceCode cell-code" id="cb118"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb118-1"><a href="#cb118-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(search.best_params_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>{'bootstrap': True, 'criterion': 'entropy', 'n_estimators': 50}</code></pre>
+<pre><code>{'bootstrap': True, 'criterion': 'entropy', 'n_estimators': 200}</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb120"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb120-1"><a href="#cb120-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classification_report(y_test, search.predict(X_test)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>              precision    recall  f1-score   support
 
-    non-user       0.47      0.39      0.42       161
-        user       0.65      0.72      0.68       252
+    non-user       0.42      0.35      0.38       161
+        user       0.63      0.70      0.66       252
 
-    accuracy                           0.59       413
-   macro avg       0.56      0.55      0.55       413
-weighted avg       0.58      0.59      0.58       413</code></pre>
+    accuracy                           0.56       413
+   macro avg       0.53      0.52      0.52       413
+weighted avg       0.55      0.56      0.55       413</code></pre>
 </div>
 </div>
 </div>
