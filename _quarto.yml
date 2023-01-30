@@ -16,6 +16,7 @@ book:
     - chapter07.qmd
     - chapter08.qmd
     - chapter09.qmd
+    - chapter10.qmd
     
     - references.qmd
 
@@ -31,3 +32,4 @@ engine: knitr
 execute:
   warning: false
   freeze: auto
+  message: false

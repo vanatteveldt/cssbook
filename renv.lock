@@ -192,6 +192,16 @@
       "Hash": "9d930f5e12e075d57965f46503a1f9b1",
       "Requirements": []
     },
+    "RcppTOML": {
+      "Package": "RcppTOML",
+      "Version": "0.2.2",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "c232938949fcd8126034419cc529333a",
+      "Requirements": [
+        "Rcpp"
+      ]
+    },
     "Rttf2pt1": {
       "Package": "Rttf2pt1",
       "Version": "1.3.12",
@@ -1109,6 +1119,16 @@
         "vctrs"
       ]
     },
+    "here": {
+      "Package": "here",
+      "Version": "1.0.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "24b224366f9c2e7534d2344d10d59211",
+      "Requirements": [
+        "rprojroot"
+      ]
+    },
     "highr": {
       "Package": "highr",
       "Version": "0.10",
@@ -1633,6 +1653,14 @@
         "Rcpp"
       ]
     },
+    "png": {
+      "Package": "png",
+      "Version": "0.1-8",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "bd54ba8a0a5faded999a7aab6e46b374",
+      "Requirements": []
+    },
     "polynom": {
       "Package": "polynom",
       "Version": "1.4-1",
@@ -1969,6 +1997,23 @@
         "stringr"
       ]
     },
+    "reticulate": {
+      "Package": "reticulate",
+      "Version": "1.28",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "86c441bf33e1d608db773cb94b848458",
+      "Requirements": [
+        "Matrix",
+        "Rcpp",
+        "RcppTOML",
+        "here",
+        "jsonlite",
+        "png",
+        "rappdirs",
+        "withr"
+      ]
+    },
     "rlang": {
       "Package": "rlang",
       "Version": "1.0.6",
@@ -2169,6 +2214,17 @@
       "Repository": "CRAN",
       "Hash": "c3c8dac08e146d8f78b226e4a30e0275",
       "Requirements": []
+    },
+    "spacyr": {
+      "Package": "spacyr",
+      "Version": "1.2.1",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "91d7138ab33fd6425700ec778206050c",
+      "Requirements": [
+        "data.table",
+        "reticulate"
+      ]
     },
     "statnet.common": {
       "Package": "statnet.common",
@@ -2411,6 +2467,18 @@
       "Hash": "b2e1cbce7c903eaf23ec05c58e59fb5e",
       "Requirements": [
         "cpp11"
+      ]
+    },
+    "udpipe": {
+      "Package": "udpipe",
+      "Version": "0.8.11",
+      "Source": "Repository",
+      "Repository": "CRAN",
+      "Hash": "dcbf8f07425c6a074023ea0b2a843dcb",
+      "Requirements": [
+        "Matrix",
+        "Rcpp",
+        "data.table"
       ]
     },
     "utf8": {
