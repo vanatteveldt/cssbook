@@ -1,10 +1,33 @@
-{% extends 'base.html' %} {% block content %} 
-
 # Computational Analysis of Communication {.unnumbered}
+
 ## Wouter van Atteveldt, Damian Trilling, Carlos Arcila Calderon
 
 This is the online version of the book _Computational Analysis of Communication_ ...
 
 ![Book][https://media.wiley.com/product_data/coverImage300/39/11196802/1119680239.jpg]]
 
-- [Chapter 1](chapter01.qmd)
+- [Introduction](chapter01.qmd)
+- [Fun with Data](chapter02.qmd)
+- [Programming Concepts](chapter03.qmd)
+- [How to write code](chapter04.qmd)
+- [Files and Data Frames](chapter05.qmd)
+- [Data Wrangling](chapter06.qmd)
+- [Exploratory data analysis](chapter07.qmd)
+- [Machine Learning](chapter08.qmd)
+- [Processing text](chapter09.qmd)
+- [Text as data]
+- [Automatic analysis of text]
+- [Scraping online data]
+- [Network Data]
+- [Multimedia data]
+- [Scaling up and distributing]
+- [Where to go next]
+
+
+This website contains the full contents (text, code examples, and figures) of the book and is (and will be) available completely free and open access. We hope that this will make computational techniques accessible (and fun!) to as many students and researchers as possible, regardless of means and institutional support. We also hope that this will make it easy for students and professors to use a sub set of chapters without forcing students to buy the whole book. We would really like to thank Wiley-Blackwell for their confidence in making this open access option possible.
+
+## Acknowledgements and feedback
+
+We would like to thank colleagues, friends, and students who provided feedback and input on earlier versions of parts of the manuscript: Dmitry Bogdanov, Andreu Casas, Modesto Escobar, Anne Kroon, Nicolas Mattis , Cecil Meeusen, Jesús Sánchez-Oro, Nel Ruigrok, Susan Vermeer, Mehdi Zamani, Marthe Möller. Of course, we also want to thank all others that we might have forgotten to mention here (sorry!) -- please contact us if you feel that your name should be here.
+
+Our intention is for the online version to be a 'living document' that we will update as tools (or our insights) change, and hopefully serve as the basis for a second edition in the future. For that reason, all feedback is highly appreciated! Please create a github issue if you see any errors, find anything hard to understand, or have any other sort of suggestions or feedback.

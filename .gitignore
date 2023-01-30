@@ -17,3 +17,5 @@ test.json
 /tikz*.log
 /.RData
 /.Rhistory
+
+/_book/
