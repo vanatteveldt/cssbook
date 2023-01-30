@@ -1,0 +1,1589 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.313">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>cssbook_quarto - 6&nbsp; Data Wrangling</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./chapter07.html" rel="next">
+<link href="./chapter05.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Data Wrangling</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">cssbook_quarto</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Computational Analysis of Communication</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter01.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter02.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Getting started: Fun with data and visualizations</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter03.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Programming concepts for data analysis</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter04.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">How to write code</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter05.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">From file to data frame and back</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter06.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Data Wrangling</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter07.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Exploratory data analysis</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter08.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Statistical Modeling and Supervised Machine Learning</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter09.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Processing text</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#filtering-selecting-and-renaming" id="toc-filtering-selecting-and-renaming" class="nav-link active" data-scroll-target="#filtering-selecting-and-renaming"><span class="toc-section-number">6.1</span>  Filtering, Selecting, and Renaming</a></li>
+  <li><a href="#sec-calculate" id="toc-sec-calculate" class="nav-link" data-scroll-target="#sec-calculate"><span class="toc-section-number">6.2</span>  Calculating Values</a></li>
+  <li><a href="#sec-grouping" id="toc-sec-grouping" class="nav-link" data-scroll-target="#sec-grouping"><span class="toc-section-number">6.3</span>  Grouping and Aggregating</a>
+  <ul class="collapse">
+  <li><a href="#combining-multiple-operations" id="toc-combining-multiple-operations" class="nav-link" data-scroll-target="#combining-multiple-operations"><span class="toc-section-number">6.3.1</span>  Combining Multiple Operations</a></li>
+  <li><a href="#adding-summary-values" id="toc-adding-summary-values" class="nav-link" data-scroll-target="#adding-summary-values"><span class="toc-section-number">6.3.2</span>  Adding Summary Values</a></li>
+  </ul></li>
+  <li><a href="#sec-join" id="toc-sec-join" class="nav-link" data-scroll-target="#sec-join"><span class="toc-section-number">6.4</span>  Merging Data</a>
+  <ul class="collapse">
+  <li><a href="#equal-units-of-analysis" id="toc-equal-units-of-analysis" class="nav-link" data-scroll-target="#equal-units-of-analysis"><span class="toc-section-number">6.4.1</span>  Equal Units of Analysis</a></li>
+  <li><a href="#inner-and-outer-joins" id="toc-inner-and-outer-joins" class="nav-link" data-scroll-target="#inner-and-outer-joins"><span class="toc-section-number">6.4.2</span>  Inner and Outer Joins</a></li>
+  <li><a href="#nested-data" id="toc-nested-data" class="nav-link" data-scroll-target="#nested-data"><span class="toc-section-number">6.4.3</span>  Nested Data</a></li>
+  </ul></li>
+  <li><a href="#sec-pivot" id="toc-sec-pivot" class="nav-link" data-scroll-target="#sec-pivot"><span class="toc-section-number">6.5</span>  Reshaping Data: Wide To Long And Long To Wide</a></li>
+  <li><a href="#restructuring-messy-data" id="toc-restructuring-messy-data" class="nav-link" data-scroll-target="#restructuring-messy-data"><span class="toc-section-number">6.6</span>  Restructuring Messy Data</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-chap-datawrangling" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Data Wrangling</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell">
+
+</div>
+<p><strong>Abstract.</strong> This chapter shows you how to do “data wrangling” in R and Python. Data wrangling is the process of transforming raw data into a shape that is suitable for analysis. The sections of this chapter first take you through the normal data wrangling pipeline of filtering, changing, grouping, and joining data. Finally, the last section shows how you can reshape data.</p>
+<p><strong>Keywords.</strong> data wrangling, data cleaning, filtering, merging, reshaping</p>
+<p><strong>Objectives:</strong></p>
+<ul>
+<li>Filter rows and columns in data frames</li>
+<li>Compute new columns and summary statistics for data frames</li>
+<li>Reshape and merge data frames</li>
+</ul>
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Packages used in this chapter
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>This chapter uses the <em>readxl</em> package for reading Excel files and various parts of the <em>tidyverse</em> including <em>ggplot2</em>, <em>dplyr</em>, and <em>tidyr</em> (which are installed automatically when you install tidyverse). In Python we rely mostly on the <em>pandas</em> package, but we also use <em>scipy</em> package for statistics and the <em>xlrd</em> for reading Excel files. You can install these packages with the code below if needed (see Section <a href="chapter01.html#sec-installing"><span>1.4</span></a> for more details):</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pip3 install pandas scipy seaborn  <span class="st">"xlrd&gt;1.2"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">#install.packages("tidyverse")</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>After installing, you need to import (activate) the packages every session:</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> seaborn <span class="im">as</span> sns</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> scipy.stats</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> re</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(readxl)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<section id="filtering-selecting-and-renaming" class="level2" data-number="6.1">
+<h2 data-number="6.1" class="anchored" data-anchor-id="filtering-selecting-and-renaming"><span class="header-section-number">6.1</span> Filtering, Selecting, and Renaming</h2>
+<p><strong>Selecting and renaming columns.</strong> A first clean up step we often want to do is removing unnecessary columns and renaming columns with unclear or overly long names. In particular, it is often convenient to rename columns that contain spaces or non-standard characters, so it is easier to refer to them later.</p>
+<p><strong>Selecting rows.</strong> As a next step, we can decide to filter certain rows. For example, we might want to use only a subset of the data, or we might want to remove certain rows because they are incomplete or incorrect.</p>
+<p>As an example, FiveThirtyEight published a quiz about American public opinion about guns, and were nice enough to also publish the underlying data<a href="#fn1" class="footnote-ref" id="fnref1" role="doc-noteref"><sup>1</sup></a>. <a href="#exm-data-filter">Example&nbsp;<span>6.1</span></a> gives an example of loading and cleaning this dataset, starting with the function <code>read_csv</code> (included in both <em>tidyverse</em> and <em>pandas</em>) to load the data directly from the Internet. This dataset contains one poll result per row, with a <em>Question</em> column indicating which question was asked, and the columns listing how many Americans (adults or registered voters) were in favor of that measure, in total and for Republicans and Democrats. Next, the columns <em>Republican</em> and <em>Democratic Support</em> are renamed to shorten the names and remove the space. Then, the URL column is dropped using the <em>tidyverse</em> function <code>select</code> in R or the <em>pandas</em> function <code>drop</code> in Python. Notice that the result of these operations is assigned to the same object <code>d</code>. This means that the original <code>d</code> is overwritten.</p>
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>In R, the <em>tidyverse</em> function <code>select</code> is quite versatile. You can specify multiple columns using <code>select(d, column1, column2)</code> or by specifying a range of columns: <code>select(d, column1:column3)</code>. Both commands keep only the specified columns. As in the example, you can also specify a negative selection with the minus sign: <code>select(d, -column1)</code> drops <code>column1</code>, keeping all other columns. Finally, you can rename columns in the select command as well: <code>select(d, column1=col1, column2)</code> renames <code>col</code> to <code>column1</code>, keeps that column and <code>column2</code>, and drops all other columns.</p>
+</div>
+</div>
+</div>
+<p>We then filter the dataset to list only the polls on whether teachers should be armed (you can understand this is close to our heart). This is done by comparing the value of the <em>Question</em> column to the value <code>'arm-teachers'</code>. This comparison is done with a double equal sign (<code>==</code>). In both Python and R, a single equals sign is used for assignment, and a double equal sign is used for comparison. A final thing to notice is that while in R we used the <em>dplyr</em> function (<code>filter</code>) to filter out rows, in Python we <em>index</em> the data frame using square brackets on the <em>pandas</em> DataFrame attribute <code>loc</code>(ation): <code>d.loc[]</code>.</p>
+<p>Note that we chose to assign the result of this filtering to <code>d2</code>, so after this operation we have the original full dataset <code>d</code> as well as the subset <code>d2</code> at our disposal. In general, it is your choice whether you overwrite the data by assigning to the same object, or create a copy by assigning to a new name<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a>. If you will later need to work with a different subset, it is smart to keep the original so you can subset it again later. On the other hand, if all your analyses will be on the subset, you might as well overwrite the original. We can always re-download it from the internet (or reload it from our harddisk) if it turns out we needed the original anyway.</p>
+<div class="callout-note callout callout-style-simple no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<div id="exm-data-filter" class="theorem example">
+<p><span class="theorem-title"><strong>Example 6.1 </strong></span>Filtering</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://cssbook.net/d/guns-polls.csv"</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> pd.read_csv(url)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> d.rename(columns<span class="op">=</span>{<span class="st">"Republican Support"</span>: <span class="st">"rep"</span>, <span class="st">"Democratic Support"</span>: <span class="st">"dem"</span>})</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> d.drop(columns<span class="op">=</span><span class="st">"URL"</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co"># alternatively, we can write:</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># d.drop(columns="URL", inplace=True)</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>d2 <span class="op">=</span> d.loc[d.Question <span class="op">==</span> <span class="st">"arm-teachers"</span>]</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>d2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>        Question    Start      End  ... Support rep  dem
+7   arm-teachers  2/23/18  2/25/18  ...      41  69   20
+8   arm-teachers  2/20/18  2/23/18  ...      44  68   20
+9   arm-teachers  2/27/18  2/28/18  ...      43  71   24
+10  arm-teachers  2/27/18  2/28/18  ...      41  68   18
+11  arm-teachers   3/3/18   3/5/18  ...      40  77   10
+12  arm-teachers  2/26/18  2/28/18  ...      43  80   11
+
+[6 rows x 8 columns]</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>url<span class="ot">=</span><span class="st">"https://cssbook.net/d/guns-polls.csv"</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>d <span class="ot">=</span> <span class="fu">read_csv</span>(url)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>d <span class="ot">=</span> <span class="fu">rename</span>(d, <span class="at">rep=</span><span class="st">`</span><span class="at">Republican Support</span><span class="st">`</span>, </span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>           <span class="at">dem=</span><span class="st">`</span><span class="at">Democratic Support</span><span class="st">`</span>)</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>d <span class="ot">=</span> <span class="fu">select</span>(d, <span class="sc">-</span>URL)</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>d2 <span class="ot">=</span> <span class="fu">filter</span>(d, Question <span class="sc">==</span> <span class="st">"arm-teachers"</span>)</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>d2</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 8
+  Question     Start   End     Pollster        Population    Support   rep   dem
+  &lt;chr&gt;        &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;           &lt;chr&gt;           &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+1 arm-teachers 2/23/18 2/25/18 YouGov/Huffpost Registered V…      41    69    20
+2 arm-teachers 2/20/18 2/23/18 CBS News        Adults             44    68    20
+3 arm-teachers 2/27/18 2/28/18 Rasmussen       Adults             43    71    24
+4 arm-teachers 2/27/18 2/28/18 NPR/Ipsos       Adults             41    68    18
+5 arm-teachers 3/3/18  3/5/18  Quinnipiac      Registered V…      40    77    10
+6 arm-teachers 2/26/18 2/28/18 SurveyMonkey    Registered V…      43    80    11</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="sec-calculate" class="level2" data-number="6.2">
+<h2 data-number="6.2" class="anchored" data-anchor-id="sec-calculate"><span class="header-section-number">6.2</span> Calculating Values</h2>
+<p>Very often, we need to calculate values for new columns or change the content of existing columns. For example, we might wish to calculate the difference between two columns, or we may need to clean a column by correcting clerical errors or converting between data types.</p>
+<p>In these steps, the general pattern is that a column is assigned a new value based on a calculation that generally involves other columns. In both R and Python, there are two general ways to accomplish this. First, you can simply assign to an existing or new column, using the column selection notation discussed in Section <a href="chapter03.html#sec-datatypes"><span>3.1</span></a>: <code>df["column"] = ...</code> in Python, or <code>df$column = ...</code> in R.</p>
+<p>Both Python and R also offer a function that allows multiple columns to be changed, returning a new copy of the data frame rather than changing the original data frame. In R, this is done using the <em>tidyverse</em> function <code>mutate</code>, which is the recommended way to compute values. The Python equivalent, <em>pandas</em> function <code>assign</code>, is used more rarely as it does not offer many advantages over direct assignment.</p>
+<p>In either case, you can use arithmetic: e.g.&nbsp;<code>rep - dem</code> to compute the difference between these columns. This works directly in R <code>mutate</code>, but in Python or in R direct assignment you also need to specify the name of the data frame. In Python, this would be <code>d["rep"] - d["dem"]</code> <a href="#fn3" class="footnote-ref" id="fnref3" role="doc-noteref"><sup>3</sup></a>, while in R this is <code>d$rep - d$dem</code>.</p>
+<p>In many cases, however, you want to use various functions to perform tasks like cleaning and data conversion (see Section <a href="chapter03.html#sec-functions"><span>3.3</span></a> for a detailed explanation of built-in and custom functions). For example, to convert a column to numeric you would use the base R function <code>as.numeric</code> in R or the <em>pandas</em> function <code>to_numeric</code> in Python. Both functions take a column as argument and convert it to a numeric column.</p>
+<p>Almost all R functions work on whole columns like that. In Python, however, many <em>functions</em> work on individual values rather than columns. To apply a function on each element of a column <code>col</code>, you can use <code>df.col.apply(my_function)</code> (where <code>df</code> and <code>col</code> are the names of your data frame and column). In contast, <em>Pandas</em> columns have multiple useful <em>methods</em> that – because they are methods of that column – apply to the whole column<a href="#fn4" class="footnote-ref" id="fnref4" role="doc-noteref"><sup>4</sup></a>. For example, the method <code>df.col.fillna</code> replaces missing values in the column <code>col</code>, and <code>df.col.str.replace</code> conducts a find and replace. Unlike functions that expect individual values rather than columns as an input, there is no need to explicitly <code>apply</code> such a method. As always, you can use tab completion (pressing the TAB key after writing <code>df.col.</code>) to get a menu that includes all available methods.</p>
+<div class="callout-note callout callout-style-simple no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<div id="exm-mutate" class="theorem example">
+<p><span class="theorem-title"><strong>Example 6.2 </strong></span>Mutate</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="co"># version of the guns polls with some errors</span></span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://cssbook.net/d/guns-polls-dirty.csv"</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>d2 <span class="op">=</span> pd.read_csv(url)</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Option 1: clean with direct assignment</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Note that when creating a new column,</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="co"># you have to use df["col"] rather than df.col</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>d2[<span class="st">"rep2"</span>] <span class="op">=</span> d2.rep.<span class="bu">str</span>.replace(<span class="st">"[^0-9</span><span class="ch">\\</span><span class="st">.]"</span>, <span class="st">""</span>)</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>d2[<span class="st">"rep2"</span>] <span class="op">=</span> pd.to_numeric(d2.rep2)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>d2[<span class="st">"Support2"</span>] <span class="op">=</span> d2.Support.fillna(d.Support.mean())</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Alternatively, clean with .assign</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Note the need to use an anonymous function</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="co"># (lambda) to chain calculations</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>cleaned <span class="op">=</span> d2.assign(</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>    rep2<span class="op">=</span>d2.rep.<span class="bu">str</span>.replace(<span class="st">"[^0-9</span><span class="ch">\\</span><span class="st">.]"</span>, <span class="st">""</span>),</span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>    rep3<span class="op">=</span><span class="kw">lambda</span> d2: pd.to_numeric(d2.rep2),</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>    Support2<span class="op">=</span>d2.Support.fillna(d2.Support.mean()),</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Finally, you can create your own function</span></span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> clean_num(x):</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> re.sub(<span class="st">"[^0-9</span><span class="ch">\\</span><span class="st">.]"</span>, <span class="st">""</span>, x)</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">int</span>(x)</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>cleaned[<span class="st">"rep3"</span>] <span class="op">=</span> cleaned.rep.<span class="bu">apply</span>(clean_num)</span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>cleaned.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       Question    Start      End         Pollster  ... dem  rep2 Support2  rep3
+0  arm-teachers  2/23/18  2/25/18  YouGov/Huffpost  ...  20    69     41.0    69
+1  arm-teachers  2/20/18  2/23/18         CBS News  ...  20    68     41.6    68
+2  arm-teachers  2/27/18  2/28/18        Rasmussen  ...  24    71     43.0    71
+3  arm-teachers  2/27/18  2/28/18        NPR/Ipsos  ...  18    68     41.0    68
+4  arm-teachers   3/3/18   3/5/18       Quinnipiac  ...  10    77     40.0    77
+
+[5 rows x 11 columns]</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># version of the guns polls with some errors</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>url<span class="ot">=</span><span class="st">"https://cssbook.net/d/guns-polls-dirty.csv"</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>d2 <span class="ot">=</span> <span class="fu">read_csv</span>(url)</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Option 1: clean with direct assignment. </span></span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Note the need to specify d2$ everywhere</span></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>d2<span class="sc">$</span>rep2<span class="ot">=</span><span class="fu">str_replace_all</span>(d2<span class="sc">$</span>rep, <span class="st">"[^0-9</span><span class="sc">\\</span><span class="st">.]"</span>, <span class="st">""</span>)</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>d2<span class="sc">$</span>rep2 <span class="ot">=</span> <span class="fu">as.numeric</span>(d2<span class="sc">$</span>rep2)</span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>d2<span class="sc">$</span>Support2 <span class="ot">=</span> <span class="fu">replace_na</span>(d2<span class="sc">$</span>Support, </span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>                        <span class="fu">mean</span>(d2<span class="sc">$</span>Support, <span class="at">na.rm=</span>T))</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a><span class="co"># Alternative, clean with mutate</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a><span class="co"># No need to specify d2$, </span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="co"># and we can assign to a new or existing object</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>cleaned <span class="ot">=</span> <span class="fu">mutate</span>(d2, </span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>    <span class="at">rep2 =</span> <span class="fu">str_replace_all</span>(rep, <span class="st">"[^0-9</span><span class="sc">\\</span><span class="st">.]"</span>, <span class="st">""</span>),</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>    <span class="at">rep2 =</span> <span class="fu">as.numeric</span>(rep2),</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>    <span class="at">Support2 =</span> <span class="fu">replace_na</span>(Support, </span>
+<span id="cb11-19"><a href="#cb11-19" aria-hidden="true" tabindex="-1"></a>        <span class="fu">mean</span>(Support, <span class="at">na.rm=</span><span class="cn">TRUE</span>)))</span>
+<span id="cb11-20"><a href="#cb11-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-21"><a href="#cb11-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Finally, you can create your own function</span></span>
+<span id="cb11-22"><a href="#cb11-22" aria-hidden="true" tabindex="-1"></a>clean_num <span class="ot">=</span> <span class="cf">function</span>(x) {</span>
+<span id="cb11-23"><a href="#cb11-23" aria-hidden="true" tabindex="-1"></a>    x <span class="ot">=</span> <span class="fu">str_replace_all</span>(x, <span class="st">"[^0-9</span><span class="sc">\\</span><span class="st">.]"</span>, <span class="st">""</span>)</span>
+<span id="cb11-24"><a href="#cb11-24" aria-hidden="true" tabindex="-1"></a>    <span class="fu">as.numeric</span>(x)</span>
+<span id="cb11-25"><a href="#cb11-25" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb11-26"><a href="#cb11-26" aria-hidden="true" tabindex="-1"></a>cleaned <span class="ot">=</span> <span class="fu">mutate</span>(cleaned, <span class="at">rep3 =</span> <span class="fu">clean_num</span>(rep))</span>
+<span id="cb11-27"><a href="#cb11-27" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(cleaned)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 11
+  Question   Start End   Polls…¹ Popul…² Support   rep   dem  rep2 Suppo…³  rep3
+  &lt;chr&gt;      &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt; &lt;dbl&gt;
+1 arm-teach… 2/23… 2/25… YouGov… Regist…      41    69    20    69    41      69
+2 arm-teach… 2/20… 2/23… CBS Ne… Adults       NA    68    20    68    41.6    68
+3 arm-teach… 2/27… 2/28… Rasmus… Adults       43    71    24    71    43      71
+4 arm-teach… 2/27… 2/28… NPR/Ip… Adults       41    68    18    68    41      68
+5 arm-teach… 3/3/… 3/5/… Quinni… Regist…      40    77    10    77    40      77
+6 arm-teach… 2/26… 2/28… Survey… Regist…      43    80    11    80    43      80
+# … with abbreviated variable names ¹​Pollster, ²​Population, ³​Support2</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>To illustrate some of the many possibilities, <a href="#exm-mutate">Example&nbsp;<span>6.2</span></a> has code for cleaning a version of the gun polls in which we intentionally introduced two problems: we added some typos to the <em>rep</em> column and introduced a missing value in the <em>Support</em> column. To clean this, we perform three steps: First, we remove all non-numeric characters using a regular expression (see Section <a href="chapter09.html#sec-regular"><span>9.2</span></a> for more information on text handling and regular expressions). Next, we need to explicitly convert the resulting column into a numeric column so we can later use it in calculations. Finally, we replace the missing value by the column mean (of course, it is doubtful that that is the best strategy for imputing missing values here, we do it mainly to show how one can deal with missing values technically. You will find some more discussion about missing values in Section <a href="chapter07.html#sec-simpleeda"><span>7.1</span></a>).</p>
+<p>The cleaning process is actually performed twice: lines 5-10 use direct assignment, while lines 12-19 use the <code>mutate</code>/<code>assign</code> function. Finally, lines 21-27 show how you can define and apply a custom function to combine the first two cleaning steps. This can be quite useful if you use the same cleaning steps in multiple places, since it reduces the repetition of code and hence the possibility of introducing bugs or inconsistencies.</p>
+<p>Note that all these versions work fine and produce the same result. In the end, it is up to the researcher to determine which feels most natural given the circumstances. As noted above, in R we would generally prefer <code>mutate</code> over direct assignment, mostly because it fits nicely into the <em>tidyverse</em> workflow and you do not need to repeat the data frame name. In Python, we would generally prefer the direct assignment, unless a copy of the data with the changes made is convenient, in which case <code>assign</code> can be more useful.</p>
+</section>
+<section id="sec-grouping" class="level2" data-number="6.3">
+<h2 data-number="6.3" class="anchored" data-anchor-id="sec-grouping"><span class="header-section-number">6.3</span> Grouping and Aggregating</h2>
+<p>The functions we used to change the data above operated on individual rows. Sometimes, however, we wish to compute summary statistics of groups of rows. This essentially shifts the unit of analysis to a higher level of abstraction. For example, we could compute per-school statistics from a data file containing information per student; or we could compute the average number of mentions of a politician per day from data file containing information per articles (each date might have multiple articles and each article multiple mentions to politicians!).</p>
+<p>In data analysis, this is called <em>aggregation</em>. In both Python and R, it consists of two steps: First, you define which rows are <em>grouped</em> together to form a new unit by specifying which column identifies these groups. In the previous examples, this would be the school name or the date of each article. It is also possible to group by multiple columns, for example to compute the average per day per news source.</p>
+<p>The next step is to specify one or more summary (or <em>aggregation</em>) functions to be computed over the desired value columns. These functions compute a summary value, like the mean, sum, or standard deviation, over all the values belonging to each group. In the example, to compute average test scores per school we would apply the average (or mean) function to the test score value column. In general, you can use multiple functions (e.g.&nbsp;mean and variance) and multiple columns (e.g.&nbsp;mean test score and mean parental income).</p>
+<p>The resulting dataset is reduced both in rows and in columns. Each row now represents a group of previuos cases (e.g.&nbsp;school or date), and the columns are now only the grouping columns and the computed summary scores.</p>
+<p><a href="#exm-aggregate">Example&nbsp;<span>6.3</span></a> shows the code in R and Python to define groups and compute summary values. First, we group by poll <em>question</em>; and for each question, we compute the average and standard deviation. The syntax is a little different for R and Python, but the idea is the same: first we create a new variable <code>groups</code> that stores the grouping information, and then we create the aggregate statistics. In this example, we do not store the result of the computation, but print it on the screen. To store the results, simply assign it to a new object as normal.</p>
+<div class="callout-note callout callout-style-simple no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<div id="exm-aggregate" class="theorem example">
+<p><span class="theorem-title"><strong>Example 6.3 </strong></span>Aggregation. Note that in the Python example, we can specify often-used functions such as “mean” simply as a string, but instead, we could also pass functions directly, such as numpy’s np.mean</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>groups <span class="op">=</span> d.groupby(<span class="st">"Question"</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>groups.agg({<span class="st">"Support"</span>: [<span class="st">"mean"</span>, <span class="st">"std"</span>]})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                               Support          
+                                  mean       std
+Question                                        
+age-21                       75.857143  6.011893
+arm-teachers                 42.000000  1.549193
+background-checks            87.428571  7.322503
+ban-assault-weapons          61.750000  6.440285
+ban-high-capacity-magazines  67.285714  3.860669
+mental-health-own-gun        85.833333  5.455884
+repeal-2nd-amendment         10.000000       NaN
+stricter-gun-laws            66.454545  5.145165</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>groups <span class="ot">=</span> <span class="fu">group_by</span>(d, Question)</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">summarize</span>(groups, <span class="at">m=</span><span class="fu">mean</span>(Support), <span class="at">sd=</span><span class="fu">sd</span>(Support))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 8 × 3
+  Question                        m    sd
+  &lt;chr&gt;                       &lt;dbl&gt; &lt;dbl&gt;
+1 age-21                       75.9  6.01
+2 arm-teachers                 42    1.55
+3 background-checks            87.4  7.32
+4 ban-assault-weapons          61.8  6.44
+5 ban-high-capacity-magazines  67.3  3.86
+6 mental-health-own-gun        85.8  5.46
+7 repeal-2nd-amendment         10   NA   
+8 stricter-gun-laws            66.5  5.15</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>In R, you use the <em>dplyr</em> function <code>group_by</code> to define the groups, and then call the function <code>summarize</code> to compute summary values by specifying <code>name=function(value)</code>.</p>
+<p>In Python, the grouping step is quite similar. In the summarization step, however, you specify which summaries to compute in a dictionary<a href="#fn5" class="footnote-ref" id="fnref5" role="doc-noteref"><sup>5</sup></a>. The keys of the dictionary list the value columns to compute summaries of, and the values contain the summary functions to apply, so <code>'value': function</code> or <code>'value': [list of functions]</code>.</p>
+<section id="combining-multiple-operations" class="level3" data-number="6.3.1">
+<h3 data-number="6.3.1" class="anchored" data-anchor-id="combining-multiple-operations"><span class="header-section-number">6.3.1</span> Combining Multiple Operations</h3>
+<p>In the examples above, each line of code (often called a <em>statement</em>) contained a single operation, generally a call to a function or method (see Section <a href="chapter03.html#sec-functions"><span>3.3</span></a>). The general shape of each line in R was <code>data = function(data, arguments)</code>, that is, the data is provided as the first argument to the function. In Python, we often used methods that “belong to” objects such as data frames or columns. Here, we therefore specify the object itself followed by a period and its method that is to be called, i.e.&nbsp;<code>object = object.method(arguments)</code>.</p>
+<p>Although there is nothing wrong with limiting each line to a single operation, both languages allow multiple operations to be chained together. Especially for grouping and summarizing, it can make sense to link these operations together as they can be thought of as a single “data wrangling” step.</p>
+<p>In Python, this can be achieved by adding the second <code>.method()</code> directly to the end of the first statement. Essentially, this calls the second method on the result of the first method: <code>data = data.method1(arguments).method2(arguments)</code>. In R, the data needs, of course, to be included in the function arguments. But we can also chain these function calls. This is done using the <em>pipe operator</em> (<code>%&gt;%</code>) from the (cutely named) <em>magrittr</em> package. The pipe operator inserts the result of the first function as the first argument of the second function. More technically, <code>f1(d) %&gt;% f2()</code> is equivalent to <code>f2(f1(d))</code>. This can be used to chain multiple commands together, e.g.&nbsp;<code>data = data %&gt;% function1(arguments) %&gt;% function2(arguments)</code>.</p>
+<div class="callout-note callout callout-style-simple no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<div id="exm-aggregate2" class="theorem example">
+<p><span class="theorem-title"><strong>Example 6.4 </strong></span>Combining multiple functions or methods. The result is identical to</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>d.groupby(<span class="st">"Question"</span>).agg({<span class="st">"Support"</span>: [<span class="st">"mean"</span>, <span class="st">"std"</span>]})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                               Support          
+                                  mean       std
+Question                                        
+age-21                       75.857143  6.011893
+arm-teachers                 42.000000  1.549193
+background-checks            87.428571  7.322503
+ban-assault-weapons          61.750000  6.440285
+ban-high-capacity-magazines  67.285714  3.860669
+mental-health-own-gun        85.833333  5.455884
+repeal-2nd-amendment         10.000000       NaN
+stricter-gun-laws            66.454545  5.145165</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>d <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(Question) <span class="sc">%&gt;%</span> </span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">summarize</span>(<span class="at">m=</span><span class="fu">mean</span>(Support), <span class="at">sd=</span><span class="fu">sd</span>(Support))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 8 × 3
+  Question                        m    sd
+  &lt;chr&gt;                       &lt;dbl&gt; &lt;dbl&gt;
+1 age-21                       75.9  6.01
+2 arm-teachers                 42    1.55
+3 background-checks            87.4  7.32
+4 ban-assault-weapons          61.8  6.44
+5 ban-high-capacity-magazines  67.3  3.86
+6 mental-health-own-gun        85.8  5.46
+7 repeal-2nd-amendment         10   NA   
+8 stricter-gun-laws            66.5  5.15</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><a href="#exm-aggregate2">Example&nbsp;<span>6.4</span></a> shows the same operation as in Example <a href="#exm-aggregate"><span>6.3</span></a>, but chained into a single statement.</p>
+</section>
+<section id="adding-summary-values" class="level3" data-number="6.3.2">
+<h3 data-number="6.3.2" class="anchored" data-anchor-id="adding-summary-values"><span class="header-section-number">6.3.2</span> Adding Summary Values</h3>
+<p>Rather than reducing a data frame to contain only the group-level information, it is sometimes desirable to add the summary values to the original data. For example, if we add the average score per school to the student-level data, we can then determine whether individual students outperform the school average.</p>
+<p>Of course, the summary scores are the same for all rows in the same group: all students in the same school have the same school average. So, these values will be repeated for these rows, essentially mixing individual and group level variables in the same data frame.</p>
+<div class="callout-note callout callout-style-simple no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<div id="exm-transform" class="theorem example">
+<p><span class="theorem-title"><strong>Example 6.5 </strong></span>Adding summary values to individual cases</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-7-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-1" role="tab" aria-controls="tabset-7-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-2" role="tab" aria-controls="tabset-7-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-7-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-7-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Note the use of ( ) to split a long line</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>d[<span class="st">"mean"</span>] <span class="op">=</span> d.groupby(<span class="st">"Question"</span>)[<span class="st">"Support"</span>].transform(<span class="st">"mean"</span>)</span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>d[<span class="st">"deviation"</span>] <span class="op">=</span> d[<span class="st">"Support"</span>] <span class="op">-</span> d[<span class="st">"mean"</span>]</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>d.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  Question    Start      End  ... dem       mean  deviation
+0   age-21  2/20/18  2/23/18  ...  86  75.857143  -3.857143
+1   age-21  2/27/18  2/28/18  ...  92  75.857143   6.142857
+2   age-21   3/1/18   3/4/18  ...  76  75.857143  -8.857143
+3   age-21  2/22/18  2/26/18  ...  92  75.857143   8.142857
+4   age-21   3/3/18   3/5/18  ...  93  75.857143   2.142857
+
+[5 rows x 10 columns]</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-7-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>d <span class="ot">=</span> d <span class="sc">%&gt;%</span> <span class="fu">group_by</span>(Question) <span class="sc">%&gt;%</span> </span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">mean =</span> <span class="fu">mean</span>(Support), </span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>         <span class="at">deviation=</span>Support <span class="sc">-</span> mean)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 10
+# Groups:   Question [1]
+  Question Start   End     Pollster    Popul…¹ Support   rep   dem  mean devia…²
+  &lt;chr&gt;    &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;       &lt;chr&gt;     &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;
+1 age-21   2/20/18 2/23/18 CNN/SSRS    Regist…      72    61    86  75.9   -3.86
+2 age-21   2/27/18 2/28/18 NPR/Ipsos   Adults       82    72    92  75.9    6.14
+3 age-21   3/1/18  3/4/18  Rasmussen   Adults       67    59    76  75.9   -8.86
+4 age-21   2/22/18 2/26/18 Harris Int… Regist…      84    77    92  75.9    8.14
+5 age-21   3/3/18  3/5/18  Quinnipiac  Regist…      78    63    93  75.9    2.14
+6 age-21   3/4/18  3/6/18  YouGov      Regist…      72    65    80  75.9   -3.86
+# … with abbreviated variable names ¹​Population, ²​deviation</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Example <a href="#exm-transform"><span>6.5</span></a> shows how this can be achieved in Python and R, computing the mean support per question and then calculating how each poll deviates from this mean.</p>
+<p>In R, the code is very similar to Example <a href="#exm-aggregate2"><span>6.4</span></a> above, simply replacing the <em>dplyr</em> function <code>summarize</code> by the function <code>mutate</code> discussed above. In this function you can mix summary functions and regular functions, as shown in the example: first the mean per group is calculated, followed by the deviation of this mean.</p>
+<p>The Python code also uses the same syntax used for computing new columns. The first line selects the <em>Support</em> column on the grouped dataset, and then calls the <em>pandas</em> method <code>transform</code> on that column to compute the mean per group, adding it as a new column by assigning it to the column name. The second line uses the regular assignment syntax to create the deviation based on the support and calculated mean.</p>
+</section>
+</section>
+<section id="sec-join" class="level2" data-number="6.4">
+<h2 data-number="6.4" class="anchored" data-anchor-id="sec-join"><span class="header-section-number">6.4</span> Merging Data</h2>
+<p>In many cases, we need to combine data from different sources or data files. For example, we might have election poll results in one file and socio-economic data per area in another. To test whether we can explain variance in poll results from factors such as education level, we would need to combine the poll results with the economic data. This process is often called merging or joining data.</p>
+<section id="equal-units-of-analysis" class="level3" data-number="6.4.1">
+<h3 data-number="6.4.1" class="anchored" data-anchor-id="equal-units-of-analysis"><span class="header-section-number">6.4.1</span> Equal Units of Analysis</h3>
+<div class="callout-note callout callout-style-simple no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<div id="exm-piketty" class="theorem example">
+<p><span class="theorem-title"><strong>Example 6.6 </strong></span>Private and Public Capital data (source: Piketty 2014).</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-8-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-1" role="tab" aria-controls="tabset-8-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-2" role="tab" aria-controls="tabset-8-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-8-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-8-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://cssbook.net/d/private_capital.csv"</span></span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>private <span class="op">=</span> pd.read_csv(url)</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>private.tail()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Year  U.S.  Japan  Germany  France  U.K.  Italy  Canada  Australia  Spain
+36  2006  4.88   5.83     3.78    5.34  5.19   6.37    3.88       5.32   7.69
+37  2007  4.94   5.79     3.79    5.53  5.23   6.42    4.02       5.55   7.92
+38  2008  4.36   5.87     3.90    5.53  4.91   6.61    3.83       5.44   7.86
+39  2009  4.06   6.19     4.15    5.63  5.04   6.91    4.13       5.04   7.89
+40  2010  4.10   6.01     4.12    5.75  5.22   6.76    4.16       5.18   7.55</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-8-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>url<span class="ot">=</span><span class="st">"https://cssbook.net/d/private_capital.csv"</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>private <span class="ot">=</span> <span class="fu">read_csv</span>(url)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(private)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 10
+   Year  U.S. Japan Germany France  U.K. Italy Canada Australia Spain
+  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;
+1  2005  4.7   5.74    3.84   5     4.99  6.24   3.73      5.22  7.24
+2  2006  4.88  5.83    3.78   5.34  5.19  6.37   3.88      5.32  7.69
+3  2007  4.94  5.79    3.79   5.53  5.23  6.42   4.02      5.55  7.92
+4  2008  4.36  5.87    3.9    5.53  4.91  6.61   3.83      5.44  7.86
+5  2009  4.06  6.19    4.15   5.63  5.04  6.91   4.13      5.04  7.89
+6  2010  4.1   6.01    4.12   5.75  5.22  6.76   4.16      5.18  7.55</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-9-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-1" role="tab" aria-controls="tabset-9-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-9-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-2" role="tab" aria-controls="tabset-9-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-9-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-9-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://cssbook.net/d/public_capital.csv"</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>public <span class="op">=</span> pd.read_csv(url)</span>
+<span id="cb29-3"><a href="#cb29-3" aria-hidden="true" tabindex="-1"></a>public.tail()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>    Year  U.S.  Japan  Germany  France  U.K.  Italy  Canada  Australia  Spain
+36  2006  0.51   0.36     0.02    0.37  0.32  -0.54   -0.10       0.69   0.20
+37  2007  0.54   0.38     0.06    0.46  0.32  -0.52   -0.03       0.69   0.26
+38  2008  0.49   0.34     0.08    0.43  0.28  -0.52    0.00       0.71   0.25
+39  2009  0.36   0.24     0.07    0.35  0.19  -0.65   -0.02       0.71   0.14
+40  2010  0.21   0.14     0.04    0.31  0.06  -0.68   -0.04       0.67   0.05</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-9-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-9-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">=</span> <span class="st">"https://cssbook.net/d/public_capital.csv"</span></span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>public <span class="ot">=</span> <span class="fu">read_csv</span>(url)</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a><span class="fu">tail</span>(public)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 10
+   Year  U.S. Japan Germany France  U.K. Italy Canada Australia Spain
+  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;   &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;     &lt;dbl&gt; &lt;dbl&gt;
+1  2005  0.48  0.34    0.04   0.28  0.32 -0.56  -0.16      0.67  0.13
+2  2006  0.51  0.36    0.02   0.37  0.32 -0.54  -0.1       0.69  0.2 
+3  2007  0.54  0.38    0.06   0.46  0.32 -0.52  -0.03      0.69  0.26
+4  2008  0.49  0.34    0.08   0.43  0.28 -0.52   0         0.71  0.25
+5  2009  0.36  0.24    0.07   0.35  0.19 -0.65  -0.02      0.71  0.14
+6  2010  0.21  0.14    0.04   0.31  0.06 -0.68  -0.04      0.67  0.05</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>The easiest joins are when both datasets have the same unit of analysis, i.e.&nbsp;the rows represent the same units. For example, consider the data on public and private capital ownership published by <span class="citation" data-cites="piketty">Piketty (<a href="references.html#ref-piketty" role="doc-biblioref">2017</a>)</span> alongside his landmark book <em>Capital in the 21st Century</em>. As shown in <a href="#exm-piketty">Example&nbsp;<span>6.6</span></a>, he released separate files for public and private capital ownership. If we wished to analyze the relationship between these (for example to recreate Figure 3.6 on page 128 of that book), we first need to combine them into a single data frame.</p>
+<p>To combine these data frames, we use the <em>pandas</em> data frame method <code>merge</code> in Python or the <em>dplyr</em> method <code>full_join</code> in R. Both methods join the data frames on one or more <em>key</em> columns. The key column(s) identify the units in both data frames, so in this case the <em>Year</em> column. Often, the key column is some sort of identifier, like a respondent or location ID. The resulting data frame will contain the shared key column(s), and all other columns from both joined data frames.</p>
+<p>In both Python and R, all columns that occur in both data frames are by default assumed to be the key columns. In many cases, this is the desired behavior as both data frames may contain e.g.&nbsp;a <em>Year</em> or <em>RepondentID</em> column. Sometimes, however, this is not the case. Possibly, the key column is called differently in both data frames, e.g.&nbsp;<em>respID</em> in one and <em>Respondent</em> in the other. It is also possible that the two frames contain columns with the same name, but which contain actual data that should not be used as a key. For example, in the Piketty data shown above the key column is called <em>Year</em> in both frames, but they also share the columns for the countries which are data columns.</p>
+<p>In these cases, it is possible to explicitly specify which columns to join on (using the <code>on=</code> (Python) / <code>by=</code> (R) argument). However, we would generally recommend preprocessing the data first and select and/or rename columns such that the only shared columns are the key columns. The reason for that is that if columns in different data frames mean the same thing (i.e.&nbsp;<em>respID</em> and <em>Respondent</em>), they should generally have the same name to avoid confusion. In the case of “accidentally” shared column names, such as the country names in the current example, it is also better to rename them so it is obvious which is which in the resulting dataset: if shared columns are not used in the join, by default they get “.x” and “.y” (R) or “_x” and “_y” (Python) appended to their name, which is not very meaningful. Even if the key column is the only shared column, however, it can still be good to explicitly select that column to make it clear to the reader (or for yourself in the future) what is happening.</p>
+<div class="callout-note callout callout-style-simple no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<div id="exm-merge" class="theorem example">
+<p><span class="theorem-title"><strong>Example 6.7 </strong></span>Merging private and public data for France.</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-10-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-1" role="tab" aria-controls="tabset-10-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-10-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-2" role="tab" aria-controls="tabset-10-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-10-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-10-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>private_fr <span class="op">=</span> private[[<span class="st">"Year"</span>, <span class="st">"France"</span>]].rename(</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>    columns<span class="op">=</span>{<span class="st">"France"</span>: <span class="st">"fr_private"</span>}</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb33-4"><a href="#cb33-4" aria-hidden="true" tabindex="-1"></a>public_fr <span class="op">=</span> public[[<span class="st">"Year"</span>, <span class="st">"France"</span>]].rename(columns<span class="op">=</span>{<span class="st">"France"</span>: <span class="st">"fr_public"</span>})</span>
+<span id="cb33-5"><a href="#cb33-5" aria-hidden="true" tabindex="-1"></a>capital_fr <span class="op">=</span> pd.merge(private_fr, public_fr)</span>
+<span id="cb33-6"><a href="#cb33-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Data for Figure 3.6 (Piketty, 2014, p 128)</span></span>
+<span id="cb33-7"><a href="#cb33-7" aria-hidden="true" tabindex="-1"></a>capital_fr.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Year  fr_private  fr_public
+0  1970        3.10       0.41
+1  1971        3.04       0.43
+2  1972        3.07       0.45
+3  1973        3.05       0.46
+4  1974        3.03       0.48</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-10-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>private_fr <span class="ot">=</span> private <span class="sc">%&gt;%</span> </span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(Year, <span class="at">fr_private=</span>France)</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>public_fr <span class="ot">=</span> public <span class="sc">%&gt;%</span> </span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">select</span>(Year, <span class="at">fr_public=</span>France)</span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>capital_fr <span class="ot">=</span> <span class="fu">full_join</span>(private_fr, public_fr)</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Data for Figure 3.6 (Piketty, 2014, p 128)</span></span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(capital_fr)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+   Year fr_private fr_public
+  &lt;dbl&gt;      &lt;dbl&gt;     &lt;dbl&gt;
+1  1970       3.1       0.41
+2  1971       3.04      0.43
+3  1972       3.07      0.45
+4  1973       3.05      0.46
+5  1974       3.03      0.48
+6  1975       3.17      0.53</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-11-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-1" role="tab" aria-controls="tabset-11-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-11-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-2" role="tab" aria-controls="tabset-11-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-11-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-11-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Are private and public capital correlated?</span></span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>r, p <span class="op">=</span> scipy.stats.pearsonr(capital_fr.fr_private, capital_fr.fr_public)</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Pearson correlation: rho=</span><span class="sc">{</span>r<span class="sc">:.2}</span><span class="ss">,p=</span><span class="sc">{</span>p<span class="sc">:.3}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Pearson correlation: rho=-0.32,p=0.0404</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-11-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-11-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Are private and public capital correlated?</span></span>
+<span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(capital_fr<span class="sc">$</span>fr_private, </span>
+<span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a>         capital_fr<span class="sc">$</span>fr_public)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's product-moment correlation
+
+data:  capital_fr$fr_private and capital_fr$fr_public
+t = -2.1204, df = 39, p-value = 0.04039
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ -0.57252488 -0.01537337
+sample estimates:
+       cor 
+-0.3215032 </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>This is shown in <a href="#exm-merge">Example&nbsp;<span>6.7</span></a>. The first two lines select only the <em>Year</em> and <em>France</em> columns, and rename the <em>France</em> column to indicate whether it is the private or public data. Line 3 does the actual join, with and without the explicit selection of key column, respectively. This is then used to compute the correlation between private and public capital, which shows that there is a weak but (just) significant negative correlation (<span class="math inline">\(\rho=-.32, p=.04\)</span>) <a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a>.</p>
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Next to <code>merge</code>, /textitPandas data frames also have a method called <code>join</code>. It is a simplified version for joining on indices (i.e., the row labels). If you have two data frames in which corresponding rows have the same row number, you can simply write <code>df1.join(df2)</code>. In short: both methods do the same, but merge provides more options, and join is easier if you want to join on the indices.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="inner-and-outer-joins" class="level3" data-number="6.4.2">
+<h3 data-number="6.4.2" class="anchored" data-anchor-id="inner-and-outer-joins"><span class="header-section-number">6.4.2</span> Inner and Outer Joins</h3>
+<p>In the example above, both datasets had exactly one entry for each unit (year), making it the most straightforward case. If either (or both) of the datasets have missing units, however, you need to specify how to deal with this.</p>
+<p>Table <a href="#tbl-joins"><span>6.1</span></a> list the four possible ways of joining, keeping all rows (<em>outer join</em>), only rows present in both (<em>inner join</em>), or all rows from one of the sets and matching rows from the other (<em>left</em> or <em>right join</em>). Left and right here literally refer to the order in which you type the data frame names. Figure <a href="#fig-joinvenn"><span>6.1</span></a> and Table <a href="#tbl-joins"><span>6.1</span></a> give an overview. In all cases except inner joins, this can create units where information from one of the datasets is missing. This will be lead to missing values (<code>NA</code>/<code>NaN</code>) being inserted in the columns of the datasets with missing units.</p>
+<div id="fig-joinvenn" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="img/ch07_figjoins.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;6.1: The solid area indicates whether the cases in the resulting datasets need to appear in one, both, or any of the datasets.</figcaption><p></p>
+</figure>
+</div>
+<div id="tbl-joins" class="anchored">
+<table class="table">
+<caption>Table&nbsp;6.1: Different types of joins between datasets d1 and d2</caption>
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Type</th>
+<th>Description</th>
+<th>R</th>
+<th>Python</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Outer</td>
+<td>All units from both sets</td>
+<td><code>full_join(d1,d2)</code></td>
+<td><code>d1.merge(d2, how='outer')</code></td>
+</tr>
+<tr class="even">
+<td>Inner</td>
+<td>Only units that are in both sets</td>
+<td><code>inner_join(d1,d2)</code></td>
+<td><code>d1.merge(d2, how='inner')</code></td>
+</tr>
+<tr class="odd">
+<td>Left</td>
+<td>All units from left-hand set</td>
+<td><code>left_join(d1,d2)</code></td>
+<td><code>d1.merge(d2, how='left')</code></td>
+</tr>
+<tr class="even">
+<td>Right</td>
+<td>All units from right-hand set</td>
+<td><code>right_join(d1,d2)</code></td>
+<td><code>d1.merge(d2, how='right')</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>In most cases, you will either use inner join or left join. Inner join is useful when information should be complete, or where you are only interested in units with information in both datasets. In general, when joining sets with the same units, it is smart to check the number of rows before and after the operation. If it decreases, this shows that there are units where information is missing in either set. If it increases, it shows that apparently the sets are not at the same level of analysis, or there are duplicate units in the data. In either case, an unexpected change in the number of rows is a good indicator that something is wrong.</p>
+<p>Left joins are useful when you are adding extra information to a “primary” dataset. For example, you might have your main survey results in a dataset, to which you want to add metadata or extra information about your respondents. If this data is not available for all respondents, you can use a left join to add the information where it is available, and simply leave the other respondents with missing values.</p>
+<p>A similar use case is when you have a list of news items, and a separate list of items that were coded or found with some search term. Using a left join will let you keep all news items, and add the coding where it is available. Especially if items that had zero hits of a search term are excluded from the search results, you might use a left join followed by a calculation to replace missing values by zeros to indicate that the counts for items aren’t actually missing, but were zero.</p>
+<p>Of course, you could also use a right join to achieve the same effect. It is more natural, however, to work from your primary dataset and add the secondary data, so you will generally use left joins rather than right joins.</p>
+<p>Outer (or full) joins can be useful when you are adding information from e.g.&nbsp;multiple survey waves, and you want to include any respondent that answered any of the waves. Of course, you will have to carefully think about how to deal with the resulting missing values in the substantive analysis.</p>
+</section>
+<section id="nested-data" class="level3" data-number="6.4.3">
+<h3 data-number="6.4.3" class="anchored" data-anchor-id="nested-data"><span class="header-section-number">6.4.3</span> Nested Data</h3>
+<p>The sections above discuss merging two datasets at the same level of analysis, i.e.&nbsp;with rows representing the same units (respondents, items, years) in both sets. It is also possible, however, to join a more aggregate (high level) set with a more detailed dataset. For example, you might have respondents that are part of a school or organizational unit. It can be desirable to join the respondent level information with the school level information, for example to then explore differences between schools or do multilevel modeling.</p>
+<p>For this use the same commands as for equal joins. In the resulting merged dataset, information from the group level will be duplicated for all individuals in that group.</p>
+<p>For example, take the two datasets shown in Example <a href="#exm-primary"><span>6.8</span></a>. The <code>results</code> dataset shows how many votes each US 2016 presidential primary candidate received in each county: Bernie Sanders got 544 votes in Autauga County in the US state of Alabama, which was 18.2% of all votes cast in the Democratic primary. Conversely, the <code>counties</code> dataset shows a large number of facts about these counties, such as population, change in population, gender and education distribution, etc.</p>
+<div class="callout-note callout callout-style-simple no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<div id="exm-primary" class="theorem example">
+<p><span class="theorem-title"><strong>Example 6.8 </strong></span>2016 Primary results and county-level metadata. Note that to avoid duplicate output, we display the counties data in the Python example and the results data in the R example</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-12-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-12-1" role="tab" aria-controls="tabset-12-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-12-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-12-2" role="tab" aria-controls="tabset-12-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-12-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-12-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> <span class="st">"https://cssbook.net/d/2016_primary_results.csv"</span></span>
+<span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>results <span class="op">=</span> pd.read_csv(r)</span>
+<span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a>results.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     state state_abbrev   county  ...        candidate votes fraction_votes
+0  Alabama           AL  Autauga  ...   Bernie Sanders   544          0.182
+1  Alabama           AL  Autauga  ...  Hillary Clinton  2387          0.800
+2  Alabama           AL  Baldwin  ...   Bernie Sanders  2694          0.329
+3  Alabama           AL  Baldwin  ...  Hillary Clinton  5290          0.647
+4  Alabama           AL  Barbour  ...   Bernie Sanders   222          0.078
+
+[5 rows x 8 columns]</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-12-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-12-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>r<span class="ot">=</span><span class="st">"https://cssbook.net/d/2016_primary_results.csv"</span></span>
+<span id="cb43-2"><a href="#cb43-2" aria-hidden="true" tabindex="-1"></a>results <span class="ot">=</span> <span class="fu">read_csv</span>(r) </span>
+<span id="cb43-3"><a href="#cb43-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(results)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 8
+  state   state_abbrev county   fips party    candidate       votes fraction_v…¹
+  &lt;chr&gt;   &lt;chr&gt;        &lt;chr&gt;   &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;           &lt;dbl&gt;        &lt;dbl&gt;
+1 Alabama AL           Autauga  1001 Democrat Bernie Sanders    544        0.182
+2 Alabama AL           Autauga  1001 Democrat Hillary Clinton  2387        0.8  
+3 Alabama AL           Baldwin  1003 Democrat Bernie Sanders   2694        0.329
+4 Alabama AL           Baldwin  1003 Democrat Hillary Clinton  5290        0.647
+5 Alabama AL           Barbour  1005 Democrat Bernie Sanders    222        0.078
+6 Alabama AL           Barbour  1005 Democrat Hillary Clinton  2567        0.906
+# … with abbreviated variable name ¹​fraction_votes</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-13-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-13-1" role="tab" aria-controls="tabset-13-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-13-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-13-2" role="tab" aria-controls="tabset-13-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-13-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-13-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> <span class="st">"https://cssbook.net/d/2016_primary_county.csv"</span></span>
+<span id="cb45-2"><a href="#cb45-2" aria-hidden="true" tabindex="-1"></a>counties <span class="op">=</span> pd.read_csv(c)</span>
+<span id="cb45-3"><a href="#cb45-3" aria-hidden="true" tabindex="-1"></a>counties.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   fips       area_name state_abbrev  ...  Building_permits   Land_area  Pop_density
+0     0   United States          NaN  ...           1046363  3531905.43         87.4
+1  1000         Alabama          NaN  ...             13369    50645.33         94.4
+2  1001  Autauga County           AL  ...               131      594.44         91.8
+3  1003  Baldwin County           AL  ...              1384     1589.78        114.6
+4  1005  Barbour County           AL  ...                 8      884.88         31.0
+
+[5 rows x 54 columns]</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-13-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-13-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a>c<span class="ot">=</span><span class="st">"https://cssbook.net/d/2016_primary_county.csv"</span></span>
+<span id="cb47-2"><a href="#cb47-2" aria-hidden="true" tabindex="-1"></a>counties <span class="ot">=</span> <span class="fu">read_csv</span>(c)</span>
+<span id="cb47-3"><a href="#cb47-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(counties)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 54
+   fips area_n…¹ state…² Pop_2…³ Pop_2…⁴ Pop_c…⁵ Pop_2…⁶ Age_u…⁷ Age_u…⁸ Age_o…⁹
+  &lt;dbl&gt; &lt;chr&gt;    &lt;chr&gt;     &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+1     0 United … &lt;NA&gt;     3.19e8  3.09e8     3.3  3.09e8     6.2    23.1    14.5
+2  1000 Alabama  &lt;NA&gt;     4.85e6  4.78e6     1.4  4.78e6     6.1    22.8    15.3
+3  1001 Autauga… AL       5.54e4  5.46e4     1.5  5.46e4     6      25.2    13.8
+4  1003 Baldwin… AL       2.00e5  1.82e5     9.8  1.82e5     5.6    22.2    18.7
+5  1005 Barbour… AL       2.69e4  2.75e4    -2.1  2.75e4     5.7    21.2    16.5
+6  1007 Bibb Co… AL       2.25e4  2.29e4    -1.8  2.29e4     5.3    21      14.8
+# … with 44 more variables: Sex_female_pct &lt;dbl&gt;, Race_white_pct &lt;dbl&gt;,
+#   Race_black_pct &lt;dbl&gt;, Race_native_pct &lt;dbl&gt;, Race_asian_pct &lt;dbl&gt;,
+#   Race_island_pct &lt;dbl&gt;, Race_mixed_pct &lt;dbl&gt;, Race_hispanic_pct &lt;dbl&gt;,
+#   Race_white_not_hispanic_pct &lt;dbl&gt;, Pop_same_house_pct &lt;dbl&gt;,
+#   Pop_foreign_born_pct &lt;dbl&gt;, Pop_nonenglish_home_pct &lt;dbl&gt;,
+#   Pop_hs_grad_pct &lt;dbl&gt;, Pop_college_grad_pct &lt;dbl&gt;,
+#   Pop_veterans_count &lt;dbl&gt;, Pop_avg_commute_mins &lt;dbl&gt;, …</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Suppose we hypothesize that Hillary Clinton would do relatively well in areas with more black voters. We would then need to combine the county level data about ethnic composition with the county <span class="math inline">\(\times\)</span> candidate level data on vote outcomes.</p>
+<p>This is achieved in Example <a href="#exm-nested"><span>6.9</span></a> in two steps. First, both datasets are cleaned to only contain the relevant data: for the <code>results</code> dataset only the Democrat rows are kept, and only the <em>fips</em> (county code), <em>candidate</em>, <em>votes</em>, and <em>fraction</em> columns. For the <code>counties</code> dataset, all rows are kept but only the <em>county code</em>, <em>name</em>, and <em>Race_white_pct</em> columns are kept.</p>
+<div class="callout-note callout callout-style-simple no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<div id="exm-nested" class="theorem example">
+<p><span class="theorem-title"><strong>Example 6.9 </strong></span>Joining data at the result and the county level</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-14-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-14-1" role="tab" aria-controls="tabset-14-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-14-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-14-2" role="tab" aria-controls="tabset-14-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-14-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-14-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>c <span class="op">=</span> counties[[<span class="st">"fips"</span>, <span class="st">"area_name"</span>, <span class="st">"Race_black_pct"</span>]]</span>
+<span id="cb49-2"><a href="#cb49-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb49-3"><a href="#cb49-3" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> results.loc[results.candidate <span class="op">==</span> <span class="st">"Hillary Clinton"</span>]</span>
+<span id="cb49-4"><a href="#cb49-4" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> r[[<span class="st">"fips"</span>, <span class="st">"votes"</span>, <span class="st">"fraction_votes"</span>]]</span>
+<span id="cb49-5"><a href="#cb49-5" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> r.merge(c)</span>
+<span id="cb49-6"><a href="#cb49-6" aria-hidden="true" tabindex="-1"></a>r.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     fips  votes  fraction_votes       area_name  Race_black_pct
+0  1001.0   2387           0.800  Autauga County            18.7
+1  1003.0   5290           0.647  Baldwin County             9.6
+2  1005.0   2567           0.906  Barbour County            47.6
+3  1007.0    942           0.755     Bibb County            22.1
+4  1009.0    564           0.551   Blount County             1.8</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-14-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-14-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>c <span class="ot">=</span> counties <span class="sc">%&gt;%</span> </span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(<span class="st">"fips"</span>, <span class="st">"area_name"</span>, <span class="st">"Race_black_pct"</span>)</span>
+<span id="cb51-3"><a href="#cb51-3" aria-hidden="true" tabindex="-1"></a>r <span class="ot">=</span> results <span class="sc">%&gt;%</span> </span>
+<span id="cb51-4"><a href="#cb51-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">filter</span>(candidate <span class="sc">==</span> <span class="st">"Hillary Clinton"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb51-5"><a href="#cb51-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">select</span>(fips, votes, fraction_votes)</span>
+<span id="cb51-6"><a href="#cb51-6" aria-hidden="true" tabindex="-1"></a>r <span class="ot">=</span> <span class="fu">inner_join</span>(r, c)</span>
+<span id="cb51-7"><a href="#cb51-7" aria-hidden="true" tabindex="-1"></a><span class="fu">cor.test</span>(r<span class="sc">$</span>Race_black_pct, r<span class="sc">$</span>fraction_votes)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>
+    Pearson's product-moment correlation
+
+data:  r$Race_black_pct and r$fraction_votes
+t = 50.944, df = 2806, p-value &lt; 2.2e-16
+alternative hypothesis: true correlation is not equal to 0
+95 percent confidence interval:
+ 0.6734586 0.7119165
+sample estimates:
+      cor 
+0.6931806 </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>In the next step, both sets are joined using an inner join from the results dataset. Note that we could also have used a left join here, but with an inner join it will be immediately obvious if county level data is missing, as the number of rows will then decrease. In fact, in this case the number of rows does decrease, because some results do not have corresponding county data. As a puzzle, can you use the dataset filtering commands discussed above to find out which results these are?</p>
+<p>Note also that the county level data contains units that are not used, particularly the national and state level statistics. These, and the results that do not correspond to counties, are automatically filtered out by using an inner join.</p>
+<p>Finally, we can create a scatter plot or correlation analysis of the relation between ethnic composition and electoral success (see how to create the scatter plot in Section <a href="chapter07.html#sec-visualization"><span>7.2</span></a>). In this case, it turns out that Hillary Clinton did indeed do much better in counties with a high percentage of black residents. Note that we cannot take this to mean there is a direct causal relation, there could be any number of underlying factors, including the date of the election which is very important in primary races. Statistically, since observations within a state are not independent, we should really control for the state-level vote here. For example, we could use a partial correlation, but we would still be violating the independence assumption of the errors, so it would be better to take a more sophisticated (e.g.&nbsp;multilevel) modeling approach. This, however, is well beyond the scope of this chapter.</p>
+</section>
+</section>
+<section id="sec-pivot" class="level2" data-number="6.5">
+<h2 data-number="6.5" class="anchored" data-anchor-id="sec-pivot"><span class="header-section-number">6.5</span> Reshaping Data: Wide To Long And Long To Wide</h2>
+<p>Data that you find or create does not always have the shape that you need it to be for your analysis. In many cases, for further data wrangling or for analyses you want each observation to be in its own row. However, many data sources list multiple observations in columns. For example, data from panel surveys asking the same question every week will often have one row per respondent, and one column for each weekly measurement. For a time-series analysis, however, each row should be a single measurement, i.e.&nbsp;the unit of analysis is a respondent per week.</p>
+<p>Generally, data with multiple observations of the same unit is called <em>wide data</em> (as there are many columns), while a dataset with one row for each observation is called <em>long data</em> (as there are many rows). In most cases, long data is easiest to work with, and in fact in <em>tidyverse</em> jargon such data is called <em>tidy data</em>.</p>
+<p>As a first relatively simple example, consider the datasets containing public and private capital. This data is “wide” in the sense that the measurements for the different countries are contained in the columns. To make this data “long” we would have to create rows for each country–year combination. This will make it much easier to do further data wrangling or analysis, as you can now e.g.&nbsp;directly merge the datasets and compute the pooled correlation between these variables. In fact, when we merged these datasets earlier in Example <a href="#exm-merge2"><span>6.10</span></a>, we selected only the measurements for France, essentially turning it into long data.</p>
+<div class="callout-note callout callout-style-simple no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<div id="exm-merge2" class="theorem example">
+<p><span class="theorem-title"><strong>Example 6.10 </strong></span>Converting wide to long data to facilitate merging and visualizing.</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-15-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-15-1" role="tab" aria-controls="tabset-15-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-15-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-15-2" role="tab" aria-controls="tabset-15-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-15-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-15-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://cssbook.net/d/private_capital.csv"</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>private <span class="op">=</span> pd.read_csv(url)</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a>private <span class="op">=</span> private.melt(id_vars<span class="op">=</span><span class="st">"Year"</span>, var_name<span class="op">=</span><span class="st">"country"</span>, value_name<span class="op">=</span><span class="st">"capital"</span>)</span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>private.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Year country  capital
+0  1970    U.S.     3.42
+1  1971    U.S.     3.41
+2  1972    U.S.     3.49
+3  1973    U.S.     3.39
+4  1974    U.S.     3.21</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-15-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-15-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">=</span> <span class="st">"https://cssbook.net/d/private_capital.csv"</span></span>
+<span id="cb55-2"><a href="#cb55-2" aria-hidden="true" tabindex="-1"></a>private <span class="ot">=</span> <span class="fu">read_csv</span>(url)</span>
+<span id="cb55-3"><a href="#cb55-3" aria-hidden="true" tabindex="-1"></a>private <span class="ot">=</span> private <span class="sc">%&gt;%</span> <span class="fu">pivot_longer</span>(<span class="at">cols =</span> <span class="sc">-</span>Year,</span>
+<span id="cb55-4"><a href="#cb55-4" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to=</span><span class="st">"country"</span>, <span class="at">values_to=</span><span class="st">"capital"</span>)</span>
+<span id="cb55-5"><a href="#cb55-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(private)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+   Year country capital
+  &lt;dbl&gt; &lt;chr&gt;     &lt;dbl&gt;
+1  1970 U.S.       3.42
+2  1970 Japan      2.99
+3  1970 Germany    2.25
+4  1970 France     3.1 
+5  1970 U.K.       3.06
+6  1970 Italy      2.39</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-16-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-16-1" role="tab" aria-controls="tabset-16-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-16-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-16-2" role="tab" aria-controls="tabset-16-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-16-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-16-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://cssbook.net/d/public_capital.csv"</span></span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>public <span class="op">=</span> pd.read_csv(url)</span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>public <span class="op">=</span> public.melt(id_vars<span class="op">=</span><span class="st">"Year"</span>, var_name<span class="op">=</span><span class="st">"country"</span>, value_name<span class="op">=</span><span class="st">"capital"</span>)</span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> pd.concat([private.assign(<span class="bu">type</span><span class="op">=</span><span class="st">"private"</span>), public.assign(<span class="bu">type</span><span class="op">=</span><span class="st">"public"</span>)])</span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>countries <span class="op">=</span> {<span class="st">"France"</span>, <span class="st">"U.K."</span>, <span class="st">"Germany"</span>}</span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> d.loc[d.country.isin(countries)]</span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a>d.reset_index(inplace<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a>plt <span class="op">=</span> sns.lineplot(data<span class="op">=</span>d, x<span class="op">=</span><span class="st">"Year"</span>, y<span class="op">=</span><span class="st">"capital"</span>, hue<span class="op">=</span><span class="st">"country"</span>, style<span class="op">=</span><span class="st">"type"</span>)</span>
+<span id="cb57-10"><a href="#cb57-10" aria-hidden="true" tabindex="-1"></a>plt.<span class="bu">set</span>(ylabel<span class="op">=</span><span class="st">"Capital (</span><span class="sc">% o</span><span class="st">f national income"</span>)</span>
+<span id="cb57-11"><a href="#cb57-11" aria-hidden="true" tabindex="-1"></a>plt.set_title(</span>
+<span id="cb57-12"><a href="#cb57-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Capital in Europe, 1970 - 2010"</span> <span class="st">"</span><span class="ch">\n</span><span class="st">Partial reproduction of Piketty fig 4.4"</span></span>
+<span id="cb57-13"><a href="#cb57-13" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chapter06_files/figure-html/merge2-python-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+<div id="tabset-16-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-16-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">=</span> <span class="st">"https://cssbook.net/d/public_capital.csv"</span></span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>public <span class="ot">=</span> <span class="fu">read_csv</span>(url) <span class="sc">%&gt;%</span> <span class="fu">pivot_longer</span>(<span class="sc">-</span>Year,</span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>    <span class="at">names_to=</span><span class="st">"country"</span>, <span class="at">values_to=</span><span class="st">"capital"</span>)</span>
+<span id="cb58-4"><a href="#cb58-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb58-5"><a href="#cb58-5" aria-hidden="true" tabindex="-1"></a>d <span class="ot">=</span> <span class="fu">bind_rows</span>(</span>
+<span id="cb58-6"><a href="#cb58-6" aria-hidden="true" tabindex="-1"></a>    private <span class="sc">%&gt;%</span> <span class="fu">add_column</span>(<span class="at">type=</span><span class="st">"private"</span>),</span>
+<span id="cb58-7"><a href="#cb58-7" aria-hidden="true" tabindex="-1"></a>    public <span class="sc">%&gt;%</span> <span class="fu">add_column</span>(<span class="at">type=</span><span class="st">"public"</span>))</span>
+<span id="cb58-8"><a href="#cb58-8" aria-hidden="true" tabindex="-1"></a>countries <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"Germany"</span>, <span class="st">"France"</span>, <span class="st">"U.K."</span>)</span>
+<span id="cb58-9"><a href="#cb58-9" aria-hidden="true" tabindex="-1"></a>d <span class="sc">%&gt;%</span> <span class="fu">filter</span>(country <span class="sc">%in%</span> countries) <span class="sc">%&gt;%</span> </span>
+<span id="cb58-10"><a href="#cb58-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggplot</span>(<span class="fu">aes</span>(<span class="at">x=</span>Year, <span class="at">y=</span>capital, </span>
+<span id="cb58-11"><a href="#cb58-11" aria-hidden="true" tabindex="-1"></a>             <span class="at">color=</span>country, <span class="at">lty=</span>type)) <span class="sc">+</span> </span>
+<span id="cb58-12"><a href="#cb58-12" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>()<span class="sc">+</span> </span>
+<span id="cb58-13"><a href="#cb58-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">"Capital (% of national income)"</span>) <span class="sc">+</span></span>
+<span id="cb58-14"><a href="#cb58-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">colour=</span><span class="fu">guide_legend</span>(<span class="st">"Country"</span>), </span>
+<span id="cb58-15"><a href="#cb58-15" aria-hidden="true" tabindex="-1"></a>         <span class="at">linetype=</span><span class="fu">guide_legend</span>(<span class="st">"Capital"</span>)) <span class="sc">+</span> </span>
+<span id="cb58-16"><a href="#cb58-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>() <span class="sc">+</span> </span>
+<span id="cb58-17"><a href="#cb58-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">ggtitle</span>(<span class="st">"Capital in Europe, 1970 - 2010"</span>, </span>
+<span id="cb58-18"><a href="#cb58-18" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Partial reproduction of Piketty fig 4.4"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chapter06_files/figure-html/merge2-r-3.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p><a href="#exm-merge2">Example&nbsp;<span>6.10</span></a> shows how you can “pivot” the capital data to long format using <code>pivot_longer</code> (R) and <code>melt</code> (Pandas). The second part of this example then goes on to do this for both datasets, merge them, and partially reproduce Figure 4.4 from <span class="citation" data-cites="piketty">Piketty (<a href="references.html#ref-piketty" role="doc-biblioref">2017</a>)</span>.</p>
+</section>
+<section id="restructuring-messy-data" class="level2" data-number="6.6">
+<h2 data-number="6.6" class="anchored" data-anchor-id="restructuring-messy-data"><span class="header-section-number">6.6</span> Restructuring Messy Data</h2>
+<p>As a final example, we will look at the data on income and wage shares from Piketty (supplemental tables S8.1 and S8.2). We want to visualize the income and wage share going to the top 1% earners in France and the US. <a href="#fig-messy">Figure&nbsp;<span>6.2</span></a> shows a screen shot of this data in Libre Office, with the US data having a similar shape. For the previous examples, we used a clean csv version of this data, but now we will tackle the additional challenge of dealing with the Excel file including extra header rows and column names aimed at human consumption rather than easy computing.</p>
+<div id="fig-messy" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="img/messy.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;6.2: Data on top incomes as provided in Piketty (2014; digital appendix).</figcaption><p></p>
+</figure>
+</div>
+<p>In order to perform our visualization, we want a dataset containing a single measurement column (percentage share), and a row for each year–country–type combination, i.e.&nbsp;one row for wage inequality in 1910 in the US. One of the most important skills in computational social science (and data-driven analysis in general) is understanding which series of generally small steps are needed to go from one data format to the other. Although there is not a fixed set of steps that are always needed, the steps to get from the raw data visualized in Figure <a href="#fig-messy"><span>6.2</span></a> to a “tidy” dataset are fairly typical:</p>
+<ul>
+<li>Input: read the data into data frames. In this case, reading from an Excel sheet and skipping the extra header rows
+<ul>
+<li>Reshape: pivoting the data into long format</li>
+<li>Normalize: normalize names, value types, etc. In this case, also separate a header like “Top 1% income share” into income type (income, wage) and percentile (10%, 1%, etc)</li>
+<li>Filter: filter for the desired data</li>
+<li>Analyze: create the visualization</li>
+</ul></li>
+</ul>
+<p>Fortunately, these steps have been discussed before: reading csv data in Section <a href="chapter05.html#sec-reading"><span>5.2</span></a>; pivot to long data in Section <a href="#sec-pivot"><span>6.5</span></a>; add a column in Section <a href="#sec-calculate"><span>6.2</span></a>; joining data in Section <a href="#sec-join"><span>6.4</span></a>; and visualizing in Section <a href="chapter07.html#sec-visualization"><span>7.2</span></a>.</p>
+<p>Example <a href="#exm-excel"><span>6.11</span></a> shows how to perform these steps for the US case. First, we use the <em>readxl</em> (R) and <em>xlrd</em> (Python) to read a sheet from an Excel file into a data frame, manually specifying the number of header and footer rows to skip. Then, we pivot the columns into a long format. In step 3, we split the header into two columns using <code>separate</code> (R) and <code>split</code> (Python). Finally, steps 4 and 5 take the desired subset and create a line plot.</p>
+<p>The missing step, splitting a header into two columns, is done using <code>separate</code> (R) and <code>split</code> (Python).</p>
+<div class="callout-note callout callout-style-simple no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<div id="exm-excel" class="theorem example">
+<p><span class="theorem-title"><strong>Example 6.11 </strong></span>Dealing with ``messy’’ data.</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-17-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-17-1" role="tab" aria-controls="tabset-17-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-17-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-17-2" role="tab" aria-controls="tabset-17-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-17-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-17-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://cssbook.net/d/Chapitre8.xls"</span></span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a><span class="co"># 1 Input: Read the data into a data frame</span></span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> pd.read_excel(url, sheet_name<span class="op">=</span><span class="st">"TS8.2"</span>, skiprows<span class="op">=</span><span class="dv">4</span>, skipfooter<span class="op">=</span><span class="dv">3</span>)</span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> d.rename(columns<span class="op">=</span>{<span class="st">"Unnamed: 0"</span>: <span class="st">"year"</span>})</span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-7"><a href="#cb59-7" aria-hidden="true" tabindex="-1"></a><span class="co"># 2 Reshape: Pivoting to long, dropping missing</span></span>
+<span id="cb59-8"><a href="#cb59-8" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> d.melt(value_name<span class="op">=</span><span class="st">"share"</span>, id_vars<span class="op">=</span><span class="st">"year"</span>)</span>
+<span id="cb59-9"><a href="#cb59-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb59-10"><a href="#cb59-10" aria-hidden="true" tabindex="-1"></a><span class="co"># 3 Normalize</span></span>
+<span id="cb59-11"><a href="#cb59-11" aria-hidden="true" tabindex="-1"></a>cols <span class="op">=</span> [<span class="st">"_top"</span>, <span class="st">"percentile"</span>, <span class="st">"type"</span>, <span class="st">"_share"</span>, <span class="st">"capital_gains"</span>]</span>
+<span id="cb59-12"><a href="#cb59-12" aria-hidden="true" tabindex="-1"></a>d[cols] <span class="op">=</span> d.variable.<span class="bu">str</span>.split(n<span class="op">=</span><span class="dv">4</span>, expand<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb59-13"><a href="#cb59-13" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> d.drop(columns<span class="op">=</span>[<span class="st">"variable"</span>, <span class="st">"_top"</span>, <span class="st">"_share"</span>])</span>
+<span id="cb59-14"><a href="#cb59-14" aria-hidden="true" tabindex="-1"></a>d[<span class="st">"capital_gains"</span>] <span class="op">=</span> d[<span class="st">"capital_gains"</span>].notna()</span>
+<span id="cb59-15"><a href="#cb59-15" aria-hidden="true" tabindex="-1"></a>d.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   year  share percentile    type  capital_gains
+0  1900  0.405        10%  income          False
+1  1901    NaN        10%  income          False
+2  1902    NaN        10%  income          False
+3  1903    NaN        10%  income          False
+4  1904    NaN        10%  income          False</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-17-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-17-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a><span class="co">#1 Input: Read the data into a data frame</span></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>url<span class="ot">=</span><span class="st">"https://cssbook.net/d/Chapitre8.xls"</span></span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a>dest <span class="ot">=</span> <span class="fu">tempfile</span>(<span class="at">fileext=</span><span class="st">".xls"</span>)</span>
+<span id="cb61-4"><a href="#cb61-4" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(url, dest)</span>
+<span id="cb61-5"><a href="#cb61-5" aria-hidden="true" tabindex="-1"></a>d <span class="ot">=</span> <span class="fu">read_excel</span>(dest,<span class="at">sheet=</span><span class="st">"TS8.2"</span>,<span class="at">skip=</span><span class="dv">4</span>)</span>
+<span id="cb61-6"><a href="#cb61-6" aria-hidden="true" tabindex="-1"></a>d <span class="ot">=</span> d<span class="sc">%&gt;%</span> <span class="fu">rename</span>(<span class="st">"year"</span><span class="ot">=</span><span class="dv">1</span>)</span>
+<span id="cb61-7"><a href="#cb61-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-8"><a href="#cb61-8" aria-hidden="true" tabindex="-1"></a><span class="co">#2 Reshape: Pivoting to long, dropping missing</span></span>
+<span id="cb61-9"><a href="#cb61-9" aria-hidden="true" tabindex="-1"></a>d <span class="ot">=</span> d<span class="sc">%&gt;%</span><span class="fu">pivot_longer</span>(<span class="sc">-</span>year, <span class="at">values_to=</span><span class="st">"share"</span>)<span class="sc">%&gt;%</span> </span>
+<span id="cb61-10"><a href="#cb61-10" aria-hidden="true" tabindex="-1"></a>        <span class="fu">na.omit</span>()</span>
+<span id="cb61-11"><a href="#cb61-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb61-12"><a href="#cb61-12" aria-hidden="true" tabindex="-1"></a><span class="co">#3 Normalize</span></span>
+<span id="cb61-13"><a href="#cb61-13" aria-hidden="true" tabindex="-1"></a>cols <span class="ot">=</span> <span class="fu">c</span>(<span class="cn">NA</span>,<span class="st">"percent"</span>,<span class="st">"type"</span>,<span class="cn">NA</span>,<span class="st">"capital_gains"</span>)</span>
+<span id="cb61-14"><a href="#cb61-14" aria-hidden="true" tabindex="-1"></a>d <span class="ot">=</span> d <span class="sc">%&gt;%</span> <span class="fu">separate</span>(name, <span class="at">into=</span>cols,</span>
+<span id="cb61-15"><a href="#cb61-15" aria-hidden="true" tabindex="-1"></a>   <span class="at">sep=</span><span class="st">" "</span>, <span class="at">extra=</span><span class="st">"merge"</span>, <span class="at">fill=</span><span class="st">"right"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb61-16"><a href="#cb61-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">year=</span><span class="fu">as.numeric</span>(year), </span>
+<span id="cb61-17"><a href="#cb61-17" aria-hidden="true" tabindex="-1"></a>         <span class="at">capital_gains=</span><span class="sc">!</span><span class="fu">is.na</span>(capital_gains))</span>
+<span id="cb61-18"><a href="#cb61-18" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 5
+   year percent type   capital_gains  share
+  &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;  &lt;lgl&gt;          &lt;dbl&gt;
+1  1900 10%     income FALSE         0.405 
+2  1900 10%     income TRUE          0.403 
+3  1910 10%     income FALSE         0.406 
+4  1910 10%-5%  income FALSE         0.0989
+5  1910 5%-1%   income FALSE         0.129 
+6  1910 1%      income FALSE         0.178 </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-18-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-18-1" role="tab" aria-controls="tabset-18-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-18-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-18-2" role="tab" aria-controls="tabset-18-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-18-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-18-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 4 Filter for the desired data</span></span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>subset <span class="op">=</span> d[</span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a>    (d.year <span class="op">&gt;=</span> <span class="dv">1910</span>) <span class="op">&amp;</span> (d.percentile <span class="op">==</span> <span class="st">"1%"</span>) <span class="op">&amp;</span> (d.capital_gains <span class="op">==</span> <span class="va">False</span>)</span>
+<span id="cb63-4"><a href="#cb63-4" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb63-5"><a href="#cb63-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb63-6"><a href="#cb63-6" aria-hidden="true" tabindex="-1"></a><span class="co"># 5 Analyze and/or visualize</span></span>
+<span id="cb63-7"><a href="#cb63-7" aria-hidden="true" tabindex="-1"></a>plt <span class="op">=</span> sns.lineplot(data<span class="op">=</span>subset, hue<span class="op">=</span><span class="st">"type"</span>, x<span class="op">=</span><span class="st">"year"</span>, y<span class="op">=</span><span class="st">"share"</span>)</span>
+<span id="cb63-8"><a href="#cb63-8" aria-hidden="true" tabindex="-1"></a>plt.<span class="bu">set</span>(xlabel<span class="op">=</span><span class="st">"Year"</span>, ylabel<span class="op">=</span><span class="st">"Share of income going to top-1%"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chapter06_files/figure-html/excel2-python-1.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+<div id="tabset-18-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-18-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="co">#4 Filter for the desired data</span></span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>subset <span class="ot">=</span> d <span class="sc">%&gt;%</span> <span class="fu">filter</span>(year <span class="sc">&gt;=</span><span class="dv">1910</span>, </span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>                      percent<span class="sc">==</span><span class="st">"1%"</span>, </span>
+<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a>                      capital_gains<span class="sc">==</span>F)</span>
+<span id="cb64-5"><a href="#cb64-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb64-6"><a href="#cb64-6" aria-hidden="true" tabindex="-1"></a><span class="co">#5 Analyze and/or visualization</span></span>
+<span id="cb64-7"><a href="#cb64-7" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(subset, <span class="fu">aes</span>(<span class="at">x=</span>year, <span class="at">y=</span>share, <span class="at">color=</span>type)) <span class="sc">+</span></span>
+<span id="cb64-8"><a href="#cb64-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_line</span>() <span class="sc">+</span> <span class="fu">xlab</span>(<span class="st">"Year"</span>) <span class="sc">+</span> </span>
+<span id="cb64-9"><a href="#cb64-9" aria-hidden="true" tabindex="-1"></a><span class="fu">ylab</span>(<span class="st">"Share of income going to top-1%"</span>) <span class="sc">+</span></span>
+<span id="cb64-10"><a href="#cb64-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_classic</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<p><img src="chapter06_files/figure-html/excel2-r-3.png" class="img-fluid" width="672"></p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="ref-piketty" class="csl-entry" role="doc-biblioentry">
+Piketty, Thomas. 2017. <em>Capital in the Twenty-First Century</em>. Cambridge, MA: Harvard University Press.
+</div>
+</div>
+</section>
+<section id="footnotes" class="footnotes footnotes-end-of-document" role="doc-endnotes">
+<hr>
+<ol>
+<li id="fn1"><p>https://projects.fivethirtyeight.com/guns-parkland-polling-quiz/; see https://github.com/fivethirtyeight/data/tree/master/poll-quiz-guns for the underlying data.<a href="#fnref1" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn2"><p>Keep in mind that in Python, <code>df2=df1</code> does <em>not</em> create a copy of a data frame, but a pointer to the same memory location (see the discussion on mutable objects in Section <a href="chapter03.html#sec-datatypes"><span>3.1</span></a>). This may often not be of practical importance, but if you really need to be sure that a copy is created, use <code>df2=df1.copy()</code>.<a href="#fnref2" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn3"><p>You can also write <code>d.rep - d.dem</code>, which is shorter, but does not work if your column names contain, for instance, spaces.<a href="#fnref3" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn4"><p>See Section <a href="chapter03.html#sec-functions"><span>3.3</span></a> for a refresher on methods and functions<a href="#fnref4" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn5"><p>See Section <a href="chapter03.html#sec-datatypes"><span>3.1</span></a> for more information on working with dictionaries<a href="#fnref5" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+<li id="fn6"><p>Of course, the fact that this is time series data means that the independence assumption of regular correlation is violated badly, so this should be interpreted as a descriptive statistic, e.g.&nbsp;in the years with high private capital there is low public capital and the other way around.<a href="#fnref6" class="footnote-back" role="doc-backlink">↩︎</a></p></li>
+</ol>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./chapter05.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">From file to data frame and back</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./chapter07.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Exploratory data analysis</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
