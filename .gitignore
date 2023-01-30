@@ -15,3 +15,5 @@ test.json
 /*_cache/
 /*_files/
 /tikz*.log
+/.RData
+/.Rhistory
