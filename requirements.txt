@@ -19,6 +19,7 @@ cymem==2.0.7
 Cython==0.29.33
 descartes==1.1.0
 dyNET38==2.1
+eli5==0.13.0
 en-core-web-sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.1.0/en_core_web_sm-3.1.0-py3-none-any.whl
 es-core-news-sm==3.1.0
 Fiona==1.8.22
@@ -32,12 +33,14 @@ geopandas==0.12.2
 google-auth==2.16.0
 google-auth-oauthlib==0.4.6
 google-pasta==0.2.0
+graphviz==0.20.1
 grpcio==1.51.1
 h5py==3.8.0
 idna==3.4
 Jinja2==3.1.2
 joblib==1.2.0
 keras==2.11.0
+Keras-Preprocessing==1.1.2
 kiwisolver==1.4.4
 langcodes==3.3.0
 libclang==15.0.6.1
