@@ -2,9 +2,9 @@ project:
   type: book
 
 book:
-  title: "cssbook_quarto"
+  title: "Computational Analysis of Communication"
   author: "Wouter van Atteveldt, Damian Trilling & Carlos Arcila"
-  date: "2023-01-01"
+  date: "2022-03-11"
   chapters:
     - index.qmd
     - chapter01.qmd
