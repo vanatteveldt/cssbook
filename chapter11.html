@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>cssbook_quarto - 11&nbsp; Automatic analysis of text</title>
+<title>Computational Analysis of Communication - 11&nbsp; Automatic analysis of text</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -149,6 +149,7 @@ div.csl-indent {
 
 <body class="nav-sidebar floating">
 
+
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
@@ -166,7 +167,7 @@ div.csl-indent {
   <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">cssbook_quarto</a> 
+      <a href="./">Computational Analysis of Communication</a> 
     </div>
       </div>
       <div class="mt-2 flex-shrink-0 align-items-center">
@@ -178,7 +179,7 @@ div.csl-indent {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">Computational Analysis of Communication</a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Table of Contents</a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -244,6 +245,21 @@ div.csl-indent {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./chapter13.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Network Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter14.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Multimedia data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter15.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Scaling up and distributing</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter16.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Where to go next</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -583,13 +599,13 @@ Saving to reviewdata.pickle.bz2</code></pre>
 <span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sent =</span> pos <span class="sc">-</span> neg)</span>
 <span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(scores)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                              doc_id pos neg sent
-1   test/neg/10899_1.txt/10899_1.txt   6  12   -6
-2 test/pos/11747_10.txt/11747_10.txt  12   1   11
-3     test/pos/8475_7.txt/8475_7.txt  23  19    4
-4   test/pos/8437_10.txt/8437_10.txt  14   6    8
-5     test/neg/7568_3.txt/7568_3.txt   6   9   -3
-6       test/pos/57_10.txt/57_10.txt  10   1    9</code></pre>
+<pre><code>                             doc_id pos neg sent
+1 train/neg/11749_4.txt/11749_4.txt   6   5    1
+2    test/neg/3196_4.txt/3196_4.txt  11   5    6
+3   train/neg/2067_1.txt/2067_1.txt  19  14    5
+4  test/pos/7489_10.txt/7489_10.txt  16   4   12
+5    test/neg/3661_1.txt/3661_1.txt   5   9   -4
+6   train/neg/6123_4.txt/6123_4.txt   9   4    5</code></pre>
 </div>
 </div>
 </div>
@@ -1151,7 +1167,7 @@ Weight  Feature
 </div>
 <div class="callout-body-container">
 <div id="exm-rnndata" class="theorem example">
-<p><span class="theorem-title"><strong>Example 11.11 </strong></span>Loading Dutch Sentiment Data <span class="citation" data-cites="vanatteveldt2021">(from <a href="references.html#ref-vanatteveldt2021" role="doc-biblioref"><strong>vanatteveldt2021?</strong></a>)</span></p>
+<p><span class="theorem-title"><strong>Example 11.11 </strong></span>Loading Dutch Sentiment Data <span class="citation" data-cites="vanatteveldt2021">(from <a href="references.html#ref-vanatteveldt2021" role="doc-biblioref">Van Atteveldt, Van der Velden, and Boukes 2021</a>)</span></p>
 <div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false">R code</a></li></ul>
 <div class="tab-content">
@@ -1222,7 +1238,7 @@ Weight  Feature
 <span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>    urllib.request.urlretrieve(url, fn)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Downloading embeddings from https://cssbook.net/d/w2v_320d_trimmed
-('w2v_320d_trimmed', &lt;http.client.HTTPMessage object at 0x7f826dbc0820&gt;)</code></pre>
+('w2v_320d_trimmed', &lt;http.client.HTTPMessage object at 0x7fd5b3158820&gt;)</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>embeddings <span class="op">=</span> KeyedVectors.load_word2vec_format(fn)</span>
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>emb_matrix <span class="op">=</span> np.zeros((<span class="bu">len</span>(tokenizer.word_index) <span class="op">+</span> <span class="dv">1</span>, embeddings.vector_size))</span>
@@ -1343,7 +1359,7 @@ ________________________________________________________________________________
 <span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> np.asarray([[x] <span class="cf">for</span> x <span class="kw">in</span> train_labels])</span>
 <span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a>m.fit(train_data, labels, epochs<span class="op">=</span><span class="dv">5</span>, batch_size<span class="op">=</span><span class="dv">128</span>, verbose<span class="op">=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;keras.callbacks.History object at 0x7f826b578fd0&gt;</code></pre>
+<pre><code>&lt;keras.callbacks.History object at 0x7fd5b84f1000&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>output <span class="op">=</span> m.predict(test_data, verbose<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -1353,7 +1369,7 @@ ________________________________________________________________________________
 <span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>acc <span class="op">=</span> <span class="bu">sum</span>(correct) <span class="op">/</span> <span class="bu">len</span>(pred)</span>
 <span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Accuracy: </span><span class="sc">{</span>acc<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Accuracy: 0.5559862187769165</code></pre>
+<pre><code>Accuracy: 0.5723514211886305</code></pre>
 </div>
 </div>
 </div>
@@ -1373,7 +1389,7 @@ ________________________________________________________________________________
 <span id="cb59-12"><a href="#cb59-12" aria-hidden="true" tabindex="-1"></a>eval<span class="ot">=</span><span class="fu">evaluate</span>(model, d_test<span class="sc">$</span>lemmata, d_test<span class="sc">$</span>value)</span>
 <span id="cb59-13"><a href="#cb59-13" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">glue</span>(<span class="st">"Accuracy: {eval['accuracy']}"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Accuracy: 0.44530576467514</code></pre>
+<pre><code>Accuracy: 0.444444447755814</code></pre>
 </div>
 </div>
 </div>
@@ -1383,7 +1399,7 @@ ________________________________________________________________________________
 </div>
 </div>
 </div>
-<p>First, <a href="#exm-rnndata">Example&nbsp;<span>11.11</span></a> loads a dataset described by <span class="citation" data-cites="vanatteveldt2021">(<a href="references.html#ref-vanatteveldt2021" role="doc-biblioref"><strong>vanatteveldt2021?</strong></a>)</span>, which consists of Dutch economic news headlines with a sentiment value. Next, in <a href="#exm-rnnmodel">Example&nbsp;<span>11.12</span></a> a model is defined consisting of several layers, corresponding roughly to <span class="quarto-unresolved-ref">?fig-cnn</span>. First, an <em>embedding</em> layer transforms the textual input into a semantic vector for each word. Next, the <em>convolutional</em> layer defines features (filters) over windows of vectors, which are then pooled in the <em>max-pooling</em> layer. This results in a vector of detected features for each document, which are then used in a regular (hidden) <em>dense</em> layer followed by an output layer.</p>
+<p>First, <a href="#exm-rnndata">Example&nbsp;<span>11.11</span></a> loads a dataset described by <span class="citation" data-cites="vanatteveldt2021">Van Atteveldt, Van der Velden, and Boukes (<a href="references.html#ref-vanatteveldt2021" role="doc-biblioref">2021</a>)</span>, which consists of Dutch economic news headlines with a sentiment value. Next, in <a href="#exm-rnnmodel">Example&nbsp;<span>11.12</span></a> a model is defined consisting of several layers, corresponding roughly to <span class="quarto-unresolved-ref">?fig-cnn</span>. First, an <em>embedding</em> layer transforms the textual input into a semantic vector for each word. Next, the <em>convolutional</em> layer defines features (filters) over windows of vectors, which are then pooled in the <em>max-pooling</em> layer. This results in a vector of detected features for each document, which are then used in a regular (hidden) <em>dense</em> layer followed by an output layer.</p>
 <p>Finally, in <a href="#exm-rnn">Example&nbsp;<span>11.13</span></a> we train the model on 4000 documents and test it against the remaining documents. The Python model, which uses pre-trained word embeddings (the <code>w2v_320d</code> file downloaded at the top), achieves a mediocre accuracy of about 56% (probably due to the low number of training sentences). The R model, which trains the embedding layer as part of the model, performs more poorly at 44% as this model is even more dependent on large training data to properly estimate the embedding layer.</p>
 </section>
 </section>
@@ -1397,11 +1413,16 @@ ________________________________________________________________________________
 <p>In early research on document clustering, a technique called Latent Semantic Analysis (LSA) essentially used a factor analysis technique called Singular Value Decomposition (see <a href="chapter07.html#sec-pcasvd"><span>Section&nbsp;7.3.3</span></a>) on the DTM. This has yielded promising results in information retrieval (i.e., document search) and studying human memory and language use. However, it has a number of drawbacks including factor loadings that can be difficult to interpret substantively and is not a good way of dealing with words that can have multiple meanings <span class="citation" data-cites="lsa">(<a href="references.html#ref-lsa" role="doc-biblioref">Landauer et al. 2013</a>)</span>.</p>
 <section id="sec-lda" class="level3" data-number="11.5.1">
 <h3 data-number="11.5.1" class="anchored" data-anchor-id="sec-lda"><span class="header-section-number">11.5.1</span> Latent Dirichlet Allocation (LDA)</h3>
-<p>The most widely used technique for topic modeling is Latent Dirichlet Allocation (LDA). Although the goal of LDA is the same as for clustering techniques, it starts from the other end with what is called a <em>generative model</em>. A generative model is a (simplified) formal model of how the data is assumed to have been generated. For example, if we would have a standard regression model predicting income based on age and education level, the implicit generative model is that to determine someone’s income, you take their age and education level, multiply them both by their regression parameters, and then add the intercept and some random error. Of course, we know that’s not actually how most companies determine wages, but it can be a useful starting point to analyze, e.g., labor market discrimination.</p>
+<p>The most widely used technique for topic modeling is Latent Dirichlet Allocation <span class="citation" data-cites="blei03">(LDA, <a href="references.html#ref-blei03" role="doc-biblioref">D. M. Blei, Ng, and Jordan 2003</a>)</span>. Although the goal of LDA is the same as for clustering techniques, it starts from the other end with what is called a <em>generative model</em>. A generative model is a (simplified) formal model of how the data is assumed to have been generated. For example, if we would have a standard regression model predicting income based on age and education level, the implicit generative model is that to determine someone’s income, you take their age and education level, multiply them both by their regression parameters, and then add the intercept and some random error. Of course, we know that’s not actually how most companies determine wages, but it can be a useful starting point to analyze, e.g., labor market discrimination.</p>
 <p>The generative model behind LDA works as follows. Assume that you are a journalist writing a 500 word news item. First, you would choose one or more <em>topics</em> to write about, for example 70% healthcare and 30% economy. Next, for each word in the item, you randomly pick one of these topics based on their respective weight. Finally, you pick a random word from the words associated with that topic, where again each word has a certain probability for that topic. For example, “hospital” might have a high probability for healthcare while “effectiveness” might have a lower probability but could still occur.</p>
 <p>As said, we know (or at least strongly suspect) that this is not how journalists actually write their stories. However, this generative model helps understand the substantive interpretation of topics. Moreover, LDA is a <em>mixture model</em>, meaning it allows for each document to be about multiple topics, and for each word to occur in multiple topics. This matches with the fact that in many cases, our documents are in fact about multiple topics, from a news article about the economic effects of the COVID virus to an open survey answer containing multiple reasons for supporting a certain candidate. Additionally, since topic assignment is based on what other words occur in a document, the word “pupil” could be assigned either to a “biology” topic or to an “education” topic, depending on whether the document talks about eyes and lenses or about teachers and classrooms.</p>
-<p>![Latent Dirichlet Allocation in ``Plate Model’’ notation <a href="img/lda.png" id="fig-lda"><span class="citation" data-cites="blei03">D. M. Blei, Ng, and Jordan (</span></a><a href="#ref-blei03" role="doc-biblioref">2003</a>), fig.&nbsp;1</p>
-<p>Figure <span class="quarto-unresolved-ref">?fig-lda</span> is a more formal notation of the same generative model. Starting from the left, for each document you pick a set of topics <span class="math inline">\(\Theta\)</span>. This set of topics is drawn from a <em>Dirichlet distribution</em> which itself has a parameter <span class="math inline">\(\alpha\)</span> (see note). Next, for each word you select a single topic <span class="math inline">\(z\)</span> from the topics in that document. Finally, you pick an actual word <span class="math inline">\(w\)</span> from the words in that topic, again controlled by a parameter <span class="math inline">\(\beta\)</span>.</p>
+<div id="fig-lda" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="img/lda.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;11.1: Latent Dirichlet Allocation in ``Plate Model’’ notation (source: Blei et al, 2003)</figcaption><p></p>
+</figure>
+</div>
+<p>Figure <a href="#fig-lda"><span>11.1</span></a> is a more formal notation of the same generative model. Starting from the left, for each document you pick a set of topics <span class="math inline">\(\Theta\)</span>. This set of topics is drawn from a <em>Dirichlet distribution</em> which itself has a parameter <span class="math inline">\(\alpha\)</span> (see note). Next, for each word you select a single topic <span class="math inline">\(z\)</span> from the topics in that document. Finally, you pick an actual word <span class="math inline">\(w\)</span> from the words in that topic, again controlled by a parameter <span class="math inline">\(\beta\)</span>.</p>
 <p>Now, if we know which words and documents are in which topics, we can start generating the documents in the corpus. In reality, of course, we have the reverse situation: we know the documents, and we want to know the topics. Thus, the task of LDA is to find the parameters that have the highest chance of generating these documents. Since only the word frequencies are observed, this is a latent variable model where we want to find the most likely values for the (latent) topic <span class="math inline">\(z\)</span> for each word in each document.</p>
 <p>Unfortunately, there is no simple analytic solution to calculate these topic assignments like there is for OLS regression. Thus, like other more complicated statistical models such as multilevel regression, we need to use an iterative estimation that progressively optimizes the assignment to improve the fit until it converges.</p>
 <p>An estimation method that is often used for LDA is Gibbs sampling. Simply put, this starts with a random assignment of topics to words. Then, in each iteration, it reconsiders each word and recomputes what likely topics for that word are given the other topics in that document and the topics in which that word occurs in other documents. Thus, if a document already contains a number of words placed in a certain topic, a new word is more likely to be placed in that topic as well. After enough iterations, this converges to a solution.</p>
@@ -1722,6 +1743,9 @@ How many topics?
 </div>
 </div>
 </div>
+<div class="cell">
+
+</div>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
@@ -1796,6 +1820,9 @@ Thelwall, Mike, Kevan Buckley, and Georgios Paltoglou. 2012. <span>“Sentiment 
 </div>
 <div id="ref-Tulkens2016" class="csl-entry" role="doc-biblioentry">
 Tulkens, Stéphan, Lisa Hilte, Elise Lodewyckx, Ben Verhoeven, and Walter Daelemans. 2016. <span>“<span class="nocase">A Dictionary-based Approach to Racism Detection in Dutch Social Media</span>.”</span> <em>Proceedings of the Workshop on Text Analytics for Cybersecurity and Online Safety (TA-COS 2016)</em>, 11–17. <a href="http://www.clips.ua.ac.be/bibliography/a-dictionary-based-approach-to-racism-detection-in-dutch-social-media">http://www.clips.ua.ac.be/bibliography/a-dictionary-based-approach-to-racism-detection-in-dutch-social-media</a>.
+</div>
+<div id="ref-vanatteveldt2021" class="csl-entry" role="doc-biblioentry">
+Van Atteveldt, Wouter, Mariken ACG Van der Velden, and Mark Boukes. 2021. <span>“The Validity of Sentiment Analysis: Comparing Manual Annotation, Crowd-Coding, Dictionary Approaches, and Machine Learning Algorithms.”</span> <em>Communication Methods and Measures</em> 15 (2): 121–40.
 </div>
 <div id="ref-vermeer2019seeing" class="csl-entry" role="doc-biblioentry">
 Vermeer, Susan A. M., Theo Araujo, Stefan F. Bernritter, and Guda van Noort. 2019. <span>“<span class="nocase">Seeing the wood for the trees: How machine learning can help firms in identifying relevant electronic word-of-mouth in social media</span>.”</span> <em>International Journal of Research in Marketing</em> 36 (3): 492–508. <a href="https://doi.org/10.1016/j.ijresmar.2019.01.010">https://doi.org/10.1016/j.ijresmar.2019.01.010</a>.

@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>cssbook_quarto - 13&nbsp; Network Data</title>
+<title>Computational Analysis of Communication - 13&nbsp; Network Data</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -112,7 +112,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./references.html" rel="next">
+<link href="./chapter14.html" rel="next">
 <link href="./chapter12.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -149,6 +149,7 @@ div.csl-indent {
 
 <body class="nav-sidebar floating">
 
+
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
@@ -166,7 +167,7 @@ div.csl-indent {
   <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">cssbook_quarto</a> 
+      <a href="./">Computational Analysis of Communication</a> 
     </div>
       </div>
       <div class="mt-2 flex-shrink-0 align-items-center">
@@ -178,7 +179,7 @@ div.csl-indent {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">Computational Analysis of Communication</a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Table of Contents</a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -244,6 +245,21 @@ div.csl-indent {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./chapter13.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Network Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter14.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Multimedia data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter15.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Scaling up and distributing</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter16.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Where to go next</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -413,9 +429,9 @@ Packages used in this chapter
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>g1 <span class="ot">=</span> <span class="fu">make_graph</span>(edges, <span class="at">directed =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>g1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>IGRAPH 4408527 UN-- 5 5 -- 
+<pre><code>IGRAPH 5ce7819 UN-- 5 5 -- 
 + attr: name (v/c)
-+ edges from 4408527 (vertex names):
++ edges from 5ce7819 (vertex names):
 [1] Hillary Clinton--Donald Trump   Hillary Clinton--Bernie Sanders
 [3] Hillary Clinton--Barack Obama   Donald Trump   --John McCain   
 [5] Bernie Sanders --Barack Obama  </code></pre>
@@ -510,9 +526,9 @@ Packages used in this chapter
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>g2 <span class="ot">=</span> <span class="fu">make_graph</span>(edges, <span class="at">directed =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(g2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>IGRAPH f4af0fe DN-- 5 7 -- 
+<pre><code>IGRAPH 6bed13a DN-- 5 7 -- 
 + attr: name (v/c)
-+ edges from f4af0fe (vertex names):
++ edges from 6bed13a (vertex names):
 [1] Hillary Clinton-&gt;Donald Trump    Bernie Sanders -&gt;Hillary Clinton
 [3] Hillary Clinton-&gt;Barack Obama    John McCain    -&gt;Donald Trump   
 [5] Barack Obama   -&gt;Bernie Sanders  Hillary Clinton-&gt;Bernie Sanders 
@@ -754,9 +770,9 @@ Packages used in this chapter
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>g3 <span class="ot">=</span> <span class="fu">induced_subgraph</span>(g1, <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">4</span>))</span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(g3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>IGRAPH 7ef3903 UN-- 3 3 -- 
+<pre><code>IGRAPH 2a29cfe UN-- 3 3 -- 
 + attr: name (v/c)
-+ edges from 7ef3903 (vertex names):
++ edges from 2a29cfe (vertex names):
 [1] Hillary Clinton--Bernie Sanders Hillary Clinton--Barack Obama  
 [3] Bernie Sanders --Barack Obama  </code></pre>
 </div>
@@ -764,9 +780,9 @@ Packages used in this chapter
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>g4 <span class="ot">=</span> <span class="fu">induced_subgraph</span>(g1, <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">5</span>))</span>
 <span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(g4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>IGRAPH b9332d0 UN-- 2 1 -- 
+<pre><code>IGRAPH 5488d98 UN-- 2 1 -- 
 + attr: name (v/c)
-+ edge from b9332d0 (vertex names):
++ edge from 5488d98 (vertex names):
 [1] Donald Trump--John McCain</code></pre>
 </div>
 </div>
@@ -860,11 +876,11 @@ Packages used in this chapter
 <span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">mode =</span> <span class="fu">c</span>(<span class="st">"all"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
-+ 4/5 vertices, named, from 4408527:
++ 4/5 vertices, named, from 5ce7819:
 [1] Barack Obama    Hillary Clinton Donald Trump    John McCain    
 
 [[2]]
-+ 5/5 vertices, named, from 4408527:
++ 5/5 vertices, named, from 5ce7819:
 [1] Barack Obama    Bernie Sanders  Hillary Clinton Donald Trump   
 [5] John McCain    </code></pre>
 </div>
@@ -1050,7 +1066,7 @@ Packages used in this chapter
 </div>
 <div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">incident</span>(g1, <span class="fu">V</span>(g1)[<span class="st">"John McCain"</span>], <span class="at">mode=</span><span class="st">"all"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>+ 1/5 edge from 4408527 (vertex names):
+<pre><code>+ 1/5 edge from 5ce7819 (vertex names):
 [1] Donald Trump--John McCain</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glue</span>(<span class="st">"Neighbors of John McCain in"</span>,</span>
@@ -1060,7 +1076,7 @@ Packages used in this chapter
 </div>
 <div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="fu">neighbors</span>(g1, <span class="fu">V</span>(g1)[<span class="st">"John McCain"</span>], <span class="at">mode=</span><span class="st">"all"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>+ 1/5 vertex, named, from 4408527:
+<pre><code>+ 1/5 vertex, named, from 5ce7819:
 [1] Donald Trump</code></pre>
 </div>
 </div>
@@ -1394,15 +1410,15 @@ Packages used in this chapter
 <div class="sourceCode cell-code" id="cb135"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb135-1"><a href="#cb135-1" aria-hidden="true" tabindex="-1"></a><span class="fu">max_cliques</span>(g1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
-+ 2/5 vertices, named, from 4408527:
++ 2/5 vertices, named, from 5ce7819:
 [1] Donald Trump John McCain 
 
 [[2]]
-+ 2/5 vertices, named, from 4408527:
++ 2/5 vertices, named, from 5ce7819:
 [1] Donald Trump    Hillary Clinton
 
 [[3]]
-+ 3/5 vertices, named, from 4408527:
++ 3/5 vertices, named, from 5ce7819:
 [1] Hillary Clinton Bernie Sanders  Barack Obama   </code></pre>
 </div>
 </div>
@@ -1475,7 +1491,7 @@ Packages used in this chapter
 <pre><code>Length 2
 Modularity: 0.22
 Membership:
- - {'Bernie Sanders', 'Barack Obama', 'Hillary Clinton'}
+ - {'Barack Obama', 'Bernie Sanders', 'Hillary Clinton'}
  - {'Donald Trump', 'John McCain'}</code></pre>
 </div>
 </div>
@@ -1534,7 +1550,7 @@ Membership:
 <pre><code>Length 2
 Modularity: 0.22
 Membership:
- - {'Bernie Sanders', 'Barack Obama', 'Hillary Clinton'}
+ - {'Barack Obama', 'Bernie Sanders', 'Hillary Clinton'}
  - {'Donald Trump', 'John McCain'}</code></pre>
 </div>
 </div>
@@ -1548,7 +1564,7 @@ Membership:
 <pre><code>Length 2
 Modularity: 0.22
 Membership:
- - frozenset({'Barack Obama', 'Bernie Sanders', 'Hillary Clinton'})
+ - frozenset({'Hillary Clinton', 'Bernie Sanders', 'Barack Obama'})
  - frozenset({'Donald Trump', 'John McCain'})</code></pre>
 </div>
 </div>
@@ -1562,7 +1578,7 @@ Membership:
 <pre><code>Length 2
 Modularity: 0.22
 Membership:
- - {'Bernie Sanders', 'Barack Obama', 'Hillary Clinton'}
+ - {'Barack Obama', 'Bernie Sanders', 'Hillary Clinton'}
  - {'Donald Trump', 'John McCain'}</code></pre>
 </div>
 </div>
@@ -2015,8 +2031,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./references.html" class="pagination-link">
-        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./chapter14.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Multimedia data</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

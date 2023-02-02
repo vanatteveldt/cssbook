@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>cssbook_quarto - 12&nbsp; Scraping online data</title>
+<title>Computational Analysis of Communication - 12&nbsp; Scraping online data</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -148,6 +148,7 @@ div.csl-indent {
 
 <body class="nav-sidebar floating">
 
+
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
@@ -165,7 +166,7 @@ div.csl-indent {
   <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">cssbook_quarto</a> 
+      <a href="./">Computational Analysis of Communication</a> 
     </div>
       </div>
       <div class="mt-2 flex-shrink-0 align-items-center">
@@ -177,7 +178,7 @@ div.csl-indent {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">Computational Analysis of Communication</a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Table of Contents</a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -243,6 +244,21 @@ div.csl-indent {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./chapter13.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Network Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter14.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Multimedia data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter15.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Scaling up and distributing</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter16.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Where to go next</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -450,7 +466,7 @@ Note
 <pre><code>{
   "kind": "books#volume",
   "id": "LqmaDwAAQBAJ",
-  "etag": "EN/55hmxvaU",
+  "etag": "0QzQUcVLMvE",
   "selfLink": "https://www.googleapis.com/books/v1/volumes/LqmaDwAAQBAJ",
   "volumeInfo": {
     "title": "Python For Dummies",
@@ -479,7 +495,7 @@ $id
 [1] "LqmaDwAAQBAJ"
 
 $etag
-[1] "vRuqaJro/qM"
+[1] "BD/Zx0zXgF0"
 
 ...</code></pre>
 </div>
@@ -508,12 +524,12 @@ $etag
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> json_normalize(data[<span class="st">"items"</span>])</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>d.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>           kind            id  ... saleInfo.buyLink saleInfo.offers
-0  books#volume  LqmaDwAAQBAJ  ...              NaN             NaN
-1  books#volume  bTUFCAAAQBAJ  ...              NaN             NaN
-2  books#volume  aJQILlLxRmAC  ...              NaN             NaN
-3  books#volume  H9emM_LGFDEC  ...              NaN             NaN
-4  books#volume  Chr1NDlUcI8C  ...              NaN             NaN
+<pre><code>           kind  ...                                    saleInfo.offers
+0  books#volume  ...                                                NaN
+1  books#volume  ...                                                NaN
+2  books#volume  ...                                                NaN
+3  books#volume  ...  [{'finskyOfferType': 1, 'listPrice': {'amountI...
+4  books#volume  ...                                                NaN
 
 [5 rows x 50 columns]</code></pre>
 </div>
@@ -530,12 +546,12 @@ $etag
 <pre><code># A tibble: 6 × 3
   kind          totalItems items$k…¹ $id   $etag $self…² $volu…³ $volu…⁴ $volu…⁵
   &lt;chr&gt;              &lt;int&gt; &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;list&gt;  &lt;chr&gt;  
-1 books#volumes       1619 books#vo… Lqma… vRuq… https:… Python… &lt;chr&gt;   John W…
-2 books#volumes       1619 books#vo… bTUF… jYwk… https:… Effect… &lt;chr&gt;   Pearso…
-3 books#volumes       1619 books#vo… aJQI… Djus… https:… Python… &lt;chr&gt;   Frankl…
-4 books#volumes       1619 books#vo… H9em… 20hb… https:… Progra… &lt;chr&gt;   Addiso…
-5 books#volumes       1619 books#vo… Chr1… IdjH… https:… Python… &lt;chr&gt;   Addiso…
-6 books#volumes       1619 books#vo… RQ6x… Ep92… https:… Automa… &lt;chr&gt;   No Sta…
+1 books#volumes       1550 books#vo… Lqma… BD/Z… https:… Python… &lt;chr&gt;   John W…
+2 books#volumes       1550 books#vo… bTUF… 5IJp… https:… Effect… &lt;chr&gt;   Pearso…
+3 books#volumes       1550 books#vo… aJQI… PBM5… https:… Python… &lt;chr&gt;   Frankl…
+4 books#volumes       1550 books#vo… RQ6x… AunQ… https:… Automa… &lt;chr&gt;   No Sta…
+5 books#volumes       1550 books#vo… H9em… swcu… https:… Progra… &lt;chr&gt;   Addiso…
+6 books#volumes       1550 books#vo… Chr1… B/Af… https:… Python… &lt;chr&gt;   Addiso…
 # … with 43 more variables: items$volumeInfo.publishedDate &lt;chr&gt;,
 #   $volumeInfo.description &lt;chr&gt;, $volumeInfo.industryIdentifiers &lt;list&gt;,
 #   $volumeInfo.pageCount &lt;int&gt;, $volumeInfo.printType &lt;chr&gt;,
@@ -581,7 +597,7 @@ $etag
 <span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>    allitems.extend(data[<span class="st">"items"</span>])</span>
 <span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    i <span class="op">+=</span> <span class="dv">40</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Retrieved 585,it seems like that's it</code></pre>
+<pre><code>Retrieved 587,it seems like that's it</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> json_normalize(allitems)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
@@ -1552,9 +1568,9 @@ Losing your head
 <p><strong>Collaborate.</strong> Another way to minimize traffic and server load is to collaborate more. A concerted effort with multiple researchers may lead to less duplicate data and in the end probably an even better, re-usable dataset.</p>
 <p><strong>Be extra careful with personal data.</strong> Both from an ethical and a legal point of view, the situation changes drastically as soon as personal data are involved. Especially since the General Data Protection Regulation (GDPR) regulations took effect in the European Union, collecting and processing such data requires a lot of additional precaution and is usually subject to explicit consent. It is clearly infeasible to ask every Twitter user for consent to process their tweet and doing so is probably covered by research exceptions, the general advice is to store as little personal data as possible and only what is absolutely needed. Most likely, you need to have a data management plan in place, and should get appropriate advice from your legal department. Therefore, think carefully whether you really need, for instance, the user names of the authors of reviews you are going to scrape, or whether the text alone suffices.</p>
 <p>Once all ethical and legal concerns are sorted out and you have made sure that you have written a scraper in such a way that it does not cause unnecessary traffic and load on the servers from which you are scraping, and after doing some test runs, it is time to think about how to actually run it on a larger scale. You may already have figured that you probably do not want to run your scraper from a Jupyter Notebook that is constantly open in your browser on your personal laptop. Also here, we would like to offer some suggestions.</p>
-<p><strong>Consider using a database.</strong> Imagine the following scenario: your scraper visits hundreds of websites, collects its results in a list or in a data frame, and after hours of running suddenly crashes – maybe because some element that you were sure must exist on each page, exists only on 999 out of 1000 pages, because a connection timed out, or any other error. Your data is lost, you need to start again (not only annoying, but also undesirable from a traffic minimization point of view). A better strategy may be to immediately write the data for each page to a file. But then, you need to handle a potentially huge number of files later on. A much better approach, especially if you plan to run your scraper repeatedly over a long period of time, is to consider the use of a database in which you dump the results immediately after a page has been scraped (see Section <span class="quarto-unresolved-ref">?sec-databases</span>).</p>
+<p><strong>Consider using a database.</strong> Imagine the following scenario: your scraper visits hundreds of websites, collects its results in a list or in a data frame, and after hours of running suddenly crashes – maybe because some element that you were sure must exist on each page, exists only on 999 out of 1000 pages, because a connection timed out, or any other error. Your data is lost, you need to start again (not only annoying, but also undesirable from a traffic minimization point of view). A better strategy may be to immediately write the data for each page to a file. But then, you need to handle a potentially huge number of files later on. A much better approach, especially if you plan to run your scraper repeatedly over a long period of time, is to consider the use of a database in which you dump the results immediately after a page has been scraped (see Section <a href="chapter15.html#sec-databases"><span>15.1</span></a>).</p>
 <p><strong>Run your script from the command line.</strong> Store your scraper as a .py or .R script and run it from your terminal (your command line) by typing <code>python myscript.py</code> or <code>R myscript.R</code> rather than using an IDE such as Spyder or R Studio or a Jupyter Notebook. You may want to have your script print a lot of status information (for instance, which page it is currently scraping), so that you can watch what it is doing. If you want to, you can have your computer run this script in regular intervals (e.g., once an hour). On Linux and MacOS, for instance, you can use a so-called <em>cron</em> job to automate this.</p>
-<p><strong>Run your script on a server.</strong> If your scraper runs for longer than a couple of hours, you may not want to run it on your laptop, especially if your Internet connection is not stable. Instead, you may consider using a server. As we will explain in Section <span class="quarto-unresolved-ref">?sec-cloudcomputing</span>, it is quite affordable to set up a Linux VM on a cloud computing platform (and next to commercial services, in some countries and institutions there are free services for academics). You can then use tools like <em>nohup</em> or <em>screen</em> to run your script on the background, even if you are no longer connected to the server (see Section <span class="quarto-unresolved-ref">?sec-cloudcomputing</span>).</p>
+<p><strong>Run your script on a server.</strong> If your scraper runs for longer than a couple of hours, you may not want to run it on your laptop, especially if your Internet connection is not stable. Instead, you may consider using a server. As we will explain in Section <a href="chapter15.html#sec-cloudcomputing"><span>15.2</span></a>, it is quite affordable to set up a Linux VM on a cloud computing platform (and next to commercial services, in some countries and institutions there are free services for academics). You can then use tools like <em>nohup</em> or <em>screen</em> to run your script on the background, even if you are no longer connected to the server (see Section <a href="chapter15.html#sec-cloudcomputing"><span>15.2</span></a>).</p>
 <div class="cell">
 
 </div>

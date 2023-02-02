@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>cssbook_quarto - 3&nbsp; Programming concepts for data analysis</title>
+<title>Computational Analysis of Communication - 3&nbsp; Programming concepts for data analysis</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -149,6 +149,7 @@ div.csl-indent {
 
 <body class="nav-sidebar floating">
 
+
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
   <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
@@ -166,7 +167,7 @@ div.csl-indent {
   <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
     <div class="pt-lg-2 mt-2 text-left sidebar-header">
     <div class="sidebar-title mb-0 py-0">
-      <a href="./">cssbook_quarto</a> 
+      <a href="./">Computational Analysis of Communication</a> 
     </div>
       </div>
       <div class="mt-2 flex-shrink-0 align-items-center">
@@ -178,7 +179,7 @@ div.csl-indent {
     <ul class="list-unstyled mt-1">
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link">Computational Analysis of Communication</a>
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Table of Contents</a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -248,6 +249,21 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./chapter14.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Multimedia data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter15.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Scaling up and distributing</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter16.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Where to go next</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
   </div>
 </li>
@@ -271,7 +287,7 @@ div.csl-indent {
   </ul></li>
   <li><a href="#sec-controlstructures" id="toc-sec-controlstructures" class="nav-link" data-scroll-target="#sec-controlstructures"><span class="toc-section-number">3.2</span>  Simple Control Structures: Loops and Conditions</a>
   <ul class="collapse">
-  <li><a href="#loops" id="toc-loops" class="nav-link" data-scroll-target="#loops"><span class="toc-section-number">3.2.1</span>  Loops</a></li>
+  <li><a href="#sec-loops" id="toc-sec-loops" class="nav-link" data-scroll-target="#sec-loops"><span class="toc-section-number">3.2.1</span>  Loops</a></li>
   <li><a href="#conditional-statements" id="toc-conditional-statements" class="nav-link" data-scroll-target="#conditional-statements"><span class="toc-section-number">3.2.2</span>  Conditional Statements</a></li>
   </ul></li>
   <li><a href="#sec-functions" id="toc-sec-functions" class="nav-link" data-scroll-target="#sec-functions"><span class="toc-section-number">3.3</span>  Functions and Methods</a></li>
@@ -1330,8 +1346,8 @@ Control structures in Python and R.
 <p>In particular, we may want to say more about how and when statements need to be executed. Maybe we want to repeat the calculation of a value for each item on a list, or maybe we want to do this only if some condition is fulfilled.</p>
 <p>Both R and Python have such <em>loops</em> and <em>conditional statements</em>, which will make your coding journey much easier and with more sophisticated results because you can control the way your statements are executed. By controlling the flow of instructions you can deal with a lot of challenges in computer programming such as iterating over unlimited cases or executing part of your code as a function of new inputs.</p>
 <p>In your script, you usually indicate such loops and conditions visually by using <em>indentation</em>. Logical empty spaces – two in R and four in Python – depict blocks and sub-blocks on your code structure. As you will see in the next section, in R, using indentation is optional, and curly brackets will indicate the beginning (<code>{</code>) and end (<code>}</code>) of a code block; whereas in Python, indentation is mandatory and tells your interpreter where the block starts and ends.</p>
-<section id="loops" class="level3" data-number="3.2.1">
-<h3 data-number="3.2.1" class="anchored" data-anchor-id="loops"><span class="header-section-number">3.2.1</span> Loops</h3>
+<section id="sec-loops" class="level3" data-number="3.2.1">
+<h3 data-number="3.2.1" class="anchored" data-anchor-id="sec-loops"><span class="header-section-number">3.2.1</span> Loops</h3>
 <p>Loops can be used to repeat a block of statements. They are executed once, indefinitely, or until a certain condition is reached. This means that you can operate over a set of objects as many times as you want just by giving one instruction. The most common types of loops are <em>for</em>, <em>while</em>, and <em>repeat</em> (do-while), but we will be mostly concerned with so-called for-loops. Imagine you have a list of headlines as an object and you want a simple script to print the length of each message. Of course you can go headline by headline using indexing, but you will get bored or will not have enough time if you have thousands of cases. Thus, the idea is to operate a loop in the list so you can get all the results, from the first until the last element, with just one instruction. The syntax of the for-loop is:</p>
 <div class="panel-tabset">
 <ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-17-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-17-1" role="tab" aria-controls="tabset-17-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-17-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-17-2" role="tab" aria-controls="tabset-17-2" aria-selected="false">R code</a></li></ul>
@@ -1874,7 +1890,7 @@ length: 4</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>As a generator:
 type: &lt;class 'generator'&gt;
-representation: &lt;generator object square2 at 0x7f3410c35770&gt;
+representation: &lt;generator object square2 at 0x7eff8eaf9700&gt;
 entries: [1225, 4, 215296, 16]
 second pass: []</code></pre>
 </div>
