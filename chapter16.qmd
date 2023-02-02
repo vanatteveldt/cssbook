@@ -1,0 +1,95 @@
+# Where to go next {#sec-chap-wherenext}
+
+**Abstract.**
+This chapter summarizes the main learning goals of the book, and outlines possible next steps. Special attention is paid to an ethical application of computational methods, as well as to the importance of open and transparent science.
+
+**Keywords.** summary, open science, ethics
+
+**Objectives:**
+
+-  Reflect on the learning goals of the book
+ -  Point out avenues for future study
+ -  Highlight ethical considerations for applying the techniques covered in the book
+ -  Relate the techniques covered in the book to Open Science practices
+
+::: {.callout-note icon=false collapse=true}
+
+This concluding chapter provides a broad overview of what was covered so far, and what interesting avenues there are to explore next. It gives pointers to resources to learn more about topics such as programming, statistical modeling or deep learning. It also discusses considerations regarding ethics and open science.
+:::
+
+## How Far Have We Come? {#sec-howfarcome}
+In this book, we introduced you to the computational analysis of communication. In Chapter [-@sec-chap-introduction], we tried to convince you that the computational analysis of communication is a worthwhile endeavor -- and we also highlighted that there is much more to the subject  than this book can cover.
+So here we are now. Maybe you skipped some chapters, maybe you did some additional reading or followed some online tutorials, and maybe you completed your first small project that involved some of techniques we covered. Time to recap.
+
+You now have some knowledge of programming. We hope that this has opened new doors for you, and allows you to use a wealth of libraries, tutorials, and tools that may make your life easier, your research more productive, and your analyses better.
+
+You have learned how to handle new types of data. Not only traditional tabular datasets, but also textual data, semi-structured data, and to some extent network data and images.
+
+You can apply machine-learning frameworks. You know about both unsupervised and supervised approaches, and can decide  how they can be useful for finding answers to your research questions.
+
+Finally, you have got at least a first impression of some cool techniques like neural networks and services such as databases, containers, and cloud computing. We hope that being aware of them will help you to make an informed decision whether they may be good tools to dive into for your upcoming projects.
+
+## Where To Go Next? {#sec-wheretogo}
+But what should you learn next?
+
+Most importantly, we cannot stress enough that it should be the research question that is the guide, not the method. You shouldn't use the newest neural network module just because it's cool, when counting occurrences of a simple regular expression does the trick. But this also applies the other way around: if a new method performs much better than an old one, you should learn it! For too long, for instance, people have relied on simple bag-of-words sentiment analyses with off-the-shelf dictionaries, simply because they were easy to use -- despite better alternatives being available.
+
+Having said that, we will nevertheless try to give some general recommendations for what to learn next.
+
+**Become better at programming.** In this book, we tried to find a compromise between teaching the programming concepts necessary to apply our methods on the one hand, and not getting overly technical on the other hand. After all, for many social scientists, programming is a means to an end, not a goal in itself. But as you progress, a deeper understanding of some programming concepts will make it easier for you to tailor everything according to your needs, and will -- again -- open new doors. There are countless books and online tutorials on "Programming in [Language of your choice]". In fact, in this "bilingual" book we have shown you how to program with R and Python (the most used languages by data scientists), but there are other programming languages that might also deserve your attention (e.g. Java, Scala, Julia, etc.) if you become a computational scientist.
+
+**Learn how to write libraries.** A very specific yet widely applicable skill we'd encourage you to learn is writing your own packages ("modules" or "libraries"). One of the nice things about computational analyses is that they are very much compatible with an Open Science approach. Sharing what you have done is much easier if everything you did is already documented in some code that you can share. But you can go one step further: of course it is nice if people can exactly reproduce your analysis, but wouldn't it be even nicer if they could also use your code to run analyses using their own data?
+If you thought about a great way to compute some statistic, why not make it easy for others to do the same?
+Consider writing (and documenting!) your code  in a general way and then publishing it on CRAN or pypi so others can easily install and use it.
+
+**Get inspiration for new types of studies.** Try to think a bit out of the box and beyond classical surveys, experiments, and content analyses to design new studies. Books like *Bit by Bit* @Salganik2019 may help you with this. You can also take a look at other scientific disciplines such as computational biology that has reinvented its methods, questions and hypotheses. Keep in mind that computational methods have an impact on the theoretical and empirical discussions of communication processes, which in turn will call for novel types of studies. The emerging scientific fields such as Computational Communication Science, Computational Social Sciences and Digital Humanities show how theory and methods can develop hand in hand.
+
+**Get a deeper understanding of deep learning.** For many tasks in the computational analysis of communication, classical machine learning approaches (like regression or support vector machines) work just fine. In fact, there is no need to always jump on the latest band wagon of the newest technique. If a simple logistic regression achieves an F1-score of 88.1, and the most fancy neural network achieves an 88.5 -- would it be worth the extra effort and the loss of explainability? It depends on your use case, but probably not. Nevertheless, by now, we can be fairly certain that neural networks and deep learning are here to stay. We could only give a limited introduction in this book, but state-of-the-art analysis of text and especially visual material cannot do without it any more. Even though you may not train such models yourself all the time, but may use, for instance, pre-trained word embeddings or use packages like *spacy* that have been trained using neural networks, it seems worthwhile to understand these techniques better. Also here, a lot of online tutorials exist for frameworks such as `keras` or `tensorflow`, but also thorough books that provide a sound understanding of the underlying models @goldberg2017.
+
+**Learn more about statistical models.** Not everything in the computational analysis of communication is machine learning. We used the analogy of the mouse trap (where we only care about the performance, not the underlying mechanism) versus better prior understanding, and argued that often, we may use machine learning as a "mouse trap" to enrich our data -- even if we are ultimately interested in explaining some other process. For instance, we may want to use machine learning as one step in a workflow to predict the topic of social media messages, and then use a conventional statistical approach to understand which factors explain how often the message has been shared. Such data, though, often have different characteristics than data that you may encounter in surveys or experiments. In this case, for instance, the number of shares is a so-called count variable: it can take only positive integers, and thus has a lower bound (0) but no upper bound. That's very different than normally distributed data and requires regression models such as negative binomial regression. That's not difficult to do, but worth  reading up on. Similarly, multilevel modelling will often be appropriate for the data you work with. Being familiar with this and other techniques (such as mediation and moderation analysis, or even structural equation modeling) will allow you to make better choices. On a different note, you may want to familiarize yourself with Bayesian statistics -- a framework that is very different from the so-called frequentist approach that you probably know from your statistics courses.
+
+And, last but not least: have fun! At least for us, that is one of the most important parts: don't forget to enjoy the skills you gained, and create projects that you enjoy!
+
+## Open, Transparent, and Ethical Computational Science {#sec-ethics}
+
+We started this book by reflecting on what we are actually doing when conducting computational analyses of communication.
+One of the things we highlighted in Chapter [-@sec-chap-introduction] was our use of open-source tools, in particular Python and R
+and the wealth of open-source libraries that extend them. Hopefully, you have also realized not only how much your work could
+therefore build on the work of others, but also how many of the resources you used were created as a community effort.
+
+Now that you acquired the knowledge it takes to conduct computational research on communication, it is time to reflect
+on how to give back to the community, and how to contribute to an open research environment. At the same time, it is
+not as simple as "just putting everything online" -- after all, researchers often work with sensitive data. We therefore
+conclude this book with a short discussion on open, transparent, and ethical computational science.
+
+**Transparent and Open Science.**
+In the wake of the so-called reproducibility crisis, the call for transparent and open science has become louder and louder
+in the last years. The public, funders, and journals increasingly ask for access to data and analysis scripts that underly
+published research. Of course, publishing your data and code is not a panacea for all problems, but it is a step towards
+better science from at least two perspectives [@VanAtteveldt2019]: first, it allows others to reproduce your work, enhancing its credibility
+(and the credibility of the field as a whole). Second, it allows others to build on your work without reinventing the wheel.
+
+So, how can you contribute to this? Most importantly, as we advised in Section [-@sec-practices]: use a version control system
+and share your code on a site like github.com. We also discussed code-sharing possibilities in Section [-@sec-publishingsource]. Finally, you can find a template for organizing your code and data so that your
+research is easy to reproduce at [github.com/ccs-amsterdam/compendium](https://github.com/ccs-amsterdam/compendium).
+
+**The privacy--transparency trade-off.** While the sharing of code is not particularly controversial, the sharing of
+data sometimes is. In particular, you may deal with data that contain personally identifiable information. On the one
+hand, you should share your data to make sure that your work can be reproduced -- on the other hand, it would be ethically
+(and depending on your jurisdiction, potentially also legally) wrong to share personal data about individuals.
+As @boyd2012 write: "Just because it is accessible does not make it ethical." Hence, the
+situation is not always black or white, and some techniques exist to find a balance between the two: you can remove
+(or hash) information such as usernames, you can aggregate your data, you can add artificial noise. Ideally, you should
+integrate legal, ethical, and technical considerations to make an informed decision on how to find a balance such that
+transparency is maximized while privacy risks are minimized. More and more literature explores different possibilities @Breuer2020.
+
+**Other Ethical Challenges in Computational Analyses.**
+Lastly, there are also other ethical challenges that go beyond the use of privacy-sensitive data. Many tools we
+use give us great power, and with that comes great responsibility. For instance, as we highlighted in
+Section [-@sec-ethicallegalpractical], every time we scrape a website, we cause some costs somewhere. They may be
+neglectable for a single http request, but they may add up. Similarly, calculations on some cloud service
+cause environmental costs. Before starting a large-scale project, we should therefore make a trade-off between
+the costs or damage we cause, and the (scientific) gain that we achieve.
+
+In the end, though, we firmly believe that as computational scientists, we are well-equipped to contribute to the move towards
+more ethical, open, and transparent science. Let's do it!
