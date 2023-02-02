@@ -386,7 +386,7 @@ and Chapter [-@sec-chap-datawrangling] for the summarization commands used to cr
 
 ::: {.callout-note appearance="simple" icon=false}
 ::: {#exm-fungraph}
-Retweet nework in the COVID tweets.
+Retweet network in the COVID tweets.
 
 ::: {.panel-tabset}
 ## Python code
