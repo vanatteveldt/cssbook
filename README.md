@@ -1,8 +1,10 @@
 # Quarto book for Computational Analysis of Communication
 
-This is a Work-in-Progress quarto re-render of the original latex+ipynb sources of the CAC book. 
+This is a quarto re-render of the original latex+ipynb sources of the CAC book. 
 
-When it is finished, it should replace the latex and html versions of the book and become the new 'canonical' source. 
+It is now considered the 'canonical' source of the book, and we are using this version to publish the [cssbook.net](https://cssbook.net) open access version and to update it for a new version. 
+
+There is a [github action](https://github.com/vanatteveldt/cssbook/actions) to automatically update [cssbook.net](https://cssbook.net) after each commit, so you can make small fixes directly on github and/or work locally and push your changes. 
 
 # Setup
 
@@ -34,3 +36,12 @@ Rscript renv/install.R
 ```
 quarto render
 ```
+
+# A note on caching
+
+The first time to render the book will take a long time. 
+After this, content is both *frozen* at the chapter level, and *cached* at the chunk level where sensible. 
+
+Note that knitr caching for python does not preserve global variables, so python chunks that create objects used in another chunk should not be cached.
+For R objects are cached so this is possible.
+
