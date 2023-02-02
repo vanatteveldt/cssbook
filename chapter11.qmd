@@ -1211,7 +1211,7 @@ However, it has a number of drawbacks including factor loadings that can be diff
 
 ### Latent Dirichlet Allocation (LDA) {#sec-lda}
 
-The most widely used technique for topic modeling is Latent Dirichlet Allocation (LDA).
+The most widely used technique for topic modeling is Latent Dirichlet Allocation [LDA, @blei03].
 Although the goal of LDA is the same as for clustering techniques, it starts from the other end with what is called a *generative model*.
 A generative model is a (simplified) formal model of how the data is assumed to have been generated.
 For example, if we would have a standard regression model predicting income based on age and education level,
