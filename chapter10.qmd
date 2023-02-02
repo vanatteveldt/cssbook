@@ -311,7 +311,7 @@ Similarly, with heavily inflected languages such as Hungarian or Arabic,
 it might be better to use preprocessing tools developed specifically for these languages, but treating those is
 beyond the scope of this book.
 
-### The DTM as a Sparse Matrix {#sec-dtm}
+### The DTM as a Sparse Matrix {#sec-sparse}
 
 ::: {.callout-note appearance="simple" icon=false}
 

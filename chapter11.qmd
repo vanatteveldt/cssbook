@@ -1237,7 +1237,7 @@ Additionally, since topic assignment is based on what other words occur in a doc
 the word "pupil" could be assigned either to a "biology" topic or to an "education" topic, depending
 on whether the document talks about eyes and lenses or about teachers and classrooms.
 
-![Latent Dirichlet Allocation in ``Plate Model'' notation [@blei03, fig. 1](img/lda.png){#fig-lda}
+![Latent Dirichlet Allocation in ``Plate Model'' notation (source: Blei et al, 2003)](img/lda.png){#fig-lda}
 
 Figure [-@fig-lda] is a more formal notation of the same generative model.
 Starting from the left, for each document you pick a set of topics $\Theta$.
@@ -1594,3 +1594,7 @@ bind_rows(results, .id="k") %>%
 :::
 
 
+```{bash cleanup}
+#| echo: false
+rm -f myclassifier.pkl myvectorizer.pkl
+```

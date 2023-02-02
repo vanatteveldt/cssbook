@@ -775,7 +775,7 @@ y_pred = predict(myclassifier, newdata = X_test)
 :::
 :::
 
-### Decision Trees and Random Forests {#subsec-randomforest}
+### Decision Trees and Random Forests {#sec-randomforest}
 
 In the models we have discussed so far, we were essentially modeling linear
 relationships. If the value of a feature is twice as high, its

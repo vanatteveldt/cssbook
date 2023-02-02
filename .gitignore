@@ -2,18 +2,13 @@
 env
 /.quarto/
 
-# some files created by the example code in the book, should probably add a cleanup block to most files to delete them
-/mynewcsvfile.csv
-/newstopwords.txt
-/stopwords.txt
-/test.json
+# Cache files from various chapters
 /*.udpipe
 /glove*.txt
-/myclassifier.pkl
-/myvectorizer.pkl
 /reviewdata.pickle.bz2
 /reviewdata.rds
 /w2v_320d_trimmed
+/mnist_784.pickle
 
 /env/
 

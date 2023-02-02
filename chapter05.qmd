@@ -502,3 +502,7 @@ you can search for datasets of all kinds, both really interesting ones and toy d
 Another great research is [kaggle.com](https://kaggle.com), a site that hosts data
 science competitions.
 
+```{bash cleanup}
+#| echo: false
+rm -f mynewcsvfile.csv newstopwords.txt stopwords.txt test.json
+```

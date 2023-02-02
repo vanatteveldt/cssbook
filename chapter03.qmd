@@ -967,7 +967,7 @@ and end (`}`) of a code block; whereas in Python, indentation
 is mandatory and tells your interpreter where the block
 starts and ends.
 
-### Loops
+### Loops {#sec-loops}
 
 Loops can be used to repeat a block of statements.
 They are executed once, indefinitely, or
