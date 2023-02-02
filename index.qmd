@@ -37,8 +37,9 @@ We would like to thank colleagues, friends, and students who provided feedback a
 Our intention is for the online version to be a 'living document' that we will update as tools (or our insights) change, and hopefully serve as the basis for a second edition in the future. For that reason, **all feedback is highly appreciated**! 
 
 What can you do to help:
-- Create a [github issue](https://github.com/vanatteveldt/cssbook/issues) if you see any errors, find anything hard to understand, or have any other sort of suggestions or feedback.
-- Fix typo's or other issues directly by editing the relevant file on [github](https://github.com/vanatteveldt/cssbook/) and creating a pull request
+
+ - Create a [github issue](https://github.com/vanatteveldt/cssbook/issues) if you see any errors, find anything hard to understand, or have any other sort of suggestions or feedback.
+ - Fix typo's or other issues directly by editing the relevant file on [github](https://github.com/vanatteveldt/cssbook/) and creating a pull request
 
 Any contributors will be acknowledged on this page and in a possible second edition of the book.
 If you are willing to contribute in a more major way (e.g. rewrite or add an entire chapter), please [get in touch](mailto:wouter.van.atteveldt@vu.nl) with us and we can work something out. 

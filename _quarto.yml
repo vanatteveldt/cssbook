@@ -5,6 +5,7 @@ book:
   title: "Computational Analysis of Communication"
   author: "Wouter van Atteveldt, Damian Trilling & Carlos Arcila"
   date: "2022-03-11"
+  favicon: img/favicon.png
   chapters:
     - index.qmd
     - chapter01.qmd
