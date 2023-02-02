@@ -25,7 +25,7 @@ jobs:
       - name: Additional apt packages
         uses: awalsh128/cache-apt-pkgs-action@latest
         with:
-          packages: libcurl4-openssl-dev
+          packages: libcurl4-openssl-dev libpoppler-cpp-dev
           version: 1.0
 
       - name: Install R Dependencies
