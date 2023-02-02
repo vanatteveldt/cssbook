@@ -3,13 +3,17 @@ env
 /.quarto/
 
 # some files created by the example code in the book
-mynewcsvfile.csv
-newstopwords.txt
-stopwords.txt
-test.json
+/mynewcsvfile.csv
+/newstopwords.txt
+/stopwords.txt
+/test.json
 /*.udpipe
 /glove*.txt
-
+/myclassifier.pkl
+/myvectorizer.pkl
+/reviewdata.pickle.bz2
+/reviewdata.rds
+/w2v_320d_trimmed
 
 /env/
 

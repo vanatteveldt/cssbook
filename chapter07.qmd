@@ -1139,7 +1139,7 @@ fviz_cluster(hc.res, d3_s, ellipse.type="convex")
 :::
 :::
 
-### Principal Component Analysis and Singular Value Decomposition
+### Principal Component Analysis and Singular Value Decomposition {#sec-pcasvd}
 
 Cluster analyses are in principle used to group similar
 cases. Sometimes, we want to group similar variables instead.  A
