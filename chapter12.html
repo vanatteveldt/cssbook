@@ -1,0 +1,1729 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>cssbook_quarto - 12&nbsp; Scraping online data</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<link href="./chapter13.html" rel="next">
+<link href="./chapter11.html" rel="prev">
+<script src="site_libs/quarto-html/quarto.js"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+
+</head>
+
+<body class="nav-sidebar floating">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Scraping online data</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="./">cssbook_quarto</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">Computational Analysis of Communication</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter01.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter02.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Getting started: Fun with data and visualizations</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter03.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Programming concepts for data analysis</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter04.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">How to write code</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter05.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">From file to data frame and back</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter06.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Data Wrangling</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter07.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Exploratory data analysis</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter08.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Statistical Modeling and Supervised Machine Learning</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter09.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Processing text</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter10.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Text as data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter11.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Automatic analysis of text</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter12.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Scraping online data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter13.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Network Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#sec-apis" id="toc-sec-apis" class="nav-link active" data-scroll-target="#sec-apis"><span class="toc-section-number">12.1</span>  Using Web APIs: From Open Resources to Twitter</a></li>
+  <li><a href="#sec-webpages" id="toc-sec-webpages" class="nav-link" data-scroll-target="#sec-webpages"><span class="toc-section-number">12.2</span>  Retrieving and Parsing Web Pages</a>
+  <ul class="collapse">
+  <li><a href="#sec-parsehtml" id="toc-sec-parsehtml" class="nav-link" data-scroll-target="#sec-parsehtml"><span class="toc-section-number">12.2.1</span>  Retrieving and Parsing an HTML Page</a></li>
+  <li><a href="#sec-crawling" id="toc-sec-crawling" class="nav-link" data-scroll-target="#sec-crawling"><span class="toc-section-number">12.2.2</span>  Crawling Websites</a></li>
+  <li><a href="#sec-selenium" id="toc-sec-selenium" class="nav-link" data-scroll-target="#sec-selenium"><span class="toc-section-number">12.2.3</span>  Dynamic Web Pages</a></li>
+  </ul></li>
+  <li><a href="#sec-authentication" id="toc-sec-authentication" class="nav-link" data-scroll-target="#sec-authentication"><span class="toc-section-number">12.3</span>  Authentication, Cookies, and Sessions</a>
+  <ul class="collapse">
+  <li><a href="#sec-authapi" id="toc-sec-authapi" class="nav-link" data-scroll-target="#sec-authapi"><span class="toc-section-number">12.3.1</span>  Authentication and APIs</a></li>
+  <li><a href="#sec-authweb" id="toc-sec-authweb" class="nav-link" data-scroll-target="#sec-authweb"><span class="toc-section-number">12.3.2</span>  Authentication and Webpages</a></li>
+  </ul></li>
+  <li><a href="#sec-ethicallegalpractical" id="toc-sec-ethicallegalpractical" class="nav-link" data-scroll-target="#sec-ethicallegalpractical"><span class="toc-section-number">12.4</span>  Ethical, Legal, and Practical Considerations</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-chap-scraping" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Scraping online data</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<!--# 
+Edit history 
+- selenium find_element_by_name replaced by find_element("name", ), same for css
+- reworked 'do you care about the children' example
+-->
+<div class="cell">
+
+</div>
+<div class="cell">
+
+</div>
+<p><strong>Abstract.</strong> In this chapter, you will learn how to retrieve your data from online sources. We first discuss the use of Application Programming Interfaces, more commonly known as APIs, which allow you to retrieve data from social media platforms, government websites, or other forms of open data, in a machine-readable format. We then discuss how to do web scraping in a narrower sense to retrieve data from websites that do not offer an API. We also discuss how to deal with authentication mechanisms, cookies, and the like, as well as ethical, legal, and practical considerations.</p>
+<p><strong>Keywords.</strong> web scraping, application programming interface (API), crawling, HTML parsing</p>
+<p><strong>Objectives:</strong></p>
+<ul>
+<li>Be able to use APIs for data retrieval</li>
+<li>Be able to write your own web scraper</li>
+<li>Assess basics of legal, ethical, and practical constraints</li>
+</ul>
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Packages used in this chapter
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>This chapter uses in particular <em>httr</em> (R) and <em>requests</em> (Python) to retrieve data, <em>json</em> (Python) and <em>jsonlite</em> (R) to handle JSON responses, and <em>lxml</em> and <em>Selenium</em> for web scraping.</p>
+<p>You can install these and some additional packages (e.g., for geocoding) with the code below if needed (see Section <a href="chapter01.html#sec-installing"><span>1.4</span></a> for more details):</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pip3 install requests geopandas geopy selenium lxml</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">"tidyverse"</span>, </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"httr"</span>, <span class="st">"jsonlite"</span>, <span class="st">"glue"</span>, </span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"data.table"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>After installing, you need to import (activate) the packages every session:</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># accessing APIs and URLs</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> requests</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># handling of JSON responses</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pprint <span class="im">import</span> pprint</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> pandas <span class="im">import</span> json_normalize</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># general data handling</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co"># note: you need to additionally install geopy</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> geopandas <span class="im">as</span> gpd</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co"># static web scraping</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> urllib.request <span class="im">import</span> urlopen</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> lxml.html <span class="im">import</span> parse, fromstring</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="co"># selenium</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> selenium <span class="im">import</span> webdriver</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> selenium.webdriver.common.keys <span class="im">import</span> Keys</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> selenium.webdriver.support.ui <span class="im">import</span> WebDriverWait</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> selenium.webdriver.support <span class="im">import</span> expected_conditions <span class="im">as</span> EC</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> selenium.webdriver.common.by <span class="im">import</span> By</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> time</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> pprint(x, <span class="op">*</span>kargs, <span class="op">**</span>kwarg):</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    x <span class="op">=</span> json.dumps(x, indent<span class="op">=</span><span class="dv">2</span>)</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> line <span class="kw">in</span> x.split(<span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)[:<span class="dv">10</span>]:</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(line)</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"..."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"tidyverse"</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"httr"</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"jsonlite"</span>)</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"rvest"</span>)</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"xml2"</span>)</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"glue"</span>)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"data.table"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<section id="sec-apis" class="level2" data-number="12.1">
+<h2 data-number="12.1" class="anchored" data-anchor-id="sec-apis"><span class="header-section-number">12.1</span> Using Web APIs: From Open Resources to Twitter</h2>
+<p>Let’s assume we want to retrieve data from some online service. This could be some social media platform, but could also be a government website, some <em>open data</em> platform or initiative, or sometimes a commercial organization that provides some online service. Of course, we could surf to their website, enter a search query, and somehow save the result. This would result in a lot of impracticalities, though. Most notably, websites are designed such that they are perfectly readable and understandable for humans, but the cues that are used often have no “meaning” for a computer program. As humans, we have no problem understanding which parts of a web page refer to the author of some item on a web page, what the numbers “2006” and “2008” mean, and on. But it is not trivial to think of a way to explain to a computer program how to identify variables like <code>author</code>, <code>title</code>, or <code>year</code> on a web page. We will learn how to do exactly that in Section <a href="#sec-webpages"><span>12.2</span></a>. Writing such a <em>parser</em> is often necessary, but it is also error-prone and a detour, as we are trying to bring some information that has been optimized for human reading <em>back</em> to a more structured data structure.</p>
+<p>Luckily, however, many online services not only have web interfaces optimized for human reading, but also offer another possibility to access the data they provide: an API (Application Programming Interface). The vast amount of contemporary web APIs work like this: you send a <em>request</em> to some URL, and you get back a JSON object. As you learned in Section <a href="chapter05.html#sec-reading"><span>5.2</span></a>, JSON is a nested data structure, very much like a Python dictionary or R named list (and, in fact, JSON data are typically represented as such in Python and R). In other words: APIs directly gives us machine-readable data that we can work with without any need to develop a custom parser.</p>
+<p>Discussing specific APIs in a book can be a bit tricky, as there is a chance that it will be outdated: after all, the API provider may change it at any time. We therefore decided not to include a chapter on very specific applications such as “How to use the Twitter API” or similar – given the popularity of such APIs, a quick online search will produce enough up-to-date (and out-of-date) tutorials on these. Instead, we discuss the generic principles of APIs that should easily translate to examples other than ours.</p>
+<p>In its simplest form, using an API is nothing more than visiting a specific URL. The first part of the URL specifies the so-called API endpoint: the address of the specific API you want to use. This address is then followed by a <code>?</code> and one or more key-value pairs with an equal sign like this: <code>key=value</code>. Multiple key-value pairs are separated with a <code>\&amp;</code>.</p>
+<p>For instance, at the time of the writing of this book, Google offers an API endpoint, <code>https://www.googleapis.com/books/v1/volumes</code>, to search for books on Google Books. If you want to search for books about Python, you can supply a key <code>q</code> (which stands for query) with the value “python” (Example <a href="#exm-googleapi1"><span>12.1</span></a>). We do not need any specific software for this – we could, in fact, use a web browser as well. Popular packages that allow us to do it programatically are <em>httr</em> in combination with <em>jsonlite</em> (R) and <em>requests</em> (Python).</p>
+<p>But how do we know which parameters (i.e., which key-value pairs) we can use? We need to look it up in the documentation of the API we are interested in (in this example <a href="https://developers.google.com/books/docs/v1/using">developers.google.com/books/docs/v1/using</a>). There is no other way of knowing that the key to submit a query is called <code>q</code>, and which other parameters can be specified.</p>
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Note
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>In our example, we used a simple value to include in the request: the string “python”. But what if we want to submit a string that contains, let’s say, a space, or a character like <code>&amp;</code> or <code>?</code> which, as we have seen, have a special meaning in the request? In these cases, you need to “encode” your URL using a mechanism called URL encoding or percent encoding. You may have seen this earlier: a space, for instance, is represented by <code>\%20</code></p>
+</div>
+</div>
+</div>
+<div class="callout-note callout callout-style-simple no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<div id="exm-googleapi1" class="theorem example">
+<p><span class="theorem-title"><strong>Example 12.1 </strong></span>Retrieving JSON data from the Google Books API.</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> requests.get(<span class="st">"https://www.googleapis.com//books/v1/volumes?q=python"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>data <span class="op">=</span> r.json()</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(data.keys())  <span class="co"># "items" seems most promising</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>dict_keys(['kind', 'totalItems', 'items'])</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>pprint(data[<span class="st">"items"</span>][<span class="dv">0</span>])  <span class="co"># let's print the 1st one</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{
+  "kind": "books#volume",
+  "id": "LqmaDwAAQBAJ",
+  "etag": "EN/55hmxvaU",
+  "selfLink": "https://www.googleapis.com/books/v1/volumes/LqmaDwAAQBAJ",
+  "volumeInfo": {
+    "title": "Python For Dummies",
+    "authors": [
+      "Stef Maruch",
+      "Aahz Maruch"
+...</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<div class="cell" data-hash="chapter12_cache/html/googleapi1-r_b5c13376d30582ef05172e02ff291e7e">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">=</span> <span class="fu">str_c</span>(<span class="st">"https://www.googleapis.com/books/v1/volumes?q=python"</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>r <span class="ot">=</span> <span class="fu">GET</span>(url)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>data <span class="ot">=</span> <span class="fu">content</span>(r, <span class="at">as=</span><span class="st">"parsed"</span>)</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">names</span>(data))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "kind"       "totalItems" "items"     </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(data<span class="sc">$</span>items[[<span class="dv">1</span>]])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$kind
+[1] "books#volume"
+
+$id
+[1] "LqmaDwAAQBAJ"
+
+$etag
+[1] "vRuqaJro/qM"
+
+...</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>The data our request returns are nested data, and hence, they do not really “fit” in a tabular data frame. We could keep the data as they are (and then, for instance, just extract the key-value pairs that we are interested in), but – for the sake of getting a quick overview – let’s flatten the data so that they can be represented in a data frame (Example <a href="#exm-googleapi2"><span>12.2</span></a>). This works quite well here, but may be more problematic when the items have a widely varying structure. If that is the case, we probably would want to write a loop to iterate over the different items and extract the information we are interested in.</p>
+<div class="callout-note callout callout-style-simple no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<div id="exm-googleapi2" class="theorem example">
+<p><span class="theorem-title"><strong>Example 12.2 </strong></span>Transforming the data into a data frame.</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
+<div class="cell" data-hash="chapter12_cache/html/googleapi2-python_9d504bb00be1d2e1745d09df861006db">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> json_normalize(data[<span class="st">"items"</span>])</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>d.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>           kind            id  ... saleInfo.buyLink saleInfo.offers
+0  books#volume  LqmaDwAAQBAJ  ...              NaN             NaN
+1  books#volume  bTUFCAAAQBAJ  ...              NaN             NaN
+2  books#volume  aJQILlLxRmAC  ...              NaN             NaN
+3  books#volume  H9emM_LGFDEC  ...              NaN             NaN
+4  books#volume  Chr1NDlUcI8C  ...              NaN             NaN
+
+[5 rows x 50 columns]</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>r_text <span class="ot">=</span> <span class="fu">content</span>(r, <span class="st">"text"</span>)</span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co">#| cache: true</span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>data_json <span class="ot">=</span> <span class="fu">fromJSON</span>(r_text, <span class="at">flatten=</span>T)</span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a>d <span class="ot">=</span> <span class="fu">as_tibble</span>(data_json)</span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+  kind          totalItems items$k…¹ $id   $etag $self…² $volu…³ $volu…⁴ $volu…⁵
+  &lt;chr&gt;              &lt;int&gt; &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;list&gt;  &lt;chr&gt;  
+1 books#volumes       1619 books#vo… Lqma… vRuq… https:… Python… &lt;chr&gt;   John W…
+2 books#volumes       1619 books#vo… bTUF… jYwk… https:… Effect… &lt;chr&gt;   Pearso…
+3 books#volumes       1619 books#vo… aJQI… Djus… https:… Python… &lt;chr&gt;   Frankl…
+4 books#volumes       1619 books#vo… H9em… 20hb… https:… Progra… &lt;chr&gt;   Addiso…
+5 books#volumes       1619 books#vo… Chr1… IdjH… https:… Python… &lt;chr&gt;   Addiso…
+6 books#volumes       1619 books#vo… RQ6x… Ep92… https:… Automa… &lt;chr&gt;   No Sta…
+# … with 43 more variables: items$volumeInfo.publishedDate &lt;chr&gt;,
+#   $volumeInfo.description &lt;chr&gt;, $volumeInfo.industryIdentifiers &lt;list&gt;,
+#   $volumeInfo.pageCount &lt;int&gt;, $volumeInfo.printType &lt;chr&gt;,
+#   $volumeInfo.categories &lt;list&gt;, $volumeInfo.averageRating &lt;dbl&gt;,
+#   $volumeInfo.ratingsCount &lt;int&gt;, $volumeInfo.maturityRating &lt;chr&gt;,
+#   $volumeInfo.allowAnonLogging &lt;lgl&gt;, $volumeInfo.contentVersion &lt;chr&gt;,
+#   $volumeInfo.language &lt;chr&gt;, $volumeInfo.previewLink &lt;chr&gt;, …</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>You may have realized that you did not get <em>all</em> results. This protects you from accidentally downloading a huge dataset (you may have underestimated the number of Python books available on the market), and saves the provider of the API a lot of bandwidth. This does not mean that you cannot get more data. In fact, many APIs work with <em>pagination</em>: you first get the first “page” of results, then the next, and so on. Sometimes, the API response contains a specific key-value pair (sometimes called a “continuation key”) that you can use to get the next results; sometimes, you can just say at which result you want to start (say, result number 11) and then get the next “page”. You can then write a loop to retrieve as many results as you need (Example <a href="#exm-googleapi3"><span>12.3</span></a>) – just make sure that you do not get stuck in an eternal loop. When you start playing around with APIs, make sure you do not cause unnecessary traffic, but limit the number of calls that are made (see also Section <a href="#sec-ethicallegalpractical"><span>12.4</span></a>).</p>
+<div class="callout-note callout callout-style-simple no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<div id="exm-googleapi3" class="theorem example">
+<p><span class="theorem-title"><strong>Example 12.3 </strong></span>Full script including pagination.</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
+<div class="cell" data-hash="chapter12_cache/html/googleapi3-python_a59126559336dc652ef94d3bb8ea2cd5">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>allitems <span class="op">=</span> []</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>i <span class="op">=</span> <span class="dv">0</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> <span class="va">True</span>:</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>    r <span class="op">=</span> requests.get(</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>        <span class="st">"https://www.googleapis.com/"</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>        <span class="st">"books/v1/volumes?q=python&amp;maxResults="</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>        <span class="ss">f"40&amp;startIndex=</span><span class="sc">{</span>i<span class="sc">}</span><span class="ss">"</span></span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a>    data <span class="op">=</span> r.json()</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> <span class="st">"items"</span> <span class="kw">in</span> data:</span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Retrieved </span><span class="sc">{</span><span class="bu">len</span>(allitems)<span class="sc">}</span><span class="ss">,"</span> <span class="st">"it seems like that's it"</span>)</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true" tabindex="-1"></a>        <span class="cf">break</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>    allitems.extend(data[<span class="st">"items"</span>])</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    i <span class="op">+=</span> <span class="dv">40</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Retrieved 585,it seems like that's it</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> json_normalize(allitems)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
+<div class="cell" data-hash="chapter12_cache/html/googleapi3-r_e691f1ce123a050c3cfc0c3c8d1c9419">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>i <span class="ot">=</span> <span class="dv">0</span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>j <span class="ot">=</span> <span class="dv">1</span></span>
+<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>url <span class="ot">=</span> <span class="fu">str_c</span>(<span class="st">"https://www.googleapis.com/books/"</span>,</span>
+<span id="cb21-4"><a href="#cb21-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">"v1/volumes?q=python&amp;maxResults=40"</span>,</span>
+<span id="cb21-5"><a href="#cb21-5" aria-hidden="true" tabindex="-1"></a>            <span class="st">"&amp;startIndex={i}"</span>)</span>
+<span id="cb21-6"><a href="#cb21-6" aria-hidden="true" tabindex="-1"></a>alldata <span class="ot">=</span> <span class="fu">list</span>()</span>
+<span id="cb21-7"><a href="#cb21-7" aria-hidden="true" tabindex="-1"></a><span class="cf">while</span> (<span class="cn">TRUE</span>) {</span>
+<span id="cb21-8"><a href="#cb21-8" aria-hidden="true" tabindex="-1"></a>    r <span class="ot">=</span> <span class="fu">GET</span>(<span class="fu">glue</span>(url))</span>
+<span id="cb21-9"><a href="#cb21-9" aria-hidden="true" tabindex="-1"></a>    r_text <span class="ot">=</span> <span class="fu">content</span>(r, <span class="st">"text"</span>)</span>
+<span id="cb21-10"><a href="#cb21-10" aria-hidden="true" tabindex="-1"></a>    data_json <span class="ot">=</span> <span class="fu">fromJSON</span>(r_text, <span class="at">flatten=</span>T)</span>
+<span id="cb21-11"><a href="#cb21-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> (<span class="fu">length</span>(data_json<span class="sc">$</span>items)<span class="sc">==</span><span class="dv">0</span>) {<span class="cf">break</span>}</span>
+<span id="cb21-12"><a href="#cb21-12" aria-hidden="true" tabindex="-1"></a>    alldata[[j]] <span class="ot">=</span> <span class="fu">as.data.frame</span>(data_json)</span>
+<span id="cb21-13"><a href="#cb21-13" aria-hidden="true" tabindex="-1"></a>    i <span class="ot">=</span> i <span class="sc">+</span> <span class="dv">40</span></span>
+<span id="cb21-14"><a href="#cb21-14" aria-hidden="true" tabindex="-1"></a>    j <span class="ot">=</span> j <span class="sc">+</span> <span class="dv">1</span>} </span>
+<span id="cb21-15"><a href="#cb21-15" aria-hidden="true" tabindex="-1"></a>d <span class="ot">=</span> <span class="fu">rbindlist</span>(alldata, <span class="at">fill=</span><span class="cn">TRUE</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Many APIs work very much like the example we discussed, and you can adapt the logic above to many APIs once you have read their documentation. You would usually start by playing around with single requests, and then try to automate the process by means of a loop.</p>
+<p>However, many APIs have restrictions regarding who can use them, how many requests can be made, and so on. For instance, you may need to limit the number of requests per minute by calling a <code>sleep</code> function within your loop to delay the execution of the next call. Or, you may need to authenticate yourself. In the example of the Google Books API, this will allow you to request more data (such as whether you own an (electronic) copy of the books you retrieved). In this case, the documentation outlines that you can simply pass an authentication token as a parameter with the URL. However, many APIs use more advanced authentication methods such as OAuth (see Section <a href="#sec-authentication"><span>12.3</span></a>).</p>
+<p>Lastly, for many APIs that are very popular with social scientists, specific wrapper packages exist (such as <em>tweepy</em> (Python) or <em>rtweet</em> (R) for downloading twitter messages) which are a bit more user-friendly and handle things like authentication, pagination, respecting rate-limits, etc., for you.</p>
+</section>
+<section id="sec-webpages" class="level2" data-number="12.2">
+<h2 data-number="12.2" class="anchored" data-anchor-id="sec-webpages"><span class="header-section-number">12.2</span> Retrieving and Parsing Web Pages</h2>
+<p>Unfortunately, not all online services we may be interested in offer an API – in fact, it has even been suggested that computational researchers have arrived in an “post-API age” <span class="citation" data-cites="Freelon2018">(<a href="references.html#ref-Freelon2018" role="doc-biblioref">Freelon 2018</a>)</span>, as API access for researchers has become increasingly restricted.</p>
+<p>If data cannot be collected using an API (or a similar service, such as RSS feeds), we need to resort to web scraping. Before you start a web scraping project, make sure to ask the appropriate authorities for ethical and legal advice (see also Section <a href="#sec-ethicallegalpractical"><span>12.4</span></a>).</p>
+<p>Web scraping (sometimes also referred to as harvesting), in essence, boils down to automatically downloading web pages aimed at a human audience, and extracting meaningful information out of them. One could also say that we are reverse-engineering the way the information was published on the web. For instance, a news site may always use a specific formatting to denote the title of an article – and we would then use this to extract the title. This process is called “parsing”, which in this context is just a fancy term for “extracting meaningful information”.</p>
+<p>When scraping data from the web, we can distinguish two different tasks: (1) downloading a (possibly large) number of webpages, and (2) parsing the content of the webpages. Often, both go hand in hand. For instance, the URL of the next page to be downloaded might actually be parsed from the content of the current page; or some overview page may contain the links and thus has to be parsed first in order to download subsequent pages.</p>
+<p>We will first discuss how to parse a single HTML page (say, the page containing one specific product review, or one specific news article), and then describe how to “scale up” and repeat the process in a loop (to scrape, let’s say, all reviews for the product; or all articles in a specific time frame).</p>
+<section id="sec-parsehtml" class="level3" data-number="12.2.1">
+<h3 data-number="12.2.1" class="anchored" data-anchor-id="sec-parsehtml"><span class="header-section-number">12.2.1</span> Retrieving and Parsing an HTML Page</h3>
+<p>In order to parse an HTML file, you need to have a basic understanding of the structure of an HTML file. Open your web browser, visit a website of your choice (we suggest to use a simple page, such as <a href="http://css-book.net/d/restaurants/index.html">css-book.net/d/restaurants/index.html</a>), and inspect its underlying HTML code (almost all browsers have a function called something like “view source”, which enables you to do so).</p>
+<p>You will see that there are some regular patterns in there. For example, you may see that each paragraph is enclosed with the tags <code>&lt;p&gt;</code> and <code>&lt;/p&gt;</code>. Thinking back to Section <a href="chapter09.html#sec-regular"><span>9.2</span></a>, you may figure out that you could, for instance, use a regular expression to extract the text of the first paragraph. In fact, packages like <em>beautifulsoup</em> under the hood use regular expressions to do exactly that.</p>
+<p>Writing your own set of regular expressions to parse an HTML page is usually not a good idea (but it can be a last resort when everything else fails). Chances are high that you will make a mistake or not handle some edge case correctly; and besides, it would be a bit like re-inventing the wheel. Packages like <em>rvest</em> (R), <em>beautifulsoup</em>, and <em>lxml</em> (both Python) already do this for you.</p>
+<p>In order to use them, though, you need to have a basic understanding of what an HTML page looks like. Here is a simplified example:</p>
+<pre><code>&lt;html&gt;
+&lt;body&gt;
+&lt;h1&gt;This is a title&lt;/h1&gt;
+&lt;div id="main"&gt;
+&lt;p&gt; Some text with one &lt;a href="test.html"&gt;link &lt;/a&gt; &lt;/p&gt;
+&lt;img src = "plaatje.jpg"&gt;an image &lt;/img&gt;
+&lt;/div&gt;
+&lt;div id="body"&gt;
+&lt;p class="lead"&gt; Some more text &lt;/p&gt;
+&lt;p&gt; Even more... &lt;/p&gt;
+&lt;p&gt; And more. &lt;/p&gt;
+&lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;</code></pre>
+<p>For now, it is not too important to understand the function of each specific tag (although it might help, for instance, to realize that <code>a</code> denotes a link, <code>h1</code> a first-level heading, <code>p</code> a paragraph and <code>div</code> some kind of section).</p>
+<p>What is important, though, is to realize that each tag is opened and closed (e.g., <code>&lt;p&gt;</code> is closed by <code>&lt;/p&gt;</code>). Because tags can be nested, we can actually draw the code as a tree. In our example, this would look like this:</p>
+<ul style="list-style-type: &quot;↪&quot;">
+<li>
+html
+</li>
+<ul style="list-style-type: &quot;↪&quot;">
+<li>
+body
+</li>
+<ul style="list-style-type: &quot;↪&quot;">
+<li>
+h1
+</li>
+<li>
+div#main
+</li>
+<ul style="list-style-type: &quot;↪&quot;">
+<li>
+p
+</li>
+<ul style="list-style-type: &quot;↪&quot;">
+<li>
+a
+</li>
+</ul>
+<li>
+img
+</li>
+</ul>
+<li>
+div
+</li>
+<ul style="list-style-type: &quot;↪&quot;">
+<li>
+p.lead
+</li>
+<li>
+p
+</li>
+<li>
+p
+</li>
+</ul>
+</ul>
+</ul>
+</ul>
+<p>Additionally, tags can have <em>attributes</em>. For instance, the makers of a page with customer reviews may use attributes to specify what a section contains. For example, they may have written <code>&lt;p class="lead"&gt; ... &lt;/div&gt;</code> to mark the lead paragraph of an article, and <code>&lt;a href=test.html"&gt; ...&lt;/a&gt;</code> to specify the target of a hyperlink. Especially important here are the <code>id</code> and <code>class</code> attributes, which are often used by webpages to control the formatting. <code>id</code> (indicated with the hash sign <code>#</code> above) gives a unique ID to a single element, while <code>class</code> (indicated with a period) assigns a class label to one or more elements. This enables web sites to specify their layout and formatting using a technique called Cascading Style Sheets (CSS). For example, the web page could set the lead paragraph to be bold. The nice thing is that we can exploit this information to tell our parser where to find the elements we are interested in.</p>
+<!--# WvA: I added a manual 'break' in the first 'advanced' example below, maybe this can be solved more elegantly? -->
+<div id="tbl-cssselect" class="anchored">
+<table class="table">
+<caption>Table&nbsp;12.1: Overview of CSSSelect and XPath syntax</caption>
+<colgroup>
+<col style="width: 36%">
+<col style="width: 27%">
+<col style="width: 36%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Example</th>
+<th>CSS Select</th>
+<th>XPath</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Basic tree navigation</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="even">
+<td><code>h1</code>anywhere in document</td>
+<td><code>h1</code></td>
+<td><code>//h1</code></td>
+</tr>
+<tr class="odd">
+<td><code>h1</code>inside a body</td>
+<td><code>body h1</code></td>
+<td><code>//body//h1</code></td>
+</tr>
+<tr class="even">
+<td><code>h1</code>directly inside<code>div</code></td>
+<td><code>div &gt; h1</code></td>
+<td><code>//div/h1</code></td>
+</tr>
+<tr class="odd">
+<td>Any node directly inside<code>div</code></td>
+<td><code>div *</code></td>
+<td><code>//div/*</code></td>
+</tr>
+<tr class="even">
+<td><code>p</code>next to a<code>h1</code></td>
+<td><code>h1   p</code></td>
+<td><code>//h1/following-sibling::p</code></td>
+</tr>
+<tr class="odd">
+<td><code>p</code>next to a<code>h1</code></td>
+<td><code>h1 + p</code></td>
+<td><code>//h1/following-sibling::p[1]</code></td>
+</tr>
+<tr class="even">
+<td><strong>Node attributes</strong></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>&lt;div id='x1'&gt;</code></td>
+<td><code>div#x1</code></td>
+<td><code>//div[@id='x1']</code></td>
+</tr>
+<tr class="even">
+<td>any node with<code>id x1</code></td>
+<td><code>#x1</code></td>
+<td><code>//*[@id='x1']</code></td>
+</tr>
+<tr class="odd">
+<td><code>&lt;div class='row'&gt;</code></td>
+<td><code>div.row</code></td>
+<td><code>//div[@class='row']</code></td>
+</tr>
+<tr class="even">
+<td>any node with<code>class row</code></td>
+<td><code>.row</code></td>
+<td><code>//*[@class='row']</code></td>
+</tr>
+<tr class="odd">
+<td><code>a</code>with<code>href="#"</code></td>
+<td><code>a[href="#"]</code></td>
+<td><code>//a[@href="#"]</code></td>
+</tr>
+<tr class="even">
+<td><span style="white-space:nowrap"><strong>Advanced tree navigation</strong></span></td>
+<td></td>
+<td></td>
+</tr>
+<tr class="odd">
+<td><code>a</code>in a<code>div</code>with class ‘meta’ directly in the <code>main</code></td>
+<td><code>#main &gt; div.meta a</code></td>
+<td><code>//*[@id='main']</code> <code>/div[@class='meta']//a</code></td>
+</tr>
+<tr class="even">
+<td>First<code>p</code>in a<code>div</code></td>
+<td><code>div p:first-of-type</code></td>
+<td><code>//div/p[1]</code></td>
+</tr>
+<tr class="odd">
+<td>First child of a<code>div</code></td>
+<td><code>div :first-child</code></td>
+<td><code>//div/*[1]</code></td>
+</tr>
+<tr class="even">
+<td>Second<code>p</code>in a<code>div</code></td>
+<td><code>div p:nth-of-type(2)</code></td>
+<td><code>//div/p[2]</code></td>
+</tr>
+<tr class="odd">
+<td>Second<code>p</code>in a<code>div</code></td>
+<td><code>div p:nth-of-type(2)</code></td>
+<td><code>//div/p[2]</code></td>
+</tr>
+<tr class="even">
+<td><span style="white-space:nowrap">parent of the<code>div</code>with id<code>x1</code></span></td>
+<td>(not possible)</td>
+<td><code>//div[@id='x1']/parent::*</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><strong>CSS Selectors.</strong> The easiest way to specify our parser to look for a specific element is to use a <em>CSS Selector</em>, which might be familiar to you if you have created web pages. For example, to find the lead paragraph(s) we specify <code>p.lead</code>. To find the node with <code>id="body"</code>, we can specify <code>\#body</code>. You can also use this to specify relations between nodes. For example, to find all paragraphs within the body element we would write <code>\#body p</code>.</p>
+<p>Table <a href="#tbl-cssselect"><span>12.1</span></a> gives an overview of the possibilities of CSS Select. In general, a CSS selector is a set of node specifiers (like <code>h1</code>, <code>.lead</code> or <code>div\#body</code>), optionally with relation specifiers between them. So, <code>\#body p</code> finds a <code>p</code> anywhere inside the <code>id=body</code> element, while <code>\#body &gt; p</code> requires the <code>p</code> to be directly contained inside the body (with no other nodes in between).</p>
+<p><strong>XPath.</strong> An alternative to CSS Selectors is <em>XPath</em>. Where CSS Selectors are directly based on HTML and CSS styling, XPath is a general way to describe nodes in XML (and HTML) documents. The general form of XPath is similar to CSS Select: a sequence of node descriptors (such as <code>h1</code> or <code>\*[@id='body']</code>). Contrary to CSS Select, you always have to specify the relationship, where <code>//</code> means any direct or indirect descendant and <code>/</code> means a direct child. If the relationship is not a child or descendant relationship (but for example a sibling or parent), you specify the <code>axis</code> with e.g.&nbsp;<code>//a/parent::p</code> meaning an <code>a</code> anywhere in the document (<code>//a</code>) which has a direct parent (<code>/parent::</code>) that is a <code>p</code>.</p>
+<p>A second difference with CSS Selectors is that the <em>class</em> and <em>id</em> attributes are not given special treatment, but can be used with the general <code>[@attribute='value']</code> pattern. Thus, to get the lead paragraph you would specify <code>//p[@class='lead']</code>.</p>
+<p>The advantage of XPath is that it is a very powerful tool. Everything that you can describe with a CSS Selector can also be described with an XPath pattern, but there are some things that CSS Selectors cannot describe, such as parents. On the other hand, XPath patterns can be a bit harder to write, read, and debug. You can choose to use either tool, and you can even mix and match them in a single script, but our general recommendation is to use CSS Selectors unless you need to use the specific abilities of XPath.</p>
+<p>Example <a href="#exm-htmlparse1"><span>12.4</span></a> shows how to use XPATHs and CSS selectors to parse an HTML page. To fully understand it, open <a href="https://cssbook.net/d/restaurants/index.html">cssbook.net/d/restaurants/index.html</a> in a browser and look at its source code (all modern browsers have a function “View page source” or similar), or – more comfortable – right-click on an element you are interested in (such as a restaurant name) and select “Inspect element” or similar. This will give you a user-friendly view of the HTML code.</p>
+<div class="callout-note callout callout-style-simple no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<div id="exm-htmlparse1" class="theorem example">
+<p><span class="theorem-title"><strong>Example 12.4 </strong></span>Parsing websites using XPATHs or CSS selectors</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>tree <span class="op">=</span> parse(urlopen(<span class="st">"https://cssbook.net/d/eat/index.html"</span>))</span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a><span class="co"># get the restaurant names via XPATH</span></span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>([e.text_content().strip() <span class="cf">for</span> e <span class="kw">in</span> tree.xpath(<span class="st">"//h3"</span>)])</span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a><span class="co"># get the restaurant names via CSS Selector</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['Pizzeria Roma', 'Trattoria Napoli', 'Curry King']</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>([e.text_content().strip() <span class="cf">for</span> e <span class="kw">in</span> tree.getroot().cssselect(<span class="st">"h3"</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['Pizzeria Roma', 'Trattoria Napoli', 'Curry King']</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb27"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">=</span> <span class="st">"https://cssbook.net/d/eat/index.html"</span></span>
+<span id="cb27-2"><a href="#cb27-2" aria-hidden="true" tabindex="-1"></a>page <span class="ot">=</span> <span class="fu">read_html</span>(url)</span>
+<span id="cb27-3"><a href="#cb27-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb27-4"><a href="#cb27-4" aria-hidden="true" tabindex="-1"></a><span class="co"># get the restaurant names via XPATH</span></span>
+<span id="cb27-5"><a href="#cb27-5" aria-hidden="true" tabindex="-1"></a>page <span class="sc">%&gt;%</span> <span class="fu">html_nodes</span>(<span class="at">xpath=</span><span class="st">"//h3"</span>) <span class="sc">%&gt;%</span> <span class="fu">html_text</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] " Pizzeria Roma "    " Trattoria Napoli " " Curry King "      </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb29"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a><span class="co"># get the restaurant names via CSS Selector</span></span>
+<span id="cb29-2"><a href="#cb29-2" aria-hidden="true" tabindex="-1"></a>page <span class="sc">%&gt;%</span> <span class="fu">html_nodes</span>(<span class="st">"h3"</span>) <span class="sc">%&gt;%</span> <span class="fu">html_text</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] " Pizzeria Roma "    " Trattoria Napoli " " Curry King "      </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Of course, Example <a href="#exm-htmlparse1"><span>12.4</span></a> only parses one possible element of interest: the restaurant names. Try to retrieve other elements as well!</p>
+<p>Notably, you may want to parse links. In HTML, links use a specific tag, <code>a</code>. These tags have an attribute, <code>href</code>, which contains the link itself. Example <a href="#exm-htmlparse3"><span>12.5</span></a> shows how, after selecting the <code>a</code> tags, we can access these attributes.</p>
+<div class="callout-note callout callout-style-simple no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<div id="exm-htmlparse3" class="theorem example">
+<p><span class="theorem-title"><strong>Example 12.5 </strong></span>Parsing link texts and links</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-7-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-1" role="tab" aria-controls="tabset-7-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-2" role="tab" aria-controls="tabset-7-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-7-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-7-1-tab">
+<div class="cell" data-hash="chapter12_cache/html/htmlparse3-python_be71ab1d3b032d6e4b44581d715bfd25">
+<div class="sourceCode cell-code" id="cb31"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a>linkelements <span class="op">=</span> tree.xpath(<span class="st">"//a"</span>)</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>linktexts <span class="op">=</span> [e.text <span class="cf">for</span> e <span class="kw">in</span> linkelements]</span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>links <span class="op">=</span> [e.attrib[<span class="st">"href"</span>] <span class="cf">for</span> e <span class="kw">in</span> linkelements]</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb31-5"><a href="#cb31-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(linktexts)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['here', 'here', 'here']</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(links)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['review0001.html', 'review0002.html', 'review0003.html']</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-7-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-2-tab">
+<div class="cell" data-hash="chapter12_cache/html/htmlparse3-r_85c681d1acf40ea915c98282b2e8f964">
+<div class="sourceCode cell-code" id="cb35"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>page <span class="sc">%&gt;%</span> </span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_nodes</span>(<span class="at">xpath=</span><span class="st">"//a"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text</span>() </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "here" "here" "here"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb37"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>page <span class="sc">%&gt;%</span> </span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_nodes</span>(<span class="at">xpath=</span><span class="st">"//a"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_attr</span>(<span class="st">"href"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "review0001.html" "review0002.html" "review0003.html"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Do you care about the children?
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>Regardless of whether you use XPATHS or CSS Selectors to specify which part of the page you are interested in, it is often the case that there are other elements within it. Depending on whether you want to also retrieve the text of these elements or not, you have to use different approaches. The code examples below shows some of these differences</p>
+<p>Appending <code>/text()</code> to the XPATH gives you exactly the text that is in the element itself, including line-breaks that happen to be in the source code. In python, the same information is also present in the <code>.text</code> property of the elements (but without the line-breaks):</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-8-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-1" role="tab" aria-controls="tabset-8-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-2" role="tab" aria-controls="tabset-8-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-8-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-8-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb39"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb39-1"><a href="#cb39-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(tree.xpath(<span class="st">"//div[@class='restaurant']/text()"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[' ', '\n      ', '\n      ', '\n    ', ' ', '\n      ', '\n      ', '\n   ...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb41"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb41-1"><a href="#cb41-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>([e.text <span class="cf">for</span> e <span class="kw">in</span> tree.xpath(<span class="st">"//div[@class='restaurant']"</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[' ', ' ', ' ']</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-8-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb43"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb43-1"><a href="#cb43-1" aria-hidden="true" tabindex="-1"></a>page <span class="sc">%&gt;%</span> <span class="fu">html_nodes</span>(<span class="at">xpath=</span><span class="st">"//div[@class='restaurant']/text()"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{xml_nodeset (12)}
+ [1]  
+ [2] \n      
+ [3] \n      
+ [4] \n    
+ [5]  
+ [6] \n      
+ [7] \n      
+ [8] \n    
+ [9]  
+[10] \n      
+[11] \n      
+[12] \n    </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>You can also use the <code>.text_content</code> property (in Python) or the <code>html_text</code> function (in R) to accces the full text of an element, including children:</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-9-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-1" role="tab" aria-controls="tabset-9-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-9-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-9-2" role="tab" aria-controls="tabset-9-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-9-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-9-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb45"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb45-1"><a href="#cb45-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>([e.text_content() <span class="cf">for</span> e <span class="kw">in</span> tree.xpath(<span class="st">"//div[@class='restaurant']"</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['  Pizzeria Roma \n       Here you can get ... ... \n       Read the full ...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb47"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb47-1"><a href="#cb47-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>([e.text_content() <span class="cf">for</span> e <span class="kw">in</span> tree.getroot().cssselect(<span class="st">".restaurant"</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['  Pizzeria Roma \n       Here you can get ... ... \n       Read the full ...</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-9-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-9-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb49"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb49-1"><a href="#cb49-1" aria-hidden="true" tabindex="-1"></a>page <span class="sc">%&gt;%</span> <span class="fu">html_nodes</span>(<span class="at">xpath=</span><span class="st">"//div[@class='restaurant']"</span>) <span class="sc">%&gt;%</span> <span class="fu">html_text</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "  Pizzeria Roma \n       Here you can get ... ... \n       Read the full review here\n    "     
+[2] "  Trattoria Napoli \n       Another restaurant ... ... \n       Read the full review here\n    "
+[3] "  Curry King \n       Some description. \n       Read the full review here\n    "               </code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>page <span class="sc">%&gt;%</span> <span class="fu">html_nodes</span>(<span class="st">".restaurant"</span>) <span class="sc">%&gt;%</span> <span class="fu">html_text</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "  Pizzeria Roma \n       Here you can get ... ... \n       Read the full review here\n    "     
+[2] "  Trattoria Napoli \n       Another restaurant ... ... \n       Read the full review here\n    "
+[3] "  Curry King \n       Some description. \n       Read the full review here\n    "               </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>And you can do the same but using CSS rather than XPATH:</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-10-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-1" role="tab" aria-controls="tabset-10-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-10-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-10-2" role="tab" aria-controls="tabset-10-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-10-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-10-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>([e.text_content() <span class="cf">for</span> e <span class="kw">in</span> tree.getroot().cssselect(<span class="st">".restaurant"</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['  Pizzeria Roma \n       Here you can get ... ... \n       Read the full ...</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-10-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-10-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a>page <span class="sc">%&gt;%</span> <span class="fu">html_nodes</span>(<span class="st">".restaurant"</span>) <span class="sc">%&gt;%</span> <span class="fu">html_text</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "  Pizzeria Roma \n       Here you can get ... ... \n       Read the full review here\n    "     
+[2] "  Trattoria Napoli \n       Another restaurant ... ... \n       Read the full review here\n    "
+[3] "  Curry King \n       Some description. \n       Read the full review here\n    "               </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Pretending to be a specific browser.
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>When <em>lxml</em>, <em>rvest</em>, or your web browser download an HTML page, they send a so-called HTTP request. This request contains the URL, but also some meta-data, such as a so-called user-agent string. This string specifies the name and version of the browser. Some sites may block specific user agents (such as, for instance, the ones that <em>lxml</em> or <em>rvest</em> use); and sometimes, they deliver different content for different browsers. By using a more powerful module for downloading the HTML code (such as <em>requests</em> or <em>httr</em>) before parsing it, you can specify your own user-agent string and thus pretend to be a specific browser. If you do a web search, you will quickly find long lists with popular strings. In the code below, we rewrote <a href="#exm-htmlparse1">Example&nbsp;<span>12.4</span></a> such that a custom user-agent can be specified:</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-11-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-1" role="tab" aria-controls="tabset-11-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-11-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-11-2" role="tab" aria-controls="tabset-11-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-11-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-11-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>headers <span class="op">=</span> {</span>
+<span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"User-Agent"</span>: <span class="st">"Mozilla/5.0 (Windows "</span></span>
+<span id="cb57-3"><a href="#cb57-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"NT 10.0; Win64; x64; rv:60.0) "</span></span>
+<span id="cb57-4"><a href="#cb57-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Gecko/20100101 Firefox/60.0"</span></span>
+<span id="cb57-5"><a href="#cb57-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a>htmlsource <span class="op">=</span> requests.get(</span>
+<span id="cb57-8"><a href="#cb57-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"https://cssbook.net/d/eat/index.html"</span>, headers<span class="op">=</span>headers</span>
+<span id="cb57-9"><a href="#cb57-9" aria-hidden="true" tabindex="-1"></a>).text</span>
+<span id="cb57-10"><a href="#cb57-10" aria-hidden="true" tabindex="-1"></a>tree <span class="op">=</span> fromstring(htmlsource)</span>
+<span id="cb57-11"><a href="#cb57-11" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>([e.text_content().strip() <span class="cf">for</span> e <span class="kw">in</span> tree.xpath(<span class="st">"//h3"</span>)])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['Pizzeria Roma', 'Trattoria Napoli', 'Curry King']</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-11-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-11-2-tab">
+<div class="cell" data-hash="chapter12_cache/html/htmlparse1useragent-r_d99e73b59ab8a4872f8010069833bb25">
+<div class="sourceCode cell-code" id="cb59"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb59-1"><a href="#cb59-1" aria-hidden="true" tabindex="-1"></a>r <span class="ot">=</span> <span class="fu">GET</span>(<span class="st">"https://cssbook.net/d/eat/index.html"</span>,</span>
+<span id="cb59-2"><a href="#cb59-2" aria-hidden="true" tabindex="-1"></a>    <span class="at">user_agent=</span><span class="fu">str_c</span>(<span class="st">"Mozilla/5.0 (Windows NT "</span>,</span>
+<span id="cb59-3"><a href="#cb59-3" aria-hidden="true" tabindex="-1"></a>    <span class="st">"10.0; Win64; x64; rv:60.0) Gecko/20100101 "</span>,</span>
+<span id="cb59-4"><a href="#cb59-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Firefox/60.0"</span>))</span>
+<span id="cb59-5"><a href="#cb59-5" aria-hidden="true" tabindex="-1"></a>page <span class="ot">=</span> <span class="fu">read_html</span>(r)</span>
+<span id="cb59-6"><a href="#cb59-6" aria-hidden="true" tabindex="-1"></a>page <span class="sc">%&gt;%</span> <span class="fu">html_nodes</span>(<span class="at">xpath=</span><span class="st">"//h3"</span>) <span class="sc">%&gt;%</span> <span class="fu">html_text</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] " Pizzeria Roma "    " Trattoria Napoli " " Curry King "      </code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+<section id="sec-crawling" class="level3" data-number="12.2.2">
+<h3 data-number="12.2.2" class="anchored" data-anchor-id="sec-crawling"><span class="header-section-number">12.2.2</span> Crawling Websites</h3>
+<p>Once we have mastered parsing a single HTML page, it is time to scale up. Only rarely are we interested in parsing a single page. In most cases, we want to use an HTML page as a starting point, parse it, follow a link to some other interesting page, parse it as well, and so on. There are some dedicated frameworks for this such as <em>scrapy</em>, but in our experience, it may be more of a burden to learn that framework than to just implement your crawler yourself.</p>
+<p>Staying with the example of a restaurant review website, we might be interested in retrieving all restaurants from a specific city, and for all of these restaurants, all available reviews.</p>
+<p>Our approach, thus, could look as follows:</p>
+<ul>
+<li>Retrieve the overview page.
+<ul>
+<li>Parse the names of the restaurants and the corresponding links.</li>
+<li>Loop over all the links, retrieve the corresponding pages.</li>
+<li>On each of these pages, parse the interesting content (i.e., the reviews, ratings, and so on).</li>
+</ul></li>
+</ul>
+<p>So, what if there are multiple overview pages (or multiple pages with reviews)? Basically, there are two possibilities: the first possibility is to look for the link to the next page, parse it, download the next page, and so on. The second possibility exploits the fact that often, URLs are very systematic: for instance, the first page of restaurants might have a URL such as <a href="http://myreviewsite.com/amsterdam/restaurants.html?page=1">myreviewsite.com/amsterdam/restaurants.html?page=1</a>. If this is the case, we can simply construct a list with all possible URLs (<a href="#exm-createurls">Example&nbsp;<span>12.6</span></a>)</p>
+<div class="callout-note callout callout-style-simple no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<div id="exm-createurls" class="theorem example">
+<p><span class="theorem-title"><strong>Example 12.6 </strong></span>Generating a list of URLs that follow the same pattern.</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-12-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-12-1" role="tab" aria-controls="tabset-12-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-12-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-12-2" role="tab" aria-controls="tabset-12-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-12-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-12-1-tab">
+<div class="cell" data-hash="chapter12_cache/html/createurls-python_2757e5d8933632f661c343bde9aeec65">
+<div class="sourceCode cell-code" id="cb61"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb61-1"><a href="#cb61-1" aria-hidden="true" tabindex="-1"></a>baseurl <span class="op">=</span> <span class="st">"https://reviews.com/?page="</span></span>
+<span id="cb61-2"><a href="#cb61-2" aria-hidden="true" tabindex="-1"></a>tenpages <span class="op">=</span> [<span class="ss">f"</span><span class="sc">{</span>baseurl<span class="sc">}{</span>i<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">"</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">10</span>)]</span>
+<span id="cb61-3"><a href="#cb61-3" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(tenpages)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['https://reviews.com/?page=1', 'https://reviews.com/?page=2', 'https://rev...</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-12-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-12-2-tab">
+<div class="cell" data-hash="chapter12_cache/html/createurls-r_66c43bd0fde8c16af510996177702b9b">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a>baseurl<span class="ot">=</span><span class="st">"https://reviews.com/?page="</span></span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>tenpages<span class="ot">=</span><span class="fu">glue</span>(<span class="st">"{baseurl}{1:10}"</span>)</span>
+<span id="cb63-3"><a href="#cb63-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(tenpages)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>https://reviews.com/?page=1
+https://reviews.com/?page=2
+https://reviews.com/?page=3
+https://reviews.com/?page=4
+https://reviews.com/?page=5
+https://reviews.com/?page=6
+https://reviews.com/?page=7
+https://reviews.com/?page=8
+https://reviews.com/?page=9
+https://reviews.com/?page=10</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Afterwards, we would just loop over this list and retrieve all the pages (a bit like how we approached <a href="#exm-googleapi3">Example&nbsp;<span>12.3</span></a> in <a href="#sec-apis"><span>Section&nbsp;12.1</span></a>).</p>
+<p>However, often, things are not as straightforward, and we need to find the correct links on a page that we have been parsing – that’s why we <em>crawl</em> through the website.</p>
+<p>Writing a good crawler can take some time, and they will look very differently for different pages. The best advice is to build them up step-by-step. Carefully inspect the website you are interested in. Take a sheet of paper, draw its structure, and try to find out which pages you need to parse, and how you can get from one page to the next. Also think about how the data that you want to extract should be organized.</p>
+<p>We will illustrate this process using our mock-up review website <a href="https://cssbook.net/d/restaurants/">cssbook.net/d/restaurants/</a>. First, have a look at the site and try to understand its structure.</p>
+<p>You will see that it has an overview page, <code>index.html</code>, with the names of all restaurants and, per restaurant, a link to a page with reviews. Click on these links, and note your observations, such as: - the pages have different numbers of reviews; - each review consists of an author name, a review text, and a rating; - some, but not all, pages have a link saying “Get older reviews” - …</p>
+<p>If you combine what you just learned about extracting text and links from HTML pages with your knowledge about control structures like loops and conditional statements (Section <a href="chapter03.html#sec-controlstructures"><span>3.2</span></a>), you can now write your own crawler.</p>
+<p>Writing a scraper is a craft, and there are several ways of achieving your goal. You probably want to develop your scraper in steps: first write a function to parse the overview page, then a function to parse the review pages, then try to combine all elements into one script. Before you read on, try to write such a scraper.</p>
+<p>To show you one possible solution, we implemented a scraper in Python that crawls and parses all reviews for all restaurants (Example <a href="#exm-crawling"><span>12.7</span></a>), which we describe in detail below.</p>
+<div class="callout-note callout callout-style-simple no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<div id="exm-crawling" class="theorem example">
+<p><span class="theorem-title"><strong>Example 12.7 </strong></span>Crawling a website in Python</p>
+<div class="cell" data-hash="chapter12_cache/html/crawling-python_1f31f0165eb539bd4d06e56b05208b68">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a>BASEURL <span class="op">=</span> <span class="st">"https://cssbook.net/d/eat/"</span></span>
+<span id="cb65-2"><a href="#cb65-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-3"><a href="#cb65-3" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_restaurants(url):</span>
+<span id="cb65-4"><a href="#cb65-4" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""takes the URL of an overview page as input</span></span>
+<span id="cb65-5"><a href="#cb65-5" aria-hidden="true" tabindex="-1"></a><span class="co">    returns a list of (name, link) tuples"""</span></span>
+<span id="cb65-6"><a href="#cb65-6" aria-hidden="true" tabindex="-1"></a>    tree <span class="op">=</span> parse(urlopen(url))</span>
+<span id="cb65-7"><a href="#cb65-7" aria-hidden="true" tabindex="-1"></a>    names <span class="op">=</span> [</span>
+<span id="cb65-8"><a href="#cb65-8" aria-hidden="true" tabindex="-1"></a>        e.text.strip() <span class="cf">for</span> e <span class="kw">in</span> tree.xpath(<span class="st">"//div[@class='restaurant']/h3"</span>)</span>
+<span id="cb65-9"><a href="#cb65-9" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb65-10"><a href="#cb65-10" aria-hidden="true" tabindex="-1"></a>    links <span class="op">=</span> [</span>
+<span id="cb65-11"><a href="#cb65-11" aria-hidden="true" tabindex="-1"></a>        e.attrib[<span class="st">"href"</span>] <span class="cf">for</span> e <span class="kw">in</span> tree.xpath(<span class="st">"//div[@class='restaurant']//a"</span>)</span>
+<span id="cb65-12"><a href="#cb65-12" aria-hidden="true" tabindex="-1"></a>    ]</span>
+<span id="cb65-13"><a href="#cb65-13" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> <span class="bu">list</span>(<span class="bu">zip</span>(names, links))</span>
+<span id="cb65-14"><a href="#cb65-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-15"><a href="#cb65-15" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> get_reviews(url):</span>
+<span id="cb65-16"><a href="#cb65-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">"""yields reviews on the specified page"""</span></span>
+<span id="cb65-17"><a href="#cb65-17" aria-hidden="true" tabindex="-1"></a>    <span class="cf">while</span> <span class="va">True</span>:</span>
+<span id="cb65-18"><a href="#cb65-18" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Downloading </span><span class="sc">{</span>url<span class="sc">}</span><span class="ss">..."</span>)</span>
+<span id="cb65-19"><a href="#cb65-19" aria-hidden="true" tabindex="-1"></a>        tree <span class="op">=</span> parse(urlopen(url))</span>
+<span id="cb65-20"><a href="#cb65-20" aria-hidden="true" tabindex="-1"></a>        names <span class="op">=</span> [</span>
+<span id="cb65-21"><a href="#cb65-21" aria-hidden="true" tabindex="-1"></a>            e.text.strip() <span class="cf">for</span> e <span class="kw">in</span> tree.xpath(<span class="st">"//div[@class='review']/h3"</span>)</span>
+<span id="cb65-22"><a href="#cb65-22" aria-hidden="true" tabindex="-1"></a>        ]</span>
+<span id="cb65-23"><a href="#cb65-23" aria-hidden="true" tabindex="-1"></a>        texts <span class="op">=</span> [e.text.strip() <span class="cf">for</span> e <span class="kw">in</span> tree.xpath(<span class="st">"//div[@class='review']/p"</span>)]</span>
+<span id="cb65-24"><a href="#cb65-24" aria-hidden="true" tabindex="-1"></a>        ratings <span class="op">=</span> [e.text.strip() <span class="cf">for</span> e <span class="kw">in</span> tree.xpath(<span class="st">"//div[@class='rating']"</span>)]</span>
+<span id="cb65-25"><a href="#cb65-25" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> u, txt, rating <span class="kw">in</span> <span class="bu">zip</span>(names, texts, ratings):</span>
+<span id="cb65-26"><a href="#cb65-26" aria-hidden="true" tabindex="-1"></a>            review <span class="op">=</span> {}</span>
+<span id="cb65-27"><a href="#cb65-27" aria-hidden="true" tabindex="-1"></a>            review[<span class="st">"username"</span>] <span class="op">=</span> u.replace(<span class="st">"wrote:"</span>, <span class="st">""</span>)</span>
+<span id="cb65-28"><a href="#cb65-28" aria-hidden="true" tabindex="-1"></a>            review[<span class="st">"reviewtext"</span>] <span class="op">=</span> txt</span>
+<span id="cb65-29"><a href="#cb65-29" aria-hidden="true" tabindex="-1"></a>            review[<span class="st">"rating"</span>] <span class="op">=</span> rating</span>
+<span id="cb65-30"><a href="#cb65-30" aria-hidden="true" tabindex="-1"></a>            <span class="cf">yield</span> review</span>
+<span id="cb65-31"><a href="#cb65-31" aria-hidden="true" tabindex="-1"></a>        bb <span class="op">=</span> tree.xpath(<span class="st">"//span[@class='backbutton']/a"</span>)</span>
+<span id="cb65-32"><a href="#cb65-32" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> bb:</span>
+<span id="cb65-33"><a href="#cb65-33" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="st">"Processing next page"</span>)</span>
+<span id="cb65-34"><a href="#cb65-34" aria-hidden="true" tabindex="-1"></a>            url <span class="op">=</span> BASEURL <span class="op">+</span> bb[<span class="dv">0</span>].attrib[<span class="st">"href"</span>]</span>
+<span id="cb65-35"><a href="#cb65-35" aria-hidden="true" tabindex="-1"></a>        <span class="cf">else</span>:</span>
+<span id="cb65-36"><a href="#cb65-36" aria-hidden="true" tabindex="-1"></a>            <span class="bu">print</span>(<span class="st">"No more pages found."</span>)</span>
+<span id="cb65-37"><a href="#cb65-37" aria-hidden="true" tabindex="-1"></a>            <span class="cf">break</span></span>
+<span id="cb65-38"><a href="#cb65-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb65-39"><a href="#cb65-39" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Retrieving all restaurants..."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Retrieving all restaurants...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb67"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a>links <span class="op">=</span> get_restaurants(BASEURL <span class="op">+</span> <span class="st">"index.html"</span>)</span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(links)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[('Pizzeria Roma', 'review0001.html'), ('Trattoria Napoli', 'review0002.htm...</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb69"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb69-1"><a href="#cb69-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"reviews.json"</span>, mode<span class="op">=</span><span class="st">"w"</span>) <span class="im">as</span> f:</span>
+<span id="cb69-2"><a href="#cb69-2" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> restaurant, link <span class="kw">in</span> links:</span>
+<span id="cb69-3"><a href="#cb69-3" aria-hidden="true" tabindex="-1"></a>        <span class="bu">print</span>(<span class="ss">f"Processing </span><span class="sc">{</span>restaurant<span class="sc">}</span><span class="ss">..."</span>)</span>
+<span id="cb69-4"><a href="#cb69-4" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> r <span class="kw">in</span> get_reviews(BASEURL <span class="op">+</span> link):</span>
+<span id="cb69-5"><a href="#cb69-5" aria-hidden="true" tabindex="-1"></a>            r[<span class="st">"restaurant"</span>] <span class="op">=</span> restaurant</span>
+<span id="cb69-6"><a href="#cb69-6" aria-hidden="true" tabindex="-1"></a>            f.write(json.dumps(r))</span>
+<span id="cb69-7"><a href="#cb69-7" aria-hidden="true" tabindex="-1"></a>            f.write(<span class="st">"</span><span class="ch">\n</span><span class="st">"</span>)</span>
+<span id="cb69-8"><a href="#cb69-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb69-9"><a href="#cb69-9" aria-hidden="true" tabindex="-1"></a><span class="co"># You can process the results with pandas</span></span>
+<span id="cb69-10"><a href="#cb69-10" aria-hidden="true" tabindex="-1"></a><span class="co"># (using lines=True since it"s one json per line)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Processing Pizzeria Roma...
+Downloading https://cssbook.net/d/eat/review0001.html...
+177
+1
+120
+1
+No more pages found.
+Processing Trattoria Napoli...
+Downloading https://cssbook.net/d/eat/review0002.html...
+140
+1
+118
+1
+No more pages found.
+Processing Curry King...
+Downloading https://cssbook.net/d/eat/review0003.html...
+96
+1
+98
+1
+122
+1
+113
+1
+Processing next page
+Downloading https://cssbook.net/d/eat/review0003-1.html...
+120
+1
+123
+1
+102
+1
+105
+1
+Processing next page
+Downloading https://cssbook.net/d/eat/review0003-2.html...
+130
+1
+118
+1
+No more pages found.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb71"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_json(<span class="st">"reviews.json"</span>, lines<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>          username  ...        restaurant
+0     gourmet2536   ...     Pizzeria Roma
+1        foodie12   ...     Pizzeria Roma
+2    mrsdiningout   ...  Trattoria Napoli
+3        foodie12   ...  Trattoria Napoli
+4           smith   ...        Curry King
+5        foodie12   ...        Curry King
+6      dontlikeit   ...        Curry King
+7        otherguy   ...        Curry King
+8           tasty   ...        Curry King
+9            anna   ...        Curry King
+10           hans   ...        Curry King
+11        bee1983   ...        Curry King
+12         rhebjf   ...        Curry King
+13  foodcritic555   ...        Curry King
+
+[14 rows x 4 columns]</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>First, we need to get a list of all restaurants and the links to their reviews. That’s what is done in the function <em>get_restaurants</em>. This is actually the first thing we do (see line 32).</p>
+<p>We now want to loop over these links and retrieve the reviews. We decided to use a <em>generator</em> (Section <a href="chapter03.html#sec-controlstructures"><span>3.2</span></a>): instead of writing a function that collects <em>all</em> reviews in a list first, we let the function yield each review immediately – and then append that review to a file. This has a big advantage: if our scraper fails (for instance, due to a time out, a block, or a programming error), then we have already saved the reviews we got so far.</p>
+<p>We loop over the links to the restaurants (line 36) and call the function <em>get_reviews</em> (line 38). Each review it returns (the review is a dict) gets the name of the restaurant as an extra key, and then gets written to a file which contains one JSON-object per line (also known as a jsonlines-file).</p>
+<p>The function <code>get_reviews</code> takes a link to a review page as input and yields reviews. If we knew all pages with reviews already, then we would not need the while loop statement in line 12 and the lines 24–29. However, as we have seen, some review pages contain a link to older reviews. We therefore use a loop that runs forever (that is what <code>while True:</code> does), <em>unless</em> it encounters a <code>break</code> statement (line 29). An inspection of the HTML code shows that these links have a <code>span</code> tag with the attribute <code>class="backbutton"</code>. We therefore check if such a button exists (line 24), and if so, we get its <code>href</code> attribute (i.e., the link itself), overwrite the <code>url</code> variable with it, and then go back to line 16, the beginning of the loop, so that we can download and parse this next URL. This goes on until such a link is no longer found.</p>
+</section>
+<section id="sec-selenium" class="level3" data-number="12.2.3">
+<h3 data-number="12.2.3" class="anchored" data-anchor-id="sec-selenium"><span class="header-section-number">12.2.3</span> Dynamic Web Pages</h3>
+<p>You may have realized that all our scraping efforts until now proceeded in two steps: we retrieved (downloaded) the HTML source of a web page and then parsed it. However, modern websites more and more frequently are dynamic rather than static. For example, after being loaded, they load additional content, or what is displayed changes based on what the user does. Frequently, some JavaScript is run within the user’s browser to do that. However, we do not have a browser here. The HTML code we downloaded may contain some instructions for the browser that some code needs to be run, but in the absence of a browser, our Python or R script cannot do this.</p>
+<p>As a first test to check out whether this is a concern, you can simply check whether the HTML code in your browser is the same as that you would get if you downloaded it with R or Python. After having retrieved the page (<a href="#exm-htmlparse1">Example&nbsp;<span>12.4</span></a>), you simply dump it to a file (<a href="#exm-htmltofile">Example&nbsp;<span>12.8</span></a>) and open this file in your browser to verify that you indeed downloaded what you intended to download (and not, for instance, a login page, a cookie wall, or an error message).</p>
+<div class="callout-note callout callout-style-simple no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<div id="exm-htmltofile" class="theorem example">
+<p><span class="theorem-title"><strong>Example 12.8 </strong></span>Dumping the HTML source to a file</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-13-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-13-1" role="tab" aria-controls="tabset-13-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-13-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-13-2" role="tab" aria-controls="tabset-13-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-13-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-13-1-tab">
+<div class="cell" data-hash="chapter12_cache/html/htmltofile-python_c3a49981c8d8a6b4fe337f28574a5496">
+<div class="sourceCode cell-code" id="cb73"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"test.html"</span>, mode<span class="op">=</span><span class="st">"w"</span>) <span class="im">as</span> fo:</span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a>    fo.write(htmlsource)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-13-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-13-2-tab">
+<div class="cell" data-hash="chapter12_cache/html/htmltofile-r_aad3eac1d96e3f55df9387dedbb12c8a">
+<div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a>fileConn<span class="ot">&lt;-</span><span class="fu">file</span>(<span class="st">"test.html"</span>)</span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a><span class="fu">writeLines</span>(<span class="fu">content</span>(r, <span class="at">as =</span> <span class="st">"text"</span>), fileConn)</span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a><span class="fu">close</span>(fileConn)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>If this test shows that the data you are interested in is indeed not part of the HTML code you can retrieve with R or Python, and use the following checklist to find</p>
+<ul>
+<li>Does using a different user-agent string (see above) solve the issue?</li>
+<li>Is the issue due to some cookie that needs to be accepted or requires you to log in (see below)?</li>
+<li>Is a different page delivered for different browsers, devices, display settings, etc.?</li>
+</ul>
+<p>If all of this does not help, or if you already know for sure that the content you are interested in is dynamically fetched via JavaScript or similar, you can use <em>Selenium</em> to literally start a browser and extract the content you are interested in from there. Selenium has been designed for testing web sites and allows you to automate clicks in a browser window, and also supports CSS selectors and Xpaths to specify parts of the web page.</p>
+<p>Using Selenium may require some additional setup on your computer, which may depend on your operating system and the software versions you are using – check out the usual online sources for guidance if needed. It is possible to use Selenium through R using <em>Rselenium</em>. However, doing so can be quite a hassle and requires, running a separate Selenium server, for instance, using Docker. If you opt to use Selenium for web scraping, your safest bet is probably to follow an online tutorial and/or to dive into the documentation. To give you a first impression of the general working, Example <a href="#exm-selenium"><span>12.9</span></a> shows you how to (at the time of writing of this book) open Firefox, surf to Google, google for Tintin by entering that string and pressing the return key, click on the first link containing that string, and take a screenshot of the result.</p>
+<div class="callout-note callout callout-style-simple no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<div id="exm-selenium" class="theorem example">
+<p><span class="theorem-title"><strong>Example 12.9 </strong></span>Using Selenium to literally open a browser, input text, click on a link, and take a screenshot.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb75"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>driver <span class="op">=</span> webdriver.Firefox()</span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a>driver.implicitly_wait(<span class="dv">10</span>)</span>
+<span id="cb75-3"><a href="#cb75-3" aria-hidden="true" tabindex="-1"></a>driver.get(<span class="st">"https://www.duckduckgo.com"</span>)</span>
+<span id="cb75-4"><a href="#cb75-4" aria-hidden="true" tabindex="-1"></a>element <span class="op">=</span> driver.find_element(<span class="st">"name"</span>, <span class="st">"q"</span>)</span>
+<span id="cb75-5"><a href="#cb75-5" aria-hidden="true" tabindex="-1"></a>element.send_keys(<span class="st">"TinTin"</span>)</span>
+<span id="cb75-6"><a href="#cb75-6" aria-hidden="true" tabindex="-1"></a>element.send_keys(Keys.RETURN)</span>
+<span id="cb75-7"><a href="#cb75-7" aria-hidden="true" tabindex="-1"></a><span class="cf">try</span>:</span>
+<span id="cb75-8"><a href="#cb75-8" aria-hidden="true" tabindex="-1"></a>    driver.find_element(<span class="st">"css selector"</span>, <span class="st">"#links a"</span>).click()</span>
+<span id="cb75-9"><a href="#cb75-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># let"s be cautious and wait 10 seconds</span></span>
+<span id="cb75-10"><a href="#cb75-10" aria-hidden="true" tabindex="-1"></a>    <span class="co"># so that everything is loaded</span></span>
+<span id="cb75-11"><a href="#cb75-11" aria-hidden="true" tabindex="-1"></a>    time.sleep(<span class="dv">10</span>)</span>
+<span id="cb75-12"><a href="#cb75-12" aria-hidden="true" tabindex="-1"></a>    driver.save_screenshot(<span class="st">"screenshotTinTin.png"</span>)</span>
+<span id="cb75-13"><a href="#cb75-13" aria-hidden="true" tabindex="-1"></a><span class="cf">finally</span>:</span>
+<span id="cb75-14"><a href="#cb75-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># whatever happens, close the browser</span></span>
+<span id="cb75-15"><a href="#cb75-15" aria-hidden="true" tabindex="-1"></a>    driver.quit()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Losing your head
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>If you want to run long-lasting scraping processes using Selenium in the background (or on a server without a graphical user interface), you may want to look into what is called a “headless” browser. For instance, Selenium can start Firefox in “headless” mode, which means that it will run without making any connection to a graphical interface. Of course, that also means that you cannot watch Selenium scrape, which may make debugging more difficult. You could opt for developing your scraper first using a normal browser, and then changing it to use a headless browser once everything works.</p>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="sec-authentication" class="level2" data-number="12.3">
+<h2 data-number="12.3" class="anchored" data-anchor-id="sec-authentication"><span class="header-section-number">12.3</span> Authentication, Cookies, and Sessions</h2>
+<section id="sec-authapi" class="level3" data-number="12.3.1">
+<h3 data-number="12.3.1" class="anchored" data-anchor-id="sec-authapi"><span class="header-section-number">12.3.1</span> Authentication and APIs</h3>
+<p>When we introduced APIs in Section <a href="#sec-apis"><span>12.1</span></a>, we used the example of an API where you did not need to authenticate yourself. As we have seen, using such an API is as simple as sending an HTTP request to an endpoint and getting a response (usually, a JSON object) back. And indeed, there are plenty of interesting APIs (think for instance of open government APIs) that work this way.</p>
+<p>While this has obvious advantages for you, it also has some serious downsides from the perspective of the API provider as well as from a security and privacy standpoint. The more confidential the data is, the more likely it is that the API provider needs to know who you are in order to determine which data you are allowed to retrieve; and even if the data are not confidential, authentication may be used to limit the number of requests that an individual can make in a given time frame.</p>
+<p>In its most simple form, you just need to provide a unique key that identifies you as a user. For instance, Example <a href="#exm-textrazor"><span>12.10</span></a> shows how such a key can be passed along as an HTTP header, essentially as additional information next to the URL that you want to retrieve (see also Section <a href="#sec-authweb"><span>12.3.2</span></a>). The example shows a call to an endpoint of a commercial API for natural language processing to inform how many requests we have made today.</p>
+<div class="callout-note callout callout-style-simple no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<div id="exm-textrazor" class="theorem example">
+<p><span class="theorem-title"><strong>Example 12.10 </strong></span>Passing a key as HTTP request header to authenticate at an API endpoint</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-14-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-14-1" role="tab" aria-controls="tabset-14-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-14-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-14-2" role="tab" aria-controls="tabset-14-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-14-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-14-1-tab">
+<div class="cell" data-hash="chapter12_cache/html/textrazor-python_e72445262c469164f002d142c23bb4de">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>requests.get(</span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>    <span class="st">"https://api.textrazor.com/account/"</span>, headers<span class="op">=</span>{<span class="st">"x-textrazor-key"</span>: <span class="st">"SECRET"</span>}</span>
+<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a>).json()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'ok': False, 'time': 0, 'error': 'Your TextRazor API Key was invalid.'}</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-14-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-14-2-tab">
+<div class="cell" data-hash="chapter12_cache/html/textrazor-r_32f8bdf5000a990569fc1acf5666e4ae">
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>r <span class="ot">=</span> <span class="fu">GET</span>(<span class="st">"https://api.textrazor.com/account/"</span>, </span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">add_headers</span>(<span class="st">"x-textrazor-key"</span><span class="ot">=</span><span class="st">"SECRET"</span>))</span>
+<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">content</span>(r, <span class="st">"text"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{"ok":false, "time":0, "error":"Your TextRazor API Key was invalid."}</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>As you see, using an API that requires authentication by passing a key as an HTTP header is hardly more complicated than using APIs that do not require authentication such as outlined in Section <a href="#sec-apis"><span>12.1</span></a>. However, many APIs use more complex protocols for authentication.</p>
+<p>The most popular one is called OAuth, and it is used by many APIs provided by major players such as Google, Facebook, Twitter, GitHub, LinkedIn, etc. Here, you have a client ID and a client secret (sometimes also called consumer key and consumer secret, or API key and API secret) and an access token with associated access token secret. The first pair authenticates you as a user, the second pair authenticates the specific “app” (i.e., your script). Once authenticated, your script can then interact with the API. While it is possible to directly work with OAuth HTTP requests using <em>requests_oauthlib</em> (Python) or <em>httr</em> (R), chances are relatively low that you have to do so, unless you plan on really developing your own app or even your own API: for all popular API’s, so-called wrappers, packages that provide a simpler interface to the API, are available on pypi and CRAN. Still, all of these require to have at least a consumer key and a consumer secret. The access token sometimes is generated via a web interface where you manage your account (e.g., in the case of Twitter), or can be acquired by your script itself, which then will redirect the user to a website in which they are asked to authenticate the app. The nice thing about this is that it only needs to happen once: once your app is authenticated, it can keep making requests.</p>
+</section>
+<section id="sec-authweb" class="level3" data-number="12.3.2">
+<h3 data-number="12.3.2" class="anchored" data-anchor-id="sec-authweb"><span class="header-section-number">12.3.2</span> Authentication and Webpages</h3>
+<p>In this section, we briefly discuss different approaches for dealing with websites where you need to log on, accept something (e.g., a so-called cookie wall), or have to otherwise authenticate yourself. One approach can be the use of a web testing framework like Selenium (see Section <a href="#sec-selenium"><span>12.2.3</span></a>): you let your script literally open a browser and, for instance, fill in your login information.</p>
+<p>However, sometimes that’s not necessary and we can still use simpler and more efficient webscraping without invoking a browser. As we have already seen in Section <a href="#sec-parsehtml"><span>12.2.1</span></a>, when making an HTTP request, we can transmit additional information, such as the so-called user-agent string. In a similar way, we can pass other information, such as cookies.</p>
+<p>In the developer tools of your browser (which we already used to determine XPATHs and CSS selectors), you can look up which cookies a specific website has placed. For instance, you could inspect all cookies <em>before</em> you logged on (or passed a cookie wall) and again inspect them afterwards to determine what has changed. With this kind of reverse-engineering, you can find out what cookies you need to manually set.</p>
+<p>In Example <a href="#exm-cookiewall"><span>12.11</span></a>, we illustrate this for a specific page (at the time of writing of our book). Here, by inspecting the cookies in Firefox, we found out that clicking “Accept” on the cookie wall landing page caused a cookie with the name <code>cpc</code> and the value <code>10</code> to be set. To set those cookies in our scraper, the easiest way is to retrieve that page first and store the cookies sent by the server. In Example <a href="#exm-cookiewall"><span>12.11</span></a>, we therefore start a <em>session</em> and try to download the page. We know that this will only show us the cookie wall – but it will also generate the necessary cookies. We then store these cookies, and add the cookie that we want to be set (<code>cpc=10</code>) to this cookie jar. Now, we have all cookies that we need for future requests. They will stay there for the whole session.</p>
+<p>If we only want to get a single page, we may not need to start a session to remember all the cookies, and we can just directly pass the single cookie we care about to a request instead (Example <a href="#exm-cookiewall2"><span>12.12</span></a>).</p>
+<div class="callout-note callout callout-style-simple no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<div id="exm-cookiewall" class="theorem example">
+<p><span class="theorem-title"><strong>Example 12.11 </strong></span>Explicitly setting a cookie to circumvent a cookie wall</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-15-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-15-1" role="tab" aria-controls="tabset-15-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-15-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-15-2" role="tab" aria-controls="tabset-15-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-15-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-15-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb80"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb80-1"><a href="#cb80-1" aria-hidden="true" tabindex="-1"></a>URL <span class="op">=</span> <span class="st">"https://www.geenstijl.nl/5160019/page"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="cell" data-hash="chapter12_cache/html/cookiewall-python_2fb6bb99ea6956b245c05bef5803106d">
+<div class="sourceCode cell-code" id="cb81"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb81-1"><a href="#cb81-1" aria-hidden="true" tabindex="-1"></a><span class="co"># circumvent cookie wall by setting a specific</span></span>
+<span id="cb81-2"><a href="#cb81-2" aria-hidden="true" tabindex="-1"></a><span class="co"># cookie: the key-value pair (cpc: 10)</span></span>
+<span id="cb81-3"><a href="#cb81-3" aria-hidden="true" tabindex="-1"></a>client <span class="op">=</span> requests.session()</span>
+<span id="cb81-4"><a href="#cb81-4" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> client.get(URL)</span>
+<span id="cb81-5"><a href="#cb81-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-6"><a href="#cb81-6" aria-hidden="true" tabindex="-1"></a>cookies <span class="op">=</span> client.cookies.items()</span>
+<span id="cb81-7"><a href="#cb81-7" aria-hidden="true" tabindex="-1"></a>cookies.append((<span class="st">"cpc"</span>, <span class="st">"10"</span>))</span>
+<span id="cb81-8"><a href="#cb81-8" aria-hidden="true" tabindex="-1"></a>response <span class="op">=</span> client.get(URL, cookies<span class="op">=</span><span class="bu">dict</span>(cookies))</span>
+<span id="cb81-9"><a href="#cb81-9" aria-hidden="true" tabindex="-1"></a><span class="co"># end circumvention</span></span>
+<span id="cb81-10"><a href="#cb81-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb81-11"><a href="#cb81-11" aria-hidden="true" tabindex="-1"></a>tree <span class="op">=</span> fromstring(response.text)</span>
+<span id="cb81-12"><a href="#cb81-12" aria-hidden="true" tabindex="-1"></a>allcomments <span class="op">=</span> [e.text_content().strip() <span class="cf">for</span> e <span class="kw">in</span> tree.cssselect(<span class="st">".cmt-content"</span>)]</span>
+<span id="cb81-13"><a href="#cb81-13" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"There are </span><span class="sc">{</span><span class="bu">len</span>(allcomments)<span class="sc">}</span><span class="ss"> comments."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>There are 318 comments.</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-15-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-15-2-tab">
+<div class="cell" data-hash="chapter12_cache/html/cookiewall-r_356411ff0edf7ab3b7d0cb70e99c8efe">
+<div class="sourceCode cell-code" id="cb83"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb83-1"><a href="#cb83-1" aria-hidden="true" tabindex="-1"></a>URL <span class="ot">=</span> <span class="st">"https://www.geenstijl.nl/5160019/page/"</span></span>
+<span id="cb83-2"><a href="#cb83-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-3"><a href="#cb83-3" aria-hidden="true" tabindex="-1"></a><span class="co"># circumvent cookie wall by setting a specific</span></span>
+<span id="cb83-4"><a href="#cb83-4" aria-hidden="true" tabindex="-1"></a><span class="co"># cookie: the key-value pair (cpc: 10)</span></span>
+<span id="cb83-5"><a href="#cb83-5" aria-hidden="true" tabindex="-1"></a>r <span class="ot">=</span> <span class="fu">GET</span>(URL)</span>
+<span id="cb83-6"><a href="#cb83-6" aria-hidden="true" tabindex="-1"></a>cookies <span class="ot">=</span> <span class="fu">setNames</span>(<span class="fu">cookies</span>(r)<span class="sc">$</span>value, </span>
+<span id="cb83-7"><a href="#cb83-7" aria-hidden="true" tabindex="-1"></a>                   <span class="fu">cookies</span>(r)<span class="sc">$</span>name)</span>
+<span id="cb83-8"><a href="#cb83-8" aria-hidden="true" tabindex="-1"></a>cookies <span class="ot">=</span> <span class="fu">c</span>(cookies, <span class="at">cpc=</span><span class="dv">10</span>)</span>
+<span id="cb83-9"><a href="#cb83-9" aria-hidden="true" tabindex="-1"></a>r <span class="ot">=</span> <span class="fu">GET</span>(URL, <span class="fu">set_cookies</span>(cookies))</span>
+<span id="cb83-10"><a href="#cb83-10" aria-hidden="true" tabindex="-1"></a><span class="co"># end circumvention</span></span>
+<span id="cb83-11"><a href="#cb83-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-12"><a href="#cb83-12" aria-hidden="true" tabindex="-1"></a>allcomments <span class="ot">=</span> r <span class="sc">%&gt;%</span> </span>
+<span id="cb83-13"><a href="#cb83-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_html</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb83-14"><a href="#cb83-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_nodes</span>(<span class="st">".cmt-content"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb83-15"><a href="#cb83-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text</span>()</span>
+<span id="cb83-16"><a href="#cb83-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb83-17"><a href="#cb83-17" aria-hidden="true" tabindex="-1"></a><span class="fu">glue</span>(<span class="st">"There are {length(allcomments)} comments."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>There are 318 comments.</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout-note callout callout-style-simple no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<div id="exm-cookiewall2" class="theorem example">
+<p><span class="theorem-title"><strong>Example 12.12 </strong></span>Shorter version of for single requests</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-16-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-16-1" role="tab" aria-controls="tabset-16-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-16-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-16-2" role="tab" aria-controls="tabset-16-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-16-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-16-1-tab">
+<div class="cell" data-hash="chapter12_cache/html/cookiewall2-python_fe5a21430b761c7f71a22bf821fd9adb">
+<div class="sourceCode cell-code" id="cb85"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb85-1"><a href="#cb85-1" aria-hidden="true" tabindex="-1"></a>r <span class="op">=</span> requests.get(URL, cookies<span class="op">=</span>{<span class="st">"cpc"</span>: <span class="st">"10"</span>})</span>
+<span id="cb85-2"><a href="#cb85-2" aria-hidden="true" tabindex="-1"></a>tree <span class="op">=</span> fromstring(r.text)</span>
+<span id="cb85-3"><a href="#cb85-3" aria-hidden="true" tabindex="-1"></a>allcomments <span class="op">=</span> [e.text_content().strip() <span class="cf">for</span> e <span class="kw">in</span> tree.cssselect(<span class="st">".cmt-content"</span>)]</span>
+<span id="cb85-4"><a href="#cb85-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"There are </span><span class="sc">{</span><span class="bu">len</span>(allcomments)<span class="sc">}</span><span class="ss"> comments."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>There are 318 comments.</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-16-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-16-2-tab">
+<div class="cell" data-hash="chapter12_cache/html/cookiewall2-r_9a4035fcb696d1b8a908cbe8f6b98121">
+<div class="sourceCode cell-code" id="cb87"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb87-1"><a href="#cb87-1" aria-hidden="true" tabindex="-1"></a>r <span class="ot">=</span> <span class="fu">GET</span>(URL, <span class="fu">set_cookies</span>(<span class="at">cpc=</span><span class="dv">10</span>))</span>
+<span id="cb87-2"><a href="#cb87-2" aria-hidden="true" tabindex="-1"></a>allcomments <span class="ot">=</span> r <span class="sc">%&gt;%</span> </span>
+<span id="cb87-3"><a href="#cb87-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">read_html</span>() <span class="sc">%&gt;%</span></span>
+<span id="cb87-4"><a href="#cb87-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_nodes</span>(<span class="st">".cmt-content"</span>) <span class="sc">%&gt;%</span> </span>
+<span id="cb87-5"><a href="#cb87-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">html_text</span>()</span>
+<span id="cb87-6"><a href="#cb87-6" aria-hidden="true" tabindex="-1"></a><span class="fu">glue</span>(<span class="st">"There are {length(allcomments)} comments."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>There are 318 comments.</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="sec-ethicallegalpractical" class="level2" data-number="12.4">
+<h2 data-number="12.4" class="anchored" data-anchor-id="sec-ethicallegalpractical"><span class="header-section-number">12.4</span> Ethical, Legal, and Practical Considerations</h2>
+<p>Web scraping is a powerful tool, but it needs to be handled responsibly. Between the white area of sites that explicitly consented to creating a copy of their data (for instance, by using a creative commons license) and the black area of an exact copy of copyrighted material and redistributing it as it is, there is a large gray area where it is less clear what is acceptable and what is not.</p>
+<p>There is a tension between legitimate interests of the operators of web sites and the producers of content on the one hand, and the societal interest of studying online communication on the other hand. Which interest prevails may differ on a case-to-case basis. For instance, when using APIs as described in Section <a href="#sec-apis"><span>12.1</span></a>, in most cases, you have to consent to the terms of service (TOS) of the API provider.</p>
+<p>For example, Twitter’s TOS allow you to redistribute the numerical tweet ids, but not the tweets themselves, and therefore, it is common to share such lists of ids with fellow researchers instead of the “real” Twitter datasets. Of course, this is not optimal from a reproducibility point of view: if another researcher has to retrieve the tweets again based on their ids, then this is not only cumbersome, but most likely also leads to a slightly different dataset, because tweets may have been deleted in the meantime. At the same time, it is a compromise most people can live with.</p>
+<p>Other social media platforms have closed their APIs or tightened the restrictions a lot, making it impossible to study many pressing research questions. Therefore, some have even called researchers to neglect these TOS, because “in some circumstances the benefits to society from breaching the terms of service outweigh the detriments to the platform itself” <span class="citation" data-cites="Bruns2019">(<a href="references.html#ref-Bruns2019" role="doc-biblioref">Bruns 2019, ~1561</a>)</span>. Others acknowledge the problem, but doubt that this is a good solution <span class="citation" data-cites="Puschmann2019">(<a href="references.html#ref-Puschmann2019" role="doc-biblioref">Puschmann 2019</a>)</span>. In general, one needs to distinguish between the act of collecting the data and sharing the data. For instance, in many jurisdictions, there are legal exemptions for collecting data for scientific purposes, but that does not mean that they can be re-distributed as they are <span class="citation" data-cites="VanAtteveldt2019">(<a href="references.html#ref-VanAtteveldt2019" role="doc-biblioref">Van Atteveldt et al. 2019</a>)</span>.</p>
+<p>This chapter can by no means replace the consultation of a legal expert and/or an ethics board, but we would like to offer some strategies to minimize potential problems.</p>
+<p><strong>Be nice.</strong> Of course, you could send hundreds of requests per minute (or second) to a website and try to download everything that they have ever published. However, this causes unnecessary load on their servers (and you would probably get blocked). If, on the other hand, you carefully think about what you really need to download, and include a lot of waiting times (for instance, using <code>sys.sleep</code> (R) or <code>time.sleep</code> (Python) so that your script essentially does the same as could be done by hiring a couple of student assistants to copy-paste the data manually, then problems are much less likely to arise.</p>
+<p><strong>Collaborate.</strong> Another way to minimize traffic and server load is to collaborate more. A concerted effort with multiple researchers may lead to less duplicate data and in the end probably an even better, re-usable dataset.</p>
+<p><strong>Be extra careful with personal data.</strong> Both from an ethical and a legal point of view, the situation changes drastically as soon as personal data are involved. Especially since the General Data Protection Regulation (GDPR) regulations took effect in the European Union, collecting and processing such data requires a lot of additional precaution and is usually subject to explicit consent. It is clearly infeasible to ask every Twitter user for consent to process their tweet and doing so is probably covered by research exceptions, the general advice is to store as little personal data as possible and only what is absolutely needed. Most likely, you need to have a data management plan in place, and should get appropriate advice from your legal department. Therefore, think carefully whether you really need, for instance, the user names of the authors of reviews you are going to scrape, or whether the text alone suffices.</p>
+<p>Once all ethical and legal concerns are sorted out and you have made sure that you have written a scraper in such a way that it does not cause unnecessary traffic and load on the servers from which you are scraping, and after doing some test runs, it is time to think about how to actually run it on a larger scale. You may already have figured that you probably do not want to run your scraper from a Jupyter Notebook that is constantly open in your browser on your personal laptop. Also here, we would like to offer some suggestions.</p>
+<p><strong>Consider using a database.</strong> Imagine the following scenario: your scraper visits hundreds of websites, collects its results in a list or in a data frame, and after hours of running suddenly crashes – maybe because some element that you were sure must exist on each page, exists only on 999 out of 1000 pages, because a connection timed out, or any other error. Your data is lost, you need to start again (not only annoying, but also undesirable from a traffic minimization point of view). A better strategy may be to immediately write the data for each page to a file. But then, you need to handle a potentially huge number of files later on. A much better approach, especially if you plan to run your scraper repeatedly over a long period of time, is to consider the use of a database in which you dump the results immediately after a page has been scraped (see Section <span class="quarto-unresolved-ref">?sec-databases</span>).</p>
+<p><strong>Run your script from the command line.</strong> Store your scraper as a .py or .R script and run it from your terminal (your command line) by typing <code>python myscript.py</code> or <code>R myscript.R</code> rather than using an IDE such as Spyder or R Studio or a Jupyter Notebook. You may want to have your script print a lot of status information (for instance, which page it is currently scraping), so that you can watch what it is doing. If you want to, you can have your computer run this script in regular intervals (e.g., once an hour). On Linux and MacOS, for instance, you can use a so-called <em>cron</em> job to automate this.</p>
+<p><strong>Run your script on a server.</strong> If your scraper runs for longer than a couple of hours, you may not want to run it on your laptop, especially if your Internet connection is not stable. Instead, you may consider using a server. As we will explain in Section <span class="quarto-unresolved-ref">?sec-cloudcomputing</span>, it is quite affordable to set up a Linux VM on a cloud computing platform (and next to commercial services, in some countries and institutions there are free services for academics). You can then use tools like <em>nohup</em> or <em>screen</em> to run your script on the background, even if you are no longer connected to the server (see Section <span class="quarto-unresolved-ref">?sec-cloudcomputing</span>).</p>
+<div class="cell">
+
+</div>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="ref-Bruns2019" class="csl-entry" role="doc-biblioentry">
+Bruns, Axel. 2019. <span>“<span class="nocase">After the ‘APIcalypse’: social media platforms and their fight against critical scholarly research</span>.”</span> <em>Information, Communication <span>&amp;</span> Society</em> 22 (11): 1544–66. <a href="https://doi.org/10.1080/1369118X.2019.1637447">https://doi.org/10.1080/1369118X.2019.1637447</a>.
+</div>
+<div id="ref-Freelon2018" class="csl-entry" role="doc-biblioentry">
+Freelon, Deen. 2018. <span>“<span class="nocase">Computational Research in the Post-API Age</span>.”</span> <em>Political Communication</em> 35 (4): 665–68. <a href="https://doi.org/10.1080/10584609.2018.1477506">https://doi.org/10.1080/10584609.2018.1477506</a>.
+</div>
+<div id="ref-Puschmann2019" class="csl-entry" role="doc-biblioentry">
+Puschmann, Cornelius. 2019. <span>“<span class="nocase">An end to the wild west of social media research: a response to Axel Bruns</span>.”</span> <em>Information, Communication <span>&amp;</span> Society</em> 22 (11): 1582–89. <a href="https://doi.org/10.1080/1369118X.2019.1646300">https://doi.org/10.1080/1369118X.2019.1646300</a>.
+</div>
+<div id="ref-VanAtteveldt2019" class="csl-entry" role="doc-biblioentry">
+Van Atteveldt, Wouter, Joanna Strycharz, Damian Trilling, and Kasper Welbers. 2019. <span>“<span class="nocase">Toward Open Computational Communication Science : A Practical Road Map for Reusable Data and Code University of Amsterdam , the Netherlands</span>.”</span> <em>International Journal of Communication</em> 13: 3935–54.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="./chapter11.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Automatic analysis of text</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="./chapter13.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Network Data</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>

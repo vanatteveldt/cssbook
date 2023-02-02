@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.313">
+<meta name="generator" content="quarto-1.2.335">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -112,7 +112,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./references.html" rel="next">
+<link href="./chapter11.html" rel="next">
 <link href="./chapter09.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -229,6 +229,21 @@ div.csl-indent {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./chapter10.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Text as data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter11.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Automatic analysis of text</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter12.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Scraping online data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter13.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Network Data</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -751,7 +766,7 @@ docs                   the first investment defrauded
 </div>
 <p>In Example <a href="#exm-freq"><span>10.5</span></a> we show how you can look at the content of the DTM. First, we show the overall term and document frequencies of each word, where we showcase words at different frequencies. Unsurprisingly, the word <em>the</em> tops both charts, but further down there are minor differences. In all cases, the highly frequent words are mostly functional words like <em>them</em> or <em>first</em>. More informative words such as <em>investments</em> are by their nature used much less often. Such term statistics are very useful to check for noise in the data and get a feeling of the kind of language that is used. Second, we take a look at the frequency of these same words in four speeches from Truman to Obama. All use words like <em>the</em> and <em>first</em>, but none of them talk about <em>defrauded</em> – which is not surprising, since it was only used once in all the speeches in the corpus.</p>
 <p>However, the words that ranked around 1000 in the top frequency are still used in less than half of the documents. Since there are about 17000 even less frequent words in the corpus, you can imagine that most of the document-term matrix consists of zeros. The output also noted this <em>sparsity</em> in the first output above. In fact, R reports that the dtm is <span class="math inline">\(91\%\)</span> sparse, meaning 91% percent of all entries are zero. Python reports a similar figure, namely that there are only just under 150000 non-zero entries out of a possible <span class="math inline">\(8\times22219\)</span>, which boils down to a 92% sparse matrix.</p>
-<p>Note that to display the matrix we turned it from a <em>sparse matrix</em> representation into a <em>dense matrix</em>. Briefly put, in a dense matrix, all entries are stored as a long list of numbers, including all the zeros. In a sparse matrix, only the non-zero entries and their location are stored. This conversion (using the function <code>as.matrix</code> and the method <code>todense</code> respectively), however, was only performed after selecting a small subset of the data. In general, it is very inefficient to store and work with the matrix in a <code>dense</code> format. For a reasonably large corpus with tens of thousands of documents and different words, this can quickly run to billions of numbers, which can cause problems even on modern computers and is, moreover, very inefficient. Because sparsity values are often higher than 99%, using a sparse matrix representation can easily reduce storage requirements by a hundred times, and in the process speed up calculations by reducing the number of entries that need to be inspected. Both <em>quanteda</em> and <code>scikit-learn</code>store DTMs as sparse matrices by default, and most analysis tools are able to deal with sparse matrices very efficiently (see, however, Section <span class="quarto-unresolved-ref">?sec-workflow</span> for problems with machine learning on sparse matrices in R).</p>
+<p>Note that to display the matrix we turned it from a <em>sparse matrix</em> representation into a <em>dense matrix</em>. Briefly put, in a dense matrix, all entries are stored as a long list of numbers, including all the zeros. In a sparse matrix, only the non-zero entries and their location are stored. This conversion (using the function <code>as.matrix</code> and the method <code>todense</code> respectively), however, was only performed after selecting a small subset of the data. In general, it is very inefficient to store and work with the matrix in a <code>dense</code> format. For a reasonably large corpus with tens of thousands of documents and different words, this can quickly run to billions of numbers, which can cause problems even on modern computers and is, moreover, very inefficient. Because sparsity values are often higher than 99%, using a sparse matrix representation can easily reduce storage requirements by a hundred times, and in the process speed up calculations by reducing the number of entries that need to be inspected. Both <em>quanteda</em> and <code>scikit-learn</code>store DTMs as sparse matrices by default, and most analysis tools are able to deal with sparse matrices very efficiently (see, however, Section <a href="chapter11.html#sec-workflow"><span>11.4.1</span></a> for problems with machine learning on sparse matrices in R).</p>
 <p>A final note on the difference between Python and R in this example. The code in R is much simpler and produces nicer results since it also shows the words and the speech names. In Python, we wrote our own helper function to create the frequency statistics which is built into the R <em>quanteda</em> package. These differences between Python and R reflect a pattern that is true in many (but not all) cases: in Python libraries such as <code>numpy</code>and <code>scikit-learn</code>are setup to maximize performance, while in R a library such as <em>quanteda</em> or <em>tidyverse</em> is more geared towards ease of use. For that reason, the DTM in Python does not “remember” the actual words, it uses the index of each word, so it consumes less memory if you don’t need to use the actual words in e.g.&nbsp;a machine learning setup. R, on the other hand, stores the words and also the document IDs and metadata in the DFM object. This is easier to use if you need to look up a word or document, but it consumes (slightly) more memory.</p>
 <div class="callout-note callout callout-style-default no-icon callout-captioned">
 <div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
@@ -900,7 +915,7 @@ x5775731054        Donald Trump Partners with TV1 on New Reality ...</code></pre
 </div>
 </div>
 </div>
-<p>Please note that although tweets are perhaps overused as a source of scientific information, we use them here because they nicely exemplify issues around non-textual elements such as hyperlinks. See Chapter <span class="quarto-unresolved-ref">?sec-chap-scraping</span> for information on how to use the Twitter and other APIs to collect your own data.</p>
+<p>Please note that although tweets are perhaps overused as a source of scientific information, we use them here because they nicely exemplify issues around non-textual elements such as hyperlinks. See Chapter <a href="chapter12.html"><span>12</span></a> for information on how to use the Twitter and other APIs to collect your own data.</p>
 <section id="sec-stopwords" class="level3" data-number="10.2.1">
 <h3 data-number="10.2.1" class="anchored" data-anchor-id="sec-stopwords"><span class="header-section-number">10.2.1</span> Removing stopwords</h3>
 <p>A first step in cleaning a DTM is often <em>stop word removal</em>. Words such as “a” and “the” are often called stop words, i.e.&nbsp;words that do not tell us much about the content. Both <em>quanteda</em> and <code>scikit-learn</code>include built-in lists of stop words, making it very easy to remove the most common words. Example <a href="#exm-stopwords"><span>10.8</span></a> shows the result of specifying “English” stop words to be removed for both packages.</p>
@@ -1429,7 +1444,7 @@ government programs         23       17</code></pre>
 <section id="sec-collocations" class="level3" data-number="10.3.2">
 <h3 data-number="10.3.2" class="anchored" data-anchor-id="sec-collocations"><span class="header-section-number">10.3.2</span> Collocations</h3>
 <p>A special case of n-grams are collocations. In the strict corpus linguistic sense of the word, collocations are pairs of words that occur more frequently than expected based on their underlying occurrence. For example, the phrase <em>crystal clear</em> presumably occurs much more often than would be expected by chance given how often <em>crystal</em> and <em>clear</em> occur separately. Collocations are important for text analysis since they often have a specific meaning, for example because they refer to names such as <em>New York</em> or disambiguate a term like <em>sound</em> in <em>sound asleep</em>, a <em>sound proposal</em>, or <em>loud sound</em>.</p>
-<p>Example <a href="#exm-colloc"><span>10.16</span></a> shows how to identify the most “surprising” collocations using R and Python. For Python, we use the <em>gensim</em> package which we will also use for topic modeling in Section <span class="quarto-unresolved-ref">?sec-unsupervised</span>. This package has a <code>Phrases</code> class which can identify the bigrams in a list of tokens. In R, we use the <code>textstat_collocations</code> function from <em>quanteda</em>. These packages each use a different implementation: <em>gensim</em> uses pointwise mutual information, i.e.&nbsp;how much information about finding the second word does seeing the first word give you? Quanteda estimates an interaction parameter in a loglinear model. Nonetheless, both methods give very similar results, with Saddam Hussein, the Iron Curtain, Al Qaida, and red tape topping the list for each.</p>
+<p>Example <a href="#exm-colloc"><span>10.16</span></a> shows how to identify the most “surprising” collocations using R and Python. For Python, we use the <em>gensim</em> package which we will also use for topic modeling in Section <a href="chapter11.html#sec-unsupervised"><span>11.5</span></a>. This package has a <code>Phrases</code> class which can identify the bigrams in a list of tokens. In R, we use the <code>textstat_collocations</code> function from <em>quanteda</em>. These packages each use a different implementation: <em>gensim</em> uses pointwise mutual information, i.e.&nbsp;how much information about finding the second word does seeing the first word give you? Quanteda estimates an interaction parameter in a loglinear model. Nonetheless, both methods give very similar results, with Saddam Hussein, the Iron Curtain, Al Qaida, and red tape topping the list for each.</p>
 <div class="callout-note callout callout-style-simple no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -1550,7 +1565,7 @@ saddam_hussein         29        5</code></pre>
 <span id="cb119-4"><a href="#cb119-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> os.path.exists(glove_fn):</span>
 <span id="cb119-5"><a href="#cb119-5" aria-hidden="true" tabindex="-1"></a>    urllib.request.urlretrieve(url, glove_fn)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>('glove.6B.50d.10k.w2v.txt', &lt;http.client.HTTPMessage object at 0x7ff1d380c820&gt;)</code></pre>
+<pre><code>('glove.6B.50d.10k.w2v.txt', &lt;http.client.HTTPMessage object at 0x7f5a27d26740&gt;)</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -1754,7 +1769,7 @@ Man is to football as woman is to: soccer</code></pre>
 <div class="callout-body-container">
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>('english-ewt-ud-2.4-190531.udpipe', &lt;http.client.HTTPMessage object at 0x7ff1d3adc550&gt;)</code></pre>
+<pre><code>('english-ewt-ud-2.4-190531.udpipe', &lt;http.client.HTTPMessage object at 0x7f5a27f11810&gt;)</code></pre>
 </div>
 </div>
 <div id="exm-udpipe" class="theorem example">
@@ -2119,8 +2134,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       </a>          
   </div>
   <div class="nav-page nav-page-next">
-      <a href="./references.html" class="pagination-link">
-        <span class="nav-page-text">References</span> <i class="bi bi-arrow-right-short"></i>
+      <a href="./chapter11.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Automatic analysis of text</span></span> <i class="bi bi-arrow-right-short"></i>
       </a>
   </div>
 </nav>

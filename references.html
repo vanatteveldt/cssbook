@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.313">
+<meta name="generator" content="quarto-1.2.335">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -49,7 +49,7 @@ div.csl-indent {
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./chapter10.html" rel="prev">
+<link href="./chapter13.html" rel="prev">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -168,6 +168,21 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./chapter11.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Automatic analysis of text</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter12.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Scraping online data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter13.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Network Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link active">References</a>
   </div>
 </li>
@@ -205,6 +220,34 @@ Stefan Müller, and Akitaka Matsuo. 2018. <span>“Quanteda: An r Package
 for the Quantitative Analysis of Textual Data.”</span> <em>Journal of
 Open Source Software</em> 3 (30): 774. <a href="https://doi.org/10.21105/joss.00774">https://doi.org/10.21105/joss.00774</a>.
 </div>
+<div id="ref-dynamiclda" class="csl-entry" role="doc-biblioentry">
+Blei, David M, and John D Lafferty. 2006. <span>“Dynamic Topic
+Models.”</span> In <em>Proceedings of the 23rd International Conference
+on Machine Learning</em>, 113–20.
+</div>
+<div id="ref-blei03" class="csl-entry" role="doc-biblioentry">
+Blei, David M, Andrew Y Ng, and Michael I Jordan. 2003. <span>“Latent
+Dirichlet Allocation.”</span> <em>Journal of Machine Learning
+Research</em> 3 (Jan): 993–1022.
+</div>
+<div id="ref-correlatedlda" class="csl-entry" role="doc-biblioentry">
+Blei, David, and John Lafferty. 2006. <span>“Correlated Topic
+Models.”</span> <em>Advances in Neural Information Processing
+Systems</em> 18: 147.
+</div>
+<div id="ref-blondel2008fast" class="csl-entry" role="doc-biblioentry">
+Blondel, Vincent D, Jean-Loup Guillaume, Renaud Lambiotte, and Etienne
+Lefebvre. 2008. <span>“Fast Unfolding of Communities in Large
+Networks.”</span> <em>Journal of Statistical Mechanics: Theory and
+Experiment</em> 2008 (10): P10008.
+</div>
+<div id="ref-Boukes2019" class="csl-entry" role="doc-biblioentry">
+Boukes, Mark, Bob van de Velde, Theo Araujo, and Rens Vliegenthart.
+2019. <span>“<span class="nocase">What’s the Tone? Easy Doesn’t Do It:
+Analyzing Performance and Agreement Between Off-the-Shelf Sentiment
+Analysis Tools</span>.”</span> <em>Communication Methods and
+Measures</em> 00 (00): 1–22. <a href="https://doi.org/10.1080/19312458.2019.1671966">https://doi.org/10.1080/19312458.2019.1671966</a>.
+</div>
 <div id="ref-Boumans2016" class="csl-entry" role="doc-biblioentry">
 Boumans, Jelle W., and Damian Trilling. 2016. <span>“<span class="nocase">Taking stock of the toolkit: An overview of relevant
 autmated content analysis approaches and techniques for digital
@@ -215,6 +258,12 @@ journalism scholars</span>.”</span> <em>Digital Journalism</em> 4 (1):
 Breiman, Leo. 2001. <span>“<span class="nocase">Statistical modeling:
 The two cultures</span>.”</span> <em>Statistical Science</em> 16 (3):
 199–215. <a href="https://doi.org/10.1214/ss/1009213726">https://doi.org/10.1214/ss/1009213726</a>.
+</div>
+<div id="ref-Bruns2019" class="csl-entry" role="doc-biblioentry">
+Bruns, Axel. 2019. <span>“<span class="nocase">After the ‘APIcalypse’:
+social media platforms and their fight against critical scholarly
+research</span>.”</span> <em>Information, Communication
+<span>&amp;</span> Society</em> 22 (11): 1544–66. <a href="https://doi.org/10.1080/1369118X.2019.1637447">https://doi.org/10.1080/1369118X.2019.1637447</a>.
 </div>
 <div id="ref-Bryman2012" class="csl-entry" role="doc-biblioentry">
 Bryman, Alan. 2012. <em>Social Research Methods</em>. 4th edition. New
@@ -230,20 +279,80 @@ Methods and Measures</em> 8 (3): 190–206. <a href="https://doi.org/10.1080/193
 <div id="ref-cairo2019charts" class="csl-entry" role="doc-biblioentry">
 Cairo, Alberto. 2019. <em>How Charts Lie</em>. WW Norton &amp; Company.
 </div>
+<div id="ref-cazals2008note" class="csl-entry" role="doc-biblioentry">
+Cazals, Frédéric, and Chinmay Karande. 2008. <span>“A Note on the
+Problem of Reporting Maximal Cliques.”</span> <em>Theoretical Computer
+Science</em> 407 (1-3): 564–68.
+</div>
+<div id="ref-Chan2021" class="csl-entry" role="doc-biblioentry">
+Chan, Chung-hong, Joseph Bajjalieh, Loretta Auvil, Hartmut Wessler,
+Scott Althaus, Kasper Welbers, Wouter van Atteveldt, and Marc Jungblut.
+in press. <span>“Four Best Practices for Measuring News Sentiment Using
+<span>‘Off-the-Shelf’</span> Dictionaries: A Large-Scale p-Hacking
+Experiment.”</span> <em>Computational Communication Research</em>, in
+press.
+</div>
+<div id="ref-chang09" class="csl-entry" role="doc-biblioentry">
+Chang, Jonathan, Sean Gerrish, Chong Wang, Jordan L Boyd-Graber, and
+David M Blei. 2009. <span>“Reading Tea Leaves: How Humans Interpret
+Topic Models.”</span> In <em>Advances in Neural Information Processing
+Systems</em>, 288–96.
+</div>
 <div id="ref-Chen2017" class="csl-entry" role="doc-biblioentry">
 Chen, Lizi. 2017. <span>“<span>News-Processed-Dataset</span>.”</span> <a href="https://doi.org/10.6084/m9.figshare.5296357.v1">https://doi.org/10.6084/m9.figshare.5296357.v1</a>.
+</div>
+<div id="ref-christakis2009connected" class="csl-entry" role="doc-biblioentry">
+Christakis, Nicholas A, and James H Fowler. 2009. <em>Connected: The
+Surprising Power of Our Social Networks and How They Shape Our
+Lives</em>. Little, Brown Spark.
 </div>
 <div id="ref-cioffi-revilla2014" class="csl-entry" role="doc-biblioentry">
 Cioffi-Revilla, Claudio. 2014. <em>Introduction to Computational Social
 Science: Principles and Applications</em>. London, UK: Springer.
 </div>
+<div id="ref-clauset2004finding" class="csl-entry" role="doc-biblioentry">
+Clauset, Aaron, Mark EJ Newman, and Cristopher Moore. 2004.
+<span>“Finding Community Structure in Very Large Networks.”</span>
+<em>Physical Review E</em> 70 (6): 066111.
+</div>
 <div id="ref-crawley2012r" class="csl-entry" role="doc-biblioentry">
 Crawley, Michael J. 2012. <em>The r Book</em>. 2nd Edition. Wiley.
+</div>
+<div id="ref-DeSmedt2012" class="csl-entry" role="doc-biblioentry">
+De Smedt, Tom, W Daelemans, and Tom De Smedt. 2012. <span>“<span class="nocase">Pattern for Python</span>.”</span> <em>The Journal of
+Machine Learning Research</em> 13: 2063–67. <a href="http://dl.acm.org/citation.cfm?id=2343710">http://dl.acm.org/citation.cfm?id=2343710</a>.
+</div>
+<div id="ref-eppstein2010listing" class="csl-entry" role="doc-biblioentry">
+Eppstein, David, Maarten Löffler, and Darren Strash. 2010.
+<span>“Listing All Maximal Cliques in Sparse Graphs in Near-Optimal
+Time.”</span> In <em>International Symposium on Algorithms and
+Computation</em>, 403–14. Springer.
+</div>
+<div id="ref-Freelon2018" class="csl-entry" role="doc-biblioentry">
+Freelon, Deen. 2018. <span>“<span class="nocase">Computational Research
+in the Post-API Age</span>.”</span> <em>Political Communication</em> 35
+(4): 665–68. <a href="https://doi.org/10.1080/10584609.2018.1477506">https://doi.org/10.1080/10584609.2018.1477506</a>.
+</div>
+<div id="ref-goldberg2017" class="csl-entry" role="doc-biblioentry">
+Goldberg, Yoav. 2017. <em>Neural Network Models for Natural Language
+Processing</em>. Morgan &amp; Claypool.
+</div>
+<div id="ref-Gonzalez-Bailon2015" class="csl-entry" role="doc-biblioentry">
+Gonzalez-Bailon, S., and G. Paltoglou. 2015. <span>“<span class="nocase">Signals of Public Opinion in Online Communication: A
+Comparison of Methods and Data Sources</span>.”</span> <em>The ANNALS of
+the American Academy of Political and Social Science</em> 659 (1):
+95–107. <a href="https://doi.org/10.1177/0002716215569192">https://doi.org/10.1177/0002716215569192</a>.
 </div>
 <div id="ref-Gonzalez-Bailon2017" class="csl-entry" role="doc-biblioentry">
 González-Bailón, Sandra. 2017. <em><span class="nocase">Decoding the
 social world: Data science and the unintended consequences of
 communication</span></em>. Cambridge, MA: MIT.
+</div>
+<div id="ref-hierarchicallda" class="csl-entry" role="doc-biblioentry">
+Griffiths, Thomas L, Michael I Jordan, Joshua B Tenenbaum, and David M
+Blei. 2004. <span>“Hierarchical Topic Models and the Nested Chinese
+Restaurant Process.”</span> In <em>Advances in Neural Information
+Processing Systems</em>, 17–24.
 </div>
 <div id="ref-Grimmer2013" class="csl-entry" role="doc-biblioentry">
 Grimmer, J., and B. M. Stewart. 2013. <span>“Text as Data:
@@ -257,6 +366,12 @@ Horne, Benjamin D., William Dron, Sara Khedr, and Sibel Adali. 2018.
 and Feature Data Set for the Study of the Complex Media
 Landscape</span>.”</span> In <em>12th International AAAI Conference on
 Web and Social Media (ICWSM)</em>, 518–27. Icwsm. <a href="http://arxiv.org/abs/1803.10124">http://arxiv.org/abs/1803.10124</a>.
+</div>
+<div id="ref-Hutto2014" class="csl-entry" role="doc-biblioentry">
+Hutto, Clayton J, and Eric Gilbert. 2014. <span>“Vader: A Parsimonious
+Rule-Based Model for Sentiment Analysis of Social Media Text.”</span> In
+<em>Eighth International AAAI Conference on Weblogs and Social
+Media</em>.
 </div>
 <div id="ref-jurafsky" class="csl-entry" role="doc-biblioentry">
 Jurafsky, Daniel, and James H Martin. 2009. <em>Speech and Language
@@ -277,11 +392,28 @@ epistemologies and paradigm shifts</span>.”</span> <em>Big Data
 ———. 2014b. <em>The Data Revolution: Big Data, Open Data, Data
 Infrastructures and Their Consequences</em>. Sage.
 </div>
+<div id="ref-Krippendorff2004" class="csl-entry" role="doc-biblioentry">
+Krippendorff, Klaus. 2004. <em>Content Analysis: An Introduction to Its
+Methodology</em>. 2nd ed. Thousand Oaks, CA: SAGE.
+</div>
+<div id="ref-lsa" class="csl-entry" role="doc-biblioentry">
+Landauer, Thomas K, Danielle S McNamara, Simon Dennis, and Walter
+Kintsch. 2013. <em>Handbook of Latent Semantic Analysis</em>. Psychology
+Press.
+</div>
 <div id="ref-mousetrap" class="csl-entry" role="doc-biblioentry">
 Lin, Jimmy. 2015. <span>“On Building Better Mousetraps and Understanding
 the Human Condition: Reflections on Big Data in the Social
 Sciences.”</span> <em>The ANNALS of the American Academy of Political
 and Social Science</em> 659 (1): 33–47.
+</div>
+<div id="ref-aclimdb" class="csl-entry" role="doc-biblioentry">
+Maas, Andrew L., Raymond E. Daly, Peter T. Pham, Dan Huang, Andrew Y.
+Ng, and Christopher Potts. 2011. <span>“Learning Word Vectors for
+Sentiment Analysis.”</span> In <em>Proceedings of the 49th Annual
+Meeting of the Association for Computational Linguistics: Human Language
+Technologies</em>, 142–50. Portland, Oregon, USA: Association for
+Computational Linguistics. <a href="http://www.aclweb.org/anthology/P11-1015">http://www.aclweb.org/anthology/P11-1015</a>.
 </div>
 <div id="ref-margolin19" class="csl-entry" role="doc-biblioentry">
 Margolin, Drew B. 2019. <span>“Computational Contributions: A Symbiotic
@@ -294,6 +426,22 @@ Mayer-Schönberger, Viktor, and Kenneth Cukier. 2013. <em>Big Data: A
 Revolution That Will Transform How We Live, Work, and Think</em>. New
 York, NY: Houghton Mifflin Harcourt.
 </div>
+<div id="ref-mimno11" class="csl-entry" role="doc-biblioentry">
+Mimno, David, Hanna Wallach, Edmund Talley, Miriam Leenders, and Andrew
+McCallum. 2011. <span>“Optimizing Semantic Coherence in Topic
+Models.”</span> In <em>Proceedings of the 2011 Conference on Empirical
+Methods in Natural Language Processing</em>, 262–72.
+</div>
+<div id="ref-moreno1934shall" class="csl-entry" role="doc-biblioentry">
+Moreno, Jacob Levy. 1934. <em>Who Shall Survive? A New Approach to the
+Problem of Human Interrelations</em>. Nervous; mental disease publishing
+co.
+</div>
+<div id="ref-newman2004finding" class="csl-entry" role="doc-biblioentry">
+Newman, Mark EJ, and Michelle Girvan. 2004. <span>“Finding and
+Evaluating Community Structure in Networks.”</span> <em>Physical Review
+E</em> 69 (2): 026113.
+</div>
 <div id="ref-nothman18" class="csl-entry" role="doc-biblioentry">
 Nothman, Joel, Hanmin Qin, and Roman Yurchak. 2018. <span>“Stop Word
 Lists in Free Open-Source Software Packages.”</span> In <em>Proceedings
@@ -303,12 +451,29 @@ of Workshop for NLP Open Source Software (NLP-OSS)</em>, 7–12.
 Piketty, Thomas. 2017. <em>Capital in the Twenty-First Century</em>.
 Cambridge, MA: Harvard University Press.
 </div>
+<div id="ref-Puschmann2019" class="csl-entry" role="doc-biblioentry">
+Puschmann, Cornelius. 2019. <span>“<span class="nocase">An end to the
+wild west of social media research: a response to Axel
+Bruns</span>.”</span> <em>Information, Communication <span>&amp;</span>
+Society</em> 22 (11): 1582–89. <a href="https://doi.org/10.1080/1369118X.2019.1646300">https://doi.org/10.1080/1369118X.2019.1646300</a>.
+</div>
 <div id="ref-stanza" class="csl-entry" role="doc-biblioentry">
 Qi, Peng, Yuhao Zhang, Yuhui Zhang, Jason Bolton, and Christopher D.
 Manning. 2020. <span>“Stanza: A <span>Python</span> Natural Language
 Processing Toolkit for Many Human Languages.”</span> In <em>Proceedings
 of the 58th Annual Meeting of the Association for Computational
 Linguistics: System Demonstrations</em>. <a href="https://nlp.stanford.edu/pubs/qi2020stanza.pdf">https://nlp.stanford.edu/pubs/qi2020stanza.pdf</a>.
+</div>
+<div id="ref-raghavan2007near" class="csl-entry" role="doc-biblioentry">
+Raghavan, Usha Nandini, Réka Albert, and Soundar Kumara. 2007.
+<span>“Near Linear Time Algorithm to Detect Community Structures in
+Large-Scale Networks.”</span> <em>Physical Review E</em> 76 (3): 036106.
+</div>
+<div id="ref-Reagan2017" class="csl-entry" role="doc-biblioentry">
+Reagan, Andrew J., Christopher M. Danforth, Brian Tivnan, Jake Ryland
+Williams, and Peter Sheridan Dodds. 2017. <span>“<span class="nocase">Sentiment analysis methods for understanding large-scale
+texts: a case for using continuum-scored words and word shift
+graphs</span>.”</span> <em>EPJ Data Science</em> 6 (1). <a href="https://doi.org/10.1140/epjds/s13688-017-0121-9">https://doi.org/10.1140/epjds/s13688-017-0121-9</a>.
 </div>
 <div id="ref-Rieder2017" class="csl-entry" role="doc-biblioentry">
 Rieder, Bernhard. 2017. <span>“Scrutinizing an Algorithmic Technique:
@@ -321,15 +486,33 @@ Riffe, Daniel, Stephen Lacy, Frederick Fico, and Brendan Watson. 2019.
 <em>Analyzing Media Messages. <span>Using</span> Quantitative Content
 Analysis in Research</em>. 4th edition. New York, NY: Routledge.
 </div>
+<div id="ref-Riffe2019" class="csl-entry" role="doc-biblioentry">
+Riffe, Daniel, Stephen Lacy, Brendan R. Watson, and Frederick Fico.
+2019. <em>Analyzing Media Messages: Using Quantitative Content Analysis
+in Research</em>. 4th ed. New York, NY: Routledge.
+</div>
+<div id="ref-stm" class="csl-entry" role="doc-biblioentry">
+Roberts, Margaret E, Brandon M Stewart, Dustin Tingley, Christopher
+Lucas, Jetson Leder-Luis, Shana Kushner Gadarian, Bethany Albertson, and
+David G Rand. 2014. <span>“Structural Topic Models for Open-Ended Survey
+Responses.”</span> <em>American Journal of Political Science</em> 58
+(4): 1064–82.
+</div>
 <div id="ref-Salganik2019" class="csl-entry" role="doc-biblioentry">
 Salganik, Matthew. 2019. <em>Bit by Bit: Social Research in the Digital
 Age</em>. Princeton University Press.
 </div>
+<div id="ref-Scharkow2011" class="csl-entry" role="doc-biblioentry">
+Scharkow, Michael. 2011. <span>“<span class="nocase">Thematic content
+analysis using supervised machine learning: An empirical evaluation
+using German online news</span>.”</span> <em>Quality <span>&amp;</span>
+Quantity</em> 47 (2): 761–73. <a href="https://doi.org/10.1007/s11135-011-9545-7">https://doi.org/10.1007/s11135-011-9545-7</a>.
+</div>
 <div id="ref-Scharkow2017" class="csl-entry" role="doc-biblioentry">
-Scharkow, Michael. 2017. <span>“<span>Content Analysis,
-Automatic</span>.”</span> In <em>The International Encyclopedia of
-Communication Research Methods</em>, edited by Jörg Matthes, Christine
-S. Davis, and Robert F. Potter, 1–14. Hoboken, NJ: Wiley. <a href="https://doi.org/10.1002/9781118901731.iecrm0043">https://doi.org/10.1002/9781118901731.iecrm0043</a>.
+———. 2017. <span>“<span>Content Analysis, Automatic</span>.”</span> In
+<em>The International Encyclopedia of Communication Research
+Methods</em>, edited by Jörg Matthes, Christine S. Davis, and Robert F.
+Potter, 1–14. Hoboken, NJ: Wiley. <a href="https://doi.org/10.1002/9781118901731.iecrm0043">https://doi.org/10.1002/9781118901731.iecrm0043</a>.
 </div>
 <div id="ref-udpipe" class="csl-entry" role="doc-biblioentry">
 Straka, Milan, and Jana Straková. 2017. <span>“Tokenizing, POS Tagging,
@@ -337,6 +520,12 @@ Lemmatizing and Parsing UD 2.0 with UDPipe.”</span> In <em>Proceedings
 of the CoNLL 2017 Shared Task: Multilingual Parsing from Raw Text to
 Universal Dependencies</em>, 88–99. Vancouver, Canada: Association for
 Computational Linguistics. <a href="http://www.aclweb.org/anthology/K/K17/K17-3009.pdf">http://www.aclweb.org/anthology/K/K17/K17-3009.pdf</a>.
+</div>
+<div id="ref-Thelwall2012" class="csl-entry" role="doc-biblioentry">
+Thelwall, Mike, Kevan Buckley, and Georgios Paltoglou. 2012.
+<span>“Sentiment Strength Detection for the Social Web.”</span>
+<em>Journal of the American Society for Information Science and
+Technology</em> 63 (1): 163–73. <a href="https://doi.org/10.1002/asi.21662">https://doi.org/10.1002/asi.21662</a>.
 </div>
 <div id="ref-Trilling2013phd" class="csl-entry" role="doc-biblioentry">
 Trilling, Damian. 2013. <span>“<span class="nocase">Following the news:
@@ -356,6 +545,20 @@ Press Cheshire, CT.
 <div id="ref-tukey1977exploratory" class="csl-entry" role="doc-biblioentry">
 Tukey, John W. 1977. <em>Exploratory Data Analysis</em>. Vol. 2.
 Reading, Mass.
+</div>
+<div id="ref-Tulkens2016" class="csl-entry" role="doc-biblioentry">
+Tulkens, Stéphan, Lisa Hilte, Elise Lodewyckx, Ben Verhoeven, and Walter
+Daelemans. 2016. <span>“<span class="nocase">A Dictionary-based Approach
+to Racism Detection in Dutch Social Media</span>.”</span>
+<em>Proceedings of the Workshop on Text Analytics for Cybersecurity and
+Online Safety (TA-COS 2016)</em>, 11–17. <a href="http://www.clips.ua.ac.be/bibliography/a-dictionary-based-approach-to-racism-detection-in-dutch-social-media">http://www.clips.ua.ac.be/bibliography/a-dictionary-based-approach-to-racism-detection-in-dutch-social-media</a>.
+</div>
+<div id="ref-VanAtteveldt2019" class="csl-entry" role="doc-biblioentry">
+Van Atteveldt, Wouter, Joanna Strycharz, Damian Trilling, and Kasper
+Welbers. 2019. <span>“<span class="nocase">Toward Open Computational
+Communication Science : A Practical Road Map for Reusable Data and Code
+University of Amsterdam , the Netherlands</span>.”</span>
+<em>International Journal of Communication</em> 13: 3935–54.
 </div>
 <div id="ref-clause" class="csl-entry" role="doc-biblioentry">
 Van Atteveldt, W., T. Sheafer, S. R. Shenhav, and Y. Fogel-Dror. 2017.
@@ -380,10 +583,19 @@ How machine learning can help firms in identifying relevant electronic
 word-of-mouth in social media</span>.”</span> <em>International Journal
 of Research in Marketing</em> 36 (3): 492–508. <a href="https://doi.org/10.1016/j.ijresmar.2019.01.010">https://doi.org/10.1016/j.ijresmar.2019.01.010</a>.
 </div>
+<div id="ref-vosoughi2018spread" class="csl-entry" role="doc-biblioentry">
+Vosoughi, Soroush, Deb Roy, and Sinan Aral. 2018. <span>“The Spread of
+True and False News Online.”</span> <em>Science</em> 359 (6380):
+1146–51.
+</div>
 <div id="ref-Waldherr2014" class="csl-entry" role="doc-biblioentry">
 Waldherr, Annie. 2014. <span>“<span class="nocase">Emergence of News
 Waves: A Social Simulation Approach</span>.”</span> <em>Journal of
 Communication</em> 64 (5): 852–73. <a href="https://doi.org/10.1111/jcom.12117">https://doi.org/10.1111/jcom.12117</a>.
+</div>
+<div id="ref-watts2004six" class="csl-entry" role="doc-biblioentry">
+Watts, Duncan J. 2004. <em>Six Degrees: The Science of a Connected
+Age</em>. WW Norton &amp; Company.
 </div>
 <div id="ref-Wettstein2020" class="csl-entry" role="doc-biblioentry">
 Wettstein, Martin. 2020. <span>“<span class="nocase">Simulating hidden
@@ -531,8 +743,8 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
 </script>
 <nav class="page-navigation">
   <div class="nav-page nav-page-previous">
-      <a href="./chapter10.html" class="pagination-link">
-        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Text as data</span></span>
+      <a href="./chapter13.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Network Data</span></span>
       </a>          
   </div>
   <div class="nav-page nav-page-next">

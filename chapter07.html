@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.313">
+<meta name="generator" content="quarto-1.2.335">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -233,6 +233,21 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./chapter11.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Automatic analysis of text</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter12.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Scraping online data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter13.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Network Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
   </div>
 </li>
@@ -257,7 +272,7 @@ div.csl-indent {
   <ul class="collapse">
   <li><a href="#k-means-clustering" id="toc-k-means-clustering" class="nav-link" data-scroll-target="#k-means-clustering"><span class="toc-section-number">7.3.1</span>  <span class="math inline">\(k\)</span>-means Clustering</a></li>
   <li><a href="#hierarchical-clustering" id="toc-hierarchical-clustering" class="nav-link" data-scroll-target="#hierarchical-clustering"><span class="toc-section-number">7.3.2</span>  Hierarchical Clustering</a></li>
-  <li><a href="#principal-component-analysis-and-singular-value-decomposition" id="toc-principal-component-analysis-and-singular-value-decomposition" class="nav-link" data-scroll-target="#principal-component-analysis-and-singular-value-decomposition"><span class="toc-section-number">7.3.3</span>  Principal Component Analysis and Singular Value Decomposition</a></li>
+  <li><a href="#sec-pcasvd" id="toc-sec-pcasvd" class="nav-link" data-scroll-target="#sec-pcasvd"><span class="toc-section-number">7.3.3</span>  Principal Component Analysis and Singular Value Decomposition</a></li>
   </ul></li>
   </ul>
 </nav>
@@ -1833,8 +1848,8 @@ data        112    -none- numeric  </code></pre>
 </div>
 </div>
 </section>
-<section id="principal-component-analysis-and-singular-value-decomposition" class="level3" data-number="7.3.3">
-<h3 data-number="7.3.3" class="anchored" data-anchor-id="principal-component-analysis-and-singular-value-decomposition"><span class="header-section-number">7.3.3</span> Principal Component Analysis and Singular Value Decomposition</h3>
+<section id="sec-pcasvd" class="level3" data-number="7.3.3">
+<h3 data-number="7.3.3" class="anchored" data-anchor-id="sec-pcasvd"><span class="header-section-number">7.3.3</span> Principal Component Analysis and Singular Value Decomposition</h3>
 <p>Cluster analyses are in principle used to group similar cases. Sometimes, we want to group similar variables instead. A well-known method for this is principal component analysis (PCA)<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a>. This unsupervised method is useful to reduce the dimensionality of your data by creating new uncorrelated variables or <em>components</em> that describe the original dataset. PCA uses linear transformations to create principal components that are ordered by the level of explained variance (the first component will catch the largest variance). We will get as many principal components as number of variables we have in the dataset, but when we look at the cumulative variance we can easily select only few of these components to explain most of the variance and thus work with a smaller and summarized data frame that might be more convenient for many tasks (i.e.&nbsp;those that require avoiding multicollinearity or just need to be more computationally efficient). By simplifying the complexity of our data we can have a first understanding of how our variables are related and also of how our observations might be grouped. All components have specific loadings for each original variable, which can tell you how the old variables are represented in the new components. This statistical technique is especially useful in EDA when working with high dimensional datasets but it can be used in many other situations.</p>
 <p>The mathematics behind PCA can be relatively easy to understand. However, for the sake of simplicity, we will just say that in order to obtain the principal components the algorithm firstly has to compute the mean of each variable and then compute the covariance matrix of the data. This matrix contains the covariance between the elements of a vector and the output will be a square matrix with an identical number of rows and columns, corresponding to the total number of dimensions of the original dataset. Specifically, we can calculate the covariance matrix of the variables <em>X</em> and <em>y</em> with the formula:</p>
 <p>Secondly, using the covariance matrix the algorithm computes the eigenvectors and their corresponding eigenvalues, and then drop the eigenvectors with the lowest eigenvalues. With this reduced matrix it transforms the original values to the new subspace in order to obtain the principal components that will synthesize the original dataset.</p>
@@ -2251,7 +2266,7 @@ Czech republic  2.17979559 -0.66348027</code></pre>
 </div>
 </div>
 </div>
-<p>When your dataset gets bigger, though, you may actually not use PCA but the very much related singular value decomposition, SVD. They are closely interrelated, and in fact SVD can be used “under the hood” to estimate a PCA. While PCA is taught in a lot of classical textbooks for statistics in the social sciences, SVD is usually not. Yet, it has a great advantage: in the way that it is implemented in <em>scikit-learn</em>, it does not require to store the (dense) covariance matrix in memory (see the feature box in <span class="quarto-unresolved-ref">?sec-workflow</span> for more information on sparse versus dense matrices). This means that once your dataset grows bigger than typical survey datasets, a PCA maybe quickly become impossible to estimate, whereas the SVD can still be estimated without much resource required. Therefore, especially when you are working with textual data, you will see that SVD is used instead of PCA. For all practical purposes, the way that you can use and interpret the results stays the same.</p>
+<p>When your dataset gets bigger, though, you may actually not use PCA but the very much related singular value decomposition, SVD. They are closely interrelated, and in fact SVD can be used “under the hood” to estimate a PCA. While PCA is taught in a lot of classical textbooks for statistics in the social sciences, SVD is usually not. Yet, it has a great advantage: in the way that it is implemented in <em>scikit-learn</em>, it does not require to store the (dense) covariance matrix in memory (see the feature box in <a href="chapter11.html#sec-workflow"><span>Section&nbsp;11.4.1</span></a> for more information on sparse versus dense matrices). This means that once your dataset grows bigger than typical survey datasets, a PCA maybe quickly become impossible to estimate, whereas the SVD can still be estimated without much resource required. Therefore, especially when you are working with textual data, you will see that SVD is used instead of PCA. For all practical purposes, the way that you can use and interpret the results stays the same.</p>
 
 
 <div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">

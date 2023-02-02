@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.313">
+<meta name="generator" content="quarto-1.2.335">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -209,6 +209,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./chapter10.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Text as data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter11.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Automatic analysis of text</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter12.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Scraping online data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter13.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Network Data</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -986,7 +1001,7 @@ To regex or not to regex in Python
 <p>A slightly more complicated pattern is the one given for international phone numbers. They always start with a plus sign and contain at least eight numbers, but can contain dashes and spaces depending on the country. So, after the literal <code>+</code> (which we need to escape since <code>+</code> is a control character), we look for seven or more numbers, optionally followed by a single dash or space, and end with a single number. This allows dashes and spaces at any position except the start and end, but does not allow for e.g.&nbsp;double dashes. It also makes sure that there are at least eight numbers regardless of how many dashes or spaces there are.</p>
 <p>The final four examples are patterns for common notations found online. For URLs, we look for <code>http://</code> or <code>https://</code> and take everything until the next space or end of the string. For email addresses, we define a character class for letters, periods, or dashes and look for it before and after the at sign. Then, there needs to be at least one period and a top level domain containing only letters. Note that the dash within the character class does not need to be escaped because it is the final character in the class, so it cannot form a range. For HTML tags and character escapes, we anchor the start (<code>&lt;</code> and <code>&amp;</code>) and end (<code>&gt;</code> and <code>;</code>) and allow any characters except for the ending character in between using an inverted character class.</p>
 <p>Note that these example patterns would also match if the text is enclosed in a larger text. For example, the zip code pattern would happily match the first five numbers of a 10-digit number. If you want to check that an input value is a valid zip code (or email address, etc.), you probably want to check that it only contains that code by surrounding it with start-of-text and end-of-text markers: <code>^\d{5}$</code>. If you want to extract e.g.&nbsp;zip codes from a longer document, it is often useful to surround them with word boundary markers: <code>\b\d{5}\b</code>.</p>
-<p>Please note that many of those patterns are not necessarily fully complete and correct, especially the final patterns for online notations. For example, email addresses can contain plus signs in the first part, but not in the domain name, while domain names are not allowed to start with a dash – a completely correct regular expression to match email addresses is over 400 characters long! Even worse, complete HTML tags are probably not even possible to describe using regular expressions, because HTML tags frequently contain comments and nested escapes within attributes. For a better way to deal with analyzing HTML, please see Chapter <span class="quarto-unresolved-ref">?sec-chap-scraping</span>. In the end, patterns like these are fine for a (somewhat) noisy analysis of (often also somewhat noisy) source texts as long as you understand the limitations.</p>
+<p>Please note that many of those patterns are not necessarily fully complete and correct, especially the final patterns for online notations. For example, email addresses can contain plus signs in the first part, but not in the domain name, while domain names are not allowed to start with a dash – a completely correct regular expression to match email addresses is over 400 characters long! Even worse, complete HTML tags are probably not even possible to describe using regular expressions, because HTML tags frequently contain comments and nested escapes within attributes. For a better way to deal with analyzing HTML, please see Chapter <a href="chapter12.html"><span>12</span></a>. In the end, patterns like these are fine for a (somewhat) noisy analysis of (often also somewhat noisy) source texts as long as you understand the limitations.</p>
 </section>
 </section>
 <section id="sec-regextract" class="level2" data-number="9.3">

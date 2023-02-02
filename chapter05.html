@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.313">
+<meta name="generator" content="quarto-1.2.335">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -229,6 +229,21 @@ div.csl-indent {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./chapter10.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Text as data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter11.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Automatic analysis of text</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter12.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Scraping online data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter13.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Network Data</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -470,7 +485,7 @@ Packages used in this chapter
 <p>The format in which we read files into a data frame and the format to which we save our final data frame by no means needs to be identical. We can, for example, read data created by someone else in Stata’s proprietary <code>.dta</code> format into a data frame and later save it to a .csv table.</p>
 <p>While we sometimes do not have the choice in which format we get our input data, we have a range of options regarding our output data. We usually prefer formats that are <em>open</em> and <em>interoperable</em> for this, which ensures that they can be used by as many people as possible, and that they are not tied to any specific (proprietary) software tool which might not be available to everyone and can be discontinued in the future.</p>
 <p>The most common file formats that are relevant to us are listed in Table <a href="#tbl-fileformats"><span>5.1</span></a>. <code>txt</code> files are particularly useful for long texts (think of one file containing one newspaper article or even a whole book), but they are bad for storing associated meta data. <code>csv</code> files are the default choice for tabular data, and <code>json</code> files allow us to store nested data in a dictionary-like format.</p>
-<p>For the sake of completeness, we also listed the native Python and R formats pickle, RDS, and RDA. Because of their lack of interoperability, they are not very suitable for long-term storage or for sharing data, but they can have a place in a workflow as an intermediate step to solve the issue that none of the other formats are able to store all properties of a data frame (e.g., the csv file cannot store whether a given column in an R data frame is to be understood as containing strings such as “man”, “woman”, “non-binary” or a factor with the three levels man, woman, non-binary). If it is important to store an object (such as a data frame) exactly as-it-is, we can use these formats. One of the rare instances where we use these formats is in Example <span class="quarto-unresolved-ref">?exm-reuse</span>, where we store machine learning models for later reuse.</p>
+<p>For the sake of completeness, we also listed the native Python and R formats pickle, RDS, and RDA. Because of their lack of interoperability, they are not very suitable for long-term storage or for sharing data, but they can have a place in a workflow as an intermediate step to solve the issue that none of the other formats are able to store all properties of a data frame (e.g., the csv file cannot store whether a given column in an R data frame is to be understood as containing strings such as “man”, “woman”, “non-binary” or a factor with the three levels man, woman, non-binary). If it is important to store an object (such as a data frame) exactly as-it-is, we can use these formats. One of the rare instances where we use these formats is in Example <a href="chapter11.html#exm-reuse"><span>11.8</span></a>, where we store machine learning models for later reuse.</p>
 <div id="tbl-fileformats" class="anchored">
 <table class="table">
 <caption>Table&nbsp;5.1: Basics of data frame handling</caption>
@@ -616,7 +631,7 @@ an</code></pre>
 <span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://cssbook.net/d/stopwords.txt"</span></span>
 <span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>urllib.request.urlretrieve(url, <span class="st">"stopwords.txt"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>('stopwords.txt', &lt;http.client.HTTPMessage object at 0x7f8171bedb10&gt;)</code></pre>
+<pre><code>('stopwords.txt', &lt;http.client.HTTPMessage object at 0x7f1049ba6650&gt;)</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"stopwords.txt"</span>) <span class="im">as</span> f:</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    stopwords <span class="op">=</span> [w.strip() <span class="cf">for</span> w <span class="kw">in</span> f]</span>
@@ -714,12 +729,12 @@ $entries
 <p>Example <a href="#exm-extendedfilehandling"><span>5.4</span></a> provides you with some more elaborate code examples that allows us to dig a bit deeper into the general way of handling files.</p>
 <p>In the Python example, we can open a file and assign a handle to it that allows us to refer to it (the name of the handle is arbitrary, let’s just call it <code>f</code> here). Then, we can use a for loop to iterate over all lines in the file and add it to a list.</p>
 <p>The <code>mode = 'r'</code> specifies that we want to read from the file. <code>mode = 'w'</code> would open the file for writing, create it if necessary, and immediately deletes all content that may have been in there if the file already existed (!). Note that the <code>.strip()</code> is necessary to remove the line ending itself, and also any possible whitespace at the beginning or end of a line. If we want to save our stopwords, we can do this in a similar way: we first open the file (this time, for writing), and then use the file handle’s methods to write to it. We are not limited to plain text files, here. For instance, we can use the same approach to read json files into a Python dict or to store a Python dict into a json file.</p>
-<p>We could also combine this with a for loop that goes over all files in a dictionary. Imagine we have a folder full of positive movie reviews, and another one full of negative movie reviews that we want to use to train a machine learning classifier (see Section <span class="quarto-unresolved-ref">?sec-supervised</span>). Let’s further assume that all these reviews are saved as <code>.txt</code> files. We can iterate over all of them, as shown in Example <span class="quarto-unresolved-ref">?exm-reviewdata</span>. If you want to read text files into a data frame in R, the <em>readtext</em> package may be interesting for you.</p>
+<p>We could also combine this with a for loop that goes over all files in a dictionary. Imagine we have a folder full of positive movie reviews, and another one full of negative movie reviews that we want to use to train a machine learning classifier (see Section <a href="chapter11.html#sec-supervised"><span>11.4</span></a>). Let’s further assume that all these reviews are saved as <code>.txt</code> files. We can iterate over all of them, as shown in Example <a href="chapter11.html#exm-reviewdata"><span>11.1</span></a>. If you want to read text files into a data frame in R, the <em>readtext</em> package may be interesting for you.</p>
 </section>
 </section>
 <section id="sec-gathering" class="level2" data-number="5.3">
 <h2 data-number="5.3" class="anchored" data-anchor-id="sec-gathering"><span class="header-section-number">5.3</span> Data from online sources</h2>
-<p>Many data that are interesting to those analyzing communication are nowadays gathered online. In Chapter <span class="quarto-unresolved-ref">?sec-chap-scraping</span>, you will learn how to use APIs to retrieve data from web services, and how to write your own web scraper to automatically download large numbers of web pages and extract relevant information. For instance, you might want to retrieve customer reviews from a website or articles from news sites.</p>
+<p>Many data that are interesting to those analyzing communication are nowadays gathered online. In Chapter <a href="chapter12.html"><span>12</span></a>, you will learn how to use APIs to retrieve data from web services, and how to write your own web scraper to automatically download large numbers of web pages and extract relevant information. For instance, you might want to retrieve customer reviews from a website or articles from news sites.</p>
 <p>In this section, however, we will focus on how to re-use existing datasets that others have made available online. For instance, the open science movement has led to more and more datasets being shared openly using repositories such as Dataverse, Figshare, or others. Re-using existing data can be very good for several reasons: first, to confirm (or not) the conclusions drawn by others; second, to avoid wasting resources by re-collecting very similar or even identical data all over again; and third, because gathering a large, high-quality dataset might just not be feasible with your means. This is especially true when you need annotated (i.e., hand-coded) data for supervised machine learning purposes (Chapter <a href="chapter08.html"><span>8</span></a>).</p>
 <p>We can distinguish between two types of existing online datasets: datasets that are inherently interesting, and so-called toy datasets.</p>
 <p>Toy datasets may include made-up data, but often, they contain real data. However, they are not analyzed to gain scientific insights (any more), as they may be too small, outdated, or already analyzed all-over again. These provide a great way, though, to learn and explore new techniques: after all, the results and the characteristics of the data are already known. Hence, such toy datasets are often even included in R and Python packages. Some of them are really well-known in teaching (e.g., the iris dataset containing measurements of some flowers; or the titanic dataset containing statistics on survival rates of passengers on the Titanic; MINIST for image classification; or the MPG dataset on car fuel consumption). Many of these are included in packages like <em>scikit-learn</em>, <em>seaborn</em>, or <em>ggplot2</em>– and you can have a look at their documentation.</p>

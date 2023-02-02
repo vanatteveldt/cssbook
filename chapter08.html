@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.313">
+<meta name="generator" content="quarto-1.2.335">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -233,6 +233,21 @@ div.csl-indent {
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./chapter11.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Automatic analysis of text</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter12.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Scraping online data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter13.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Network Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
   </div>
 </li>
@@ -373,9 +388,9 @@ Note
 </div>
 </div>
 </div>
-<p>In this chapter, we introduce the basic concepts and ideas behind machine learning. We will outline how machine learning relates to traditional statistical approaches that you already might know (and as you will see, there is a lot of overlap), present different types of models, and discuss how to validate them. Later in this book (<span class="quarto-unresolved-ref">?sec-supervised</span>), we will specifically apply the knowledge you gain from this chapter to the analysis of textual data, arguably one of the most interesting tasks in the computational analysis of communication.</p>
+<p>In this chapter, we introduce the basic concepts and ideas behind machine learning. We will outline how machine learning relates to traditional statistical approaches that you already might know (and as you will see, there is a lot of overlap), present different types of models, and discuss how to validate them. Later in this book (<a href="chapter11.html#sec-supervised"><span>Section&nbsp;11.4</span></a>), we will specifically apply the knowledge you gain from this chapter to the analysis of textual data, arguably one of the most interesting tasks in the computational analysis of communication.</p>
 <p>In this chapter, we focus on <em>supervised</em> machine learning (SML) – a form of machine learning, where we aim to predict a variable that, for at least a part of our data, is known. SML is usually applied to <em>classification</em> and <em>regression</em> problems. To illustrate the idea, imagine that you are interested in predicting gender, based on Twitter biographies. You determine the gender for some of the biographies yourself and hand these examples over to the computer. The computer “learns” this <em>classification</em> from your examples, and can then be used to predict the gender for other Twitter biographies for which you do not know the gender.</p>
-<p>In unsupervised machine learning (UML), in contrast, you do not have such examples. Therefore, UML is usually applied to <em>clustering</em> and <em>associations</em> problems. We have discussed some of these techniques in <a href="chapter07.html#sec-clustering"><span>Section&nbsp;7.3</span></a>, in particular cluster analysis and principal component analysis (PCA). Later, in <span class="quarto-unresolved-ref">?sec-unsupervised</span>, we will discuss topic modeling, an unsupervised method to extract so-called topics from textual data.</p>
+<p>In unsupervised machine learning (UML), in contrast, you do not have such examples. Therefore, UML is usually applied to <em>clustering</em> and <em>associations</em> problems. We have discussed some of these techniques in <a href="chapter07.html#sec-clustering"><span>Section&nbsp;7.3</span></a>, in particular cluster analysis and principal component analysis (PCA). Later, in <a href="chapter11.html#sec-unsupervised"><span>Section&nbsp;11.5</span></a>, we will discuss topic modeling, an unsupervised method to extract so-called topics from textual data.</p>
 <p>Even though both approaches can be combined (for instance, one could first reduce the amount of data using PCA or SVD, and then predict some outcome), they can be seen as fundamentally different, from both theoretical and conceptual points of view. Unsupervised machine learning is a bottom-up approach and corresponds to an inductive reasoning: you do not have a hypothesis of, for instance, which topics are present in a corpus of text; you rather let the topics emerge from the data. Supervised machine learning, in contrast, is a top-down approach and can be seen as more deductive: you define <em>a priori</em> which topics to predict.</p>
 <section id="sec-prediction" class="level2" data-number="8.1">
 <h2 data-number="8.1" class="anchored" data-anchor-id="sec-prediction"><span class="header-section-number">8.1</span> Statistical Modeling and Prediction</h2>
@@ -917,12 +932,12 @@ Prediction non-user user
 <div class="cell-output cell-output-stdout">
 <pre><code>              precision    recall  f1-score   support
 
-    non-user       0.43      0.37      0.40       161
-        user       0.63      0.68      0.66       252
+    non-user       0.45      0.39      0.42       161
+        user       0.64      0.70      0.67       252
 
-    accuracy                           0.56       413
-   macro avg       0.53      0.53      0.53       413
-weighted avg       0.55      0.56      0.56       413</code></pre>
+    accuracy                           0.58       413
+   macro avg       0.55      0.54      0.54       413
+weighted avg       0.57      0.58      0.57       413</code></pre>
 </div>
 </div>
 </div>

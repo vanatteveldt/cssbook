@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.313">
+<meta name="generator" content="quarto-1.2.335">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -213,6 +213,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./chapter11.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Automatic analysis of text</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter12.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Scraping online data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter13.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Network Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
   </div>
 </li>
@@ -334,7 +349,7 @@ Packages used in this chapter
 <section id="sec-funtweets" class="level2" data-number="2.1">
 <h2 data-number="2.1" class="anchored" data-anchor-id="sec-funtweets"><span class="header-section-number">2.1</span> Fun With Tweets</h2>
 <p>The goal of this chapter is to showcase how you can use R or Python to quickly and easily run some impressive analyses of real world data. For this purpose, we will be using a dataset of tweets about the COVID pandemic that is engulfing much of the world at the time this book is written. Of course, tweets are probably only representative for what is said on Twitter, but the data are (semi-)public and rich, containing text, location, and network characteristics. This makes them ideal for exploring the many ways in which we can analyze and visualize information with Python and R.</p>
-<p>Example <a href="#exm-funtweets"><span>2.1</span></a> shows how you can read this dataset into memory using a single command. Note that this does not retrieve the tweets from Twitter itself, but rather downloads our cached version of the tweets. In Chapter <span class="quarto-unresolved-ref">?sec-chap-scraping</span> we will show how you can download tweets and location data yourself, but to make sure we can get down to business immediately we will start from this cached version.</p>
+<p>Example <a href="#exm-funtweets"><span>2.1</span></a> shows how you can read this dataset into memory using a single command. Note that this does not retrieve the tweets from Twitter itself, but rather downloads our cached version of the tweets. In Chapter <a href="chapter12.html"><span>12</span></a> we will show how you can download tweets and location data yourself, but to make sure we can get down to business immediately we will start from this cached version.</p>
 <div class="callout-note callout callout-style-simple no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -476,7 +491,7 @@ Packages used in this chapter
 </div>
 </div>
 </div>
-<p><strong>Topic Model.</strong> Where a word cloud (or tag cloud) shows which words occur most frequently, a <code>topic model</code> analysis shows which words co-occur in the same documents. Using the most common topic modeling algorithm, Latent Dirichlet Allocation or LDA, Example <a href="#exm-funlda"><span>2.4</span></a> explores the tweets by automatically clustering the tags selected earlier into 10 <em>topics</em>. Topic modeling is non-deterministic – if you run it again you can get slightly different topics, and topics are swapped around randomly as the topic numbers have no special meaning. By setting the computer’s <em>random seed</em> you can ensure that if you run it again you get the same results. As you can see, some topics seem easily interpretable (such as topic 2 about social distancing, and topic 8 on health care), it is always recommended that you inspect the clustered documents and edge cases in addition to the top words (or tags) as shown here. You can play around with this example by using a different selection of words (modifying the code in Example <a href="#exm-funcloud"><span>2.3</span></a>) or changing the number of topics. You can also change (or remove) the random seed and see how running the same model multiple times will give different results. See <span class="quarto-unresolved-ref">?sec-unsupervised</span> for more information about fitting, interpreting, and validating topic models.</p>
+<p><strong>Topic Model.</strong> Where a word cloud (or tag cloud) shows which words occur most frequently, a <code>topic model</code> analysis shows which words co-occur in the same documents. Using the most common topic modeling algorithm, Latent Dirichlet Allocation or LDA, Example <a href="#exm-funlda"><span>2.4</span></a> explores the tweets by automatically clustering the tags selected earlier into 10 <em>topics</em>. Topic modeling is non-deterministic – if you run it again you can get slightly different topics, and topics are swapped around randomly as the topic numbers have no special meaning. By setting the computer’s <em>random seed</em> you can ensure that if you run it again you get the same results. As you can see, some topics seem easily interpretable (such as topic 2 about social distancing, and topic 8 on health care), it is always recommended that you inspect the clustered documents and edge cases in addition to the top words (or tags) as shown here. You can play around with this example by using a different selection of words (modifying the code in Example <a href="#exm-funcloud"><span>2.3</span></a>) or changing the number of topics. You can also change (or remove) the random seed and see how running the same model multiple times will give different results. See <a href="chapter11.html#sec-unsupervised"><span>Section&nbsp;11.5</span></a> for more information about fitting, interpreting, and validating topic models.</p>
 <div class="callout-note callout callout-style-simple no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -666,7 +681,7 @@ Packages used in this chapter
 </section>
 <section id="sec-funnet" class="level2" data-number="2.4">
 <h2 data-number="2.4" class="anchored" data-anchor-id="sec-funnet"><span class="header-section-number">2.4</span> Fun With Networks</h2>
-<p>Twitter, of course, is a social network as well as a microblogging service: users are connected to other users because they follow each other and retweet and like each others’ tweets. Using the <code>reply_to_screen_name</code> column, we can inspect the retweet network contained in the COVID tweet dataset. Example <a href="#exm-fungraph"><span>2.7</span></a> first uses the data summarization commands from <code>tidyverse</code>(R) and <code>pandas</code>(Python) to create a data frame of connections or <code>edges</code> listing how often each user retweets each other user. The second code block shows how the <em>igraph</em> (R) and <em>networkx</em> (Python) packages are used to convert this edge list into a graph. From this graph, we select only the largest connected component and use a clustering algorithm to analyze which nodes (users) form cohesive subnetworks. Finally, a number of options are used to set the color and size of the edges, nodes, and labels, and the resulting network is plotted. As you can see, the central node is Donald Trump, who is retweeted by a large number of users, some of which are then retweeted by other users. You can play around with different settings for the plot options, or try to filter e.g.&nbsp;only tweets from a certain language. You could also easily compute social network metrics such as centrality on this network, and/or export the network for further analysis in specialized social network analysis software. See Chapter <span class="quarto-unresolved-ref">?sec-chap-network</span> for more information on network analysis, and Chapter <a href="chapter06.html"><span>6</span></a> for the summarization commands used to create the edge list.</p>
+<p>Twitter, of course, is a social network as well as a microblogging service: users are connected to other users because they follow each other and retweet and like each others’ tweets. Using the <code>reply_to_screen_name</code> column, we can inspect the retweet network contained in the COVID tweet dataset. Example <a href="#exm-fungraph"><span>2.7</span></a> first uses the data summarization commands from <code>tidyverse</code>(R) and <code>pandas</code>(Python) to create a data frame of connections or <code>edges</code> listing how often each user retweets each other user. The second code block shows how the <em>igraph</em> (R) and <em>networkx</em> (Python) packages are used to convert this edge list into a graph. From this graph, we select only the largest connected component and use a clustering algorithm to analyze which nodes (users) form cohesive subnetworks. Finally, a number of options are used to set the color and size of the edges, nodes, and labels, and the resulting network is plotted. As you can see, the central node is Donald Trump, who is retweeted by a large number of users, some of which are then retweeted by other users. You can play around with different settings for the plot options, or try to filter e.g.&nbsp;only tweets from a certain language. You could also easily compute social network metrics such as centrality on this network, and/or export the network for further analysis in specialized social network analysis software. See Chapter <a href="chapter13.html"><span>13</span></a> for more information on network analysis, and Chapter <a href="chapter06.html"><span>6</span></a> for the summarization commands used to create the edge list.</p>
 <div class="callout-note callout callout-style-simple no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">

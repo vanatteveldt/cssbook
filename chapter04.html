@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.313">
+<meta name="generator" content="quarto-1.2.335">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -213,6 +213,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 </li>
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./chapter11.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Automatic analysis of text</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter12.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Scraping online data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter13.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Network Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">References</a>
   </div>
 </li>
@@ -314,9 +329,9 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li>Add consistency checks. For instance, if from a theoretical point of view, two lists need to have the same length, check it with the length function; similarly, if you know that an object must have a specific value (e.g., because you know the result), check this assumption.</li>
 </ul></li>
 </ul>
-<p>Finally, when you know that some typical errors may arise and you don’t want your script to stop or crash, you can add an <code>exception</code> in your code. Suppose for example that you are building a function to connect to an API (see Section <span class="quarto-unresolved-ref">?sec-apis</span>). There might be many reasons for getting an error, such as an Internet connection problem, a server issue, or a missing document. You might decide to skip the error and continue the next lines or you could even give more detailed instructions of what to do (i.e.&nbsp;wait five minutes and try again). The inclusion of these exceptions are in fact a good practice and will help your code to be more robust and stable.</p>
+<p>Finally, when you know that some typical errors may arise and you don’t want your script to stop or crash, you can add an <code>exception</code> in your code. Suppose for example that you are building a function to connect to an API (see Section <a href="chapter12.html#sec-apis"><span>12.1</span></a>). There might be many reasons for getting an error, such as an Internet connection problem, a server issue, or a missing document. You might decide to skip the error and continue the next lines or you could even give more detailed instructions of what to do (i.e.&nbsp;wait five minutes and try again). The inclusion of these exceptions are in fact a good practice and will help your code to be more robust and stable.</p>
 <p>Let’s make Example <a href="chapter03.html#exm-if1"><span>3.17</span></a> from the previous chapter more robust so that it does not fail if an invalid headline is passed. For instance, in Python, the object <code>None</code> has no defined length; and in R, it is illegal to calculate the number of characters in a factor. It is a good idea to think about how you want to deal with this: either you want your script to just fail (and clean up the data), or you may want to deal with the error in some way. Especially if you have little control over the input data and/or if the process you are dealing with takes a long time, you may want to handle these errors rather than having your script fail. In Example <a href="#exm-tryexcept"><span>4.1</span></a>, we show how to use such a try/except construction: you indicate which code block you want to try (e.g., run as normal); and in the next block, you indicate what should happen if that results in an error.</p>
-<p>Note that using <em>try … except</em> statements like this is fairly common in Python code, in R it is not needed as frequently. In many cases where a Python function like <code>int</code> raises an exception if the input cannot be converted to an integer, the R function <code>as.numeric</code> just returns a missing value. Thus, in R you normally only encounter these statements when using external resources, for example when using an API or scraping a web page. See Chapter <span class="quarto-unresolved-ref">?sec-chap-scraping</span> for more details on these topics.</p>
+<p>Note that using <em>try … except</em> statements like this is fairly common in Python code, in R it is not needed as frequently. In many cases where a Python function like <code>int</code> raises an exception if the input cannot be converted to an integer, the R function <code>as.numeric</code> just returns a missing value. Thus, in R you normally only encounter these statements when using external resources, for example when using an API or scraping a web page. See Chapter <a href="chapter12.html"><span>12</span></a> for more details on these topics.</p>
 <div class="callout-note callout callout-style-simple no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -408,7 +423,7 @@ Venezuelan president is dismissed</code></pre>
 <p></p><figcaption class="figure-caption">Figure&nbsp;4.3: Markdown (left) and Jupyter (right) Notebooks</figcaption><p></p>
 </figure>
 </div>
-<p>So far you have seen many of the possibilities that the world of code offers you from a technical and collaboration perspective. We will come back to ethical and normative considerations throughout the book, in particular in Section <span class="quarto-unresolved-ref">?sec-ethicallegalpractical</span> and Section <span class="quarto-unresolved-ref">?sec-ethics</span>.</p>
+<p>So far you have seen many of the possibilities that the world of code offers you from a technical and collaboration perspective. We will come back to ethical and normative considerations throughout the book, in particular in Section <a href="chapter12.html#sec-ethicallegalpractical"><span>12.4</span></a> and Section <span class="quarto-unresolved-ref">?sec-ethics</span>.</p>
 <div id="fig-colab" class="quarto-figure quarto-figure-center anchored">
 <figure class="figure">
 <p><img src="img/ch04_colab.png" class="img-fluid figure-img"></p>

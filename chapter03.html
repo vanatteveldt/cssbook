@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.2.313">
+<meta name="generator" content="quarto-1.2.335">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -229,6 +229,21 @@ div.csl-indent {
         <li class="sidebar-item">
   <div class="sidebar-item-container"> 
   <a href="./chapter10.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Text as data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter11.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Automatic analysis of text</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter12.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Scraping online data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./chapter13.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Network Data</span></a>
   </div>
 </li>
         <li class="sidebar-item">
@@ -1804,7 +1819,7 @@ Note
 </div>
 <div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
-<p>A specific type of Python function that you may come across at some point (for instance, in Section <span class="quarto-unresolved-ref">?sec-crawling</span>) is the <code>generator</code>. Think of a function that returns a list of multiple values. Often, you do not need all values at once: you may only need the <em>next</em> value at a time. This is especially interesting when calculating the whole list would take a lot of time or a lot of memory. Rather than waiting for all values to be calculated, you can immediately begin processing the first value before the next arrives; or you can work with data so large that it doesn’t all fit into your memory at the same time. You recognize a generator by the <code>yield</code> keyword instead of a <code>return</code> keyword (Example <a href="#exm-generators"><span>3.21</span></a>)</p>
+<p>A specific type of Python function that you may come across at some point (for instance, in Section <a href="chapter12.html#sec-crawling"><span>12.2.2</span></a>) is the <code>generator</code>. Think of a function that returns a list of multiple values. Often, you do not need all values at once: you may only need the <em>next</em> value at a time. This is especially interesting when calculating the whole list would take a lot of time or a lot of memory. Rather than waiting for all values to be calculated, you can immediately begin processing the first value before the next arrives; or you can work with data so large that it doesn’t all fit into your memory at the same time. You recognize a generator by the <code>yield</code> keyword instead of a <code>return</code> keyword (Example <a href="#exm-generators"><span>3.21</span></a>)</p>
 </div>
 </div>
 </div>
@@ -1859,7 +1874,7 @@ length: 4</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>As a generator:
 type: &lt;class 'generator'&gt;
-representation: &lt;generator object square2 at 0x7f41424d1770&gt;
+representation: &lt;generator object square2 at 0x7f3410c35770&gt;
 entries: [1225, 4, 215296, 16]
 second pass: []</code></pre>
 </div>
