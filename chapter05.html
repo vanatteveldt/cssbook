@@ -114,6 +114,7 @@ div.csl-indent {
 <meta name="quarto:offset" content="./">
 <link href="./chapter06.html" rel="next">
 <link href="./chapter04.html" rel="prev">
+<link href="./img/favicon.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -647,7 +648,7 @@ an</code></pre>
 <span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://cssbook.net/d/stopwords.txt"</span></span>
 <span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>urllib.request.urlretrieve(url, <span class="st">"stopwords.txt"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>('stopwords.txt', &lt;http.client.HTTPMessage object at 0x7f0fca3326b0&gt;)</code></pre>
+<pre><code>('stopwords.txt', &lt;http.client.HTTPMessage object at 0x7f3cee332680&gt;)</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"stopwords.txt"</span>) <span class="im">as</span> f:</span>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    stopwords <span class="op">=</span> [w.strip() <span class="cf">for</span> w <span class="kw">in</span> f]</span>

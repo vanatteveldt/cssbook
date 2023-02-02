@@ -114,6 +114,7 @@ div.csl-indent {
 <meta name="quarto:offset" content="./">
 <link href="./chapter09.html" rel="next">
 <link href="./chapter07.html" rel="prev">
+<link href="./img/favicon.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -942,18 +943,18 @@ Prediction non-user user
 </div>
 <div class="sourceCode cell-code" id="cb64"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(search.best_params_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>{'bootstrap': True, 'criterion': 'entropy', 'n_estimators': 10}</code></pre>
+<pre><code>{'bootstrap': True, 'criterion': 'entropy', 'n_estimators': 200}</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb66"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classification_report(y_test, search.predict(X_test)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>              precision    recall  f1-score   support
 
-    non-user       0.46      0.40      0.43       161
-        user       0.65      0.70      0.67       252
+    non-user       0.43      0.38      0.40       161
+        user       0.63      0.68      0.65       252
 
-    accuracy                           0.58       413
-   macro avg       0.55      0.55      0.55       413
-weighted avg       0.57      0.58      0.58       413</code></pre>
+    accuracy                           0.56       413
+   macro avg       0.53      0.53      0.53       413
+weighted avg       0.55      0.56      0.56       413</code></pre>
 </div>
 </div>
 </div>

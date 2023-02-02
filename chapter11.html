@@ -114,6 +114,7 @@ div.csl-indent {
 <meta name="quarto:offset" content="./">
 <link href="./chapter12.html" rel="next">
 <link href="./chapter10.html" rel="prev">
+<link href="./img/favicon.png" rel="icon" type="image/png">
 <script src="site_libs/quarto-html/quarto.js"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -600,12 +601,12 @@ Saving to reviewdata.pickle.bz2</code></pre>
 <span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(scores)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>                             doc_id pos neg sent
-1 train/neg/11749_4.txt/11749_4.txt   6   5    1
-2    test/neg/3196_4.txt/3196_4.txt  11   5    6
-3   train/neg/2067_1.txt/2067_1.txt  19  14    5
-4  test/pos/7489_10.txt/7489_10.txt  16   4   12
-5    test/neg/3661_1.txt/3661_1.txt   5   9   -4
-6   train/neg/6123_4.txt/6123_4.txt   9   4    5</code></pre>
+1   train/neg/5436_2.txt/5436_2.txt   9   7    2
+2 train/pos/10517_8.txt/10517_8.txt  11   3    8
+3  test/neg/10246_2.txt/10246_2.txt  14  16   -2
+4   train/neg/8117_2.txt/8117_2.txt   0   8   -8
+5      test/pos/818_9.txt/818_9.txt  14   7    7
+6    test/neg/9926_4.txt/9926_4.txt   3   3    0</code></pre>
 </div>
 </div>
 </div>
@@ -825,29 +826,29 @@ weighted avg       0.82      0.82      0.82     25000</code></pre>
 <pre><code>NB-count
 MultinomialNB()
         Precision   Recall
-pos:    0.87        0.77
 neg:    0.79        0.88
+pos:    0.87        0.77
 
 
 NB-TfIdf
 MultinomialNB()
         Precision   Recall
-pos:    0.87        0.78
 neg:    0.80        0.88
+pos:    0.87        0.78
 
 
 LR-Count
 LogisticRegression(solver='liblinear')
         Precision   Recall
-pos:    0.87        0.85
 neg:    0.85        0.87
+pos:    0.87        0.85
 
 
 LR-TfIdf
 LogisticRegression(solver='liblinear')
         Precision   Recall
-pos:    0.89        0.88
-neg:    0.88        0.89</code></pre>
+neg:    0.88        0.89
+pos:    0.89        0.88</code></pre>
 </div>
 </div>
 </div>
@@ -878,32 +879,32 @@ neg:    0.88        0.89</code></pre>
 Pipeline(steps=[('countvectorizer', CountVectorizer(max_df=0.5, min_df=5)),
                 ('multinomialnb', MultinomialNB())])
         Precision   Recall
-pos:    0.87        0.77
 neg:    0.79        0.88
+pos:    0.87        0.77
 
 
 NB-TfIdf
 Pipeline(steps=[('tfidfvectorizer', TfidfVectorizer(max_df=0.5, min_df=5)),
                 ('multinomialnb', MultinomialNB())])
         Precision   Recall
-pos:    0.87        0.78
 neg:    0.80        0.88
+pos:    0.87        0.78
 
 
 LR-Count
 Pipeline(steps=[('countvectorizer', CountVectorizer(max_df=0.5, min_df=5)),
                 ('logisticregression', LogisticRegression(solver='liblinear'))])
         Precision   Recall
-pos:    0.87        0.85
 neg:    0.85        0.87
+pos:    0.87        0.85
 
 
 LR-TfIdf
 Pipeline(steps=[('tfidfvectorizer', TfidfVectorizer(max_df=0.5, min_df=5)),
                 ('logisticregression', LogisticRegression(solver='liblinear'))])
         Precision   Recall
-pos:    0.89        0.88
-neg:    0.88        0.89</code></pre>
+neg:    0.88        0.89
+pos:    0.89        0.88</code></pre>
 </div>
 </div>
 </div>
@@ -957,8 +958,8 @@ neg:    0.88        0.89</code></pre>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(short_classification_report(y_test, pred))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        Precision   Recall
-pos:    0.90        0.90
 neg:    0.90        0.90
+pos:    0.90        0.90
 None</code></pre>
 </div>
 </div>
@@ -1238,7 +1239,7 @@ Weight  Feature
 <span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>    urllib.request.urlretrieve(url, fn)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Downloading embeddings from https://cssbook.net/d/w2v_320d_trimmed
-('w2v_320d_trimmed', &lt;http.client.HTTPMessage object at 0x7fd5b3158820&gt;)</code></pre>
+('w2v_320d_trimmed', &lt;http.client.HTTPMessage object at 0x7fda943b4820&gt;)</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>embeddings <span class="op">=</span> KeyedVectors.load_word2vec_format(fn)</span>
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>emb_matrix <span class="op">=</span> np.zeros((<span class="bu">len</span>(tokenizer.word_index) <span class="op">+</span> <span class="dv">1</span>, embeddings.vector_size))</span>
@@ -1359,7 +1360,7 @@ ________________________________________________________________________________
 <span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> np.asarray([[x] <span class="cf">for</span> x <span class="kw">in</span> train_labels])</span>
 <span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a>m.fit(train_data, labels, epochs<span class="op">=</span><span class="dv">5</span>, batch_size<span class="op">=</span><span class="dv">128</span>, verbose<span class="op">=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;keras.callbacks.History object at 0x7fd5b84f1000&gt;</code></pre>
+<pre><code>&lt;keras.callbacks.History object at 0x7fda94408fd0&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>output <span class="op">=</span> m.predict(test_data, verbose<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -1369,7 +1370,7 @@ ________________________________________________________________________________
 <span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>acc <span class="op">=</span> <span class="bu">sum</span>(correct) <span class="op">/</span> <span class="bu">len</span>(pred)</span>
 <span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Accuracy: </span><span class="sc">{</span>acc<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Accuracy: 0.5723514211886305</code></pre>
+<pre><code>Accuracy: 0.5727820844099913</code></pre>
 </div>
 </div>
 </div>
@@ -1389,7 +1390,7 @@ ________________________________________________________________________________
 <span id="cb59-12"><a href="#cb59-12" aria-hidden="true" tabindex="-1"></a>eval<span class="ot">=</span><span class="fu">evaluate</span>(model, d_test<span class="sc">$</span>lemmata, d_test<span class="sc">$</span>value)</span>
 <span id="cb59-13"><a href="#cb59-13" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">glue</span>(<span class="st">"Accuracy: {eval['accuracy']}"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Accuracy: 0.444444447755814</code></pre>
+<pre><code>Accuracy: 0.441860467195511</code></pre>
 </div>
 </div>
 </div>
