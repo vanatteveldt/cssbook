@@ -2,7 +2,7 @@
 env
 /.quarto/
 
-# some files created by the example code in the book
+# some files created by the example code in the book, should probably add a cleanup block to most files to delete them
 /mynewcsvfile.csv
 /newstopwords.txt
 /stopwords.txt

@@ -1,0 +1,1203 @@
+# Scraping online data {#sec-chap-scraping}
+
+<!--# 
+Edit history 
+- selenium find_element_by_name replaced by find_element("name", ), same for css
+- reworked 'do you care about the children' example
+-->
+
+```{python}
+#| echo: false
+import warnings; warnings.filterwarnings('ignore')
+def print(x, *args, **kargs):
+  x = str(x)
+  if len(x) > 75 and "\n" not in x:
+    x = x[:75] + "..."
+  __builtins__.print(x, *args, **kargs)
+```
+
+
+```{r interceptprint}
+#| echo: false
+print = function(x, ...) {
+    if (is.list(x) & !is.null(names(x)) ) {
+        base::print(x[names(x)[1:3]])
+        cat("...")
+    } else {
+        if (nchar(x) > 70) x = paste0(substr(x, 1, 70), "...")
+        base::print(x, ...)
+    }
+}
+```
+
+
+**Abstract.**
+In this chapter, you will learn how to retrieve your data from online sources. We first discuss the use of Application Programming Interfaces, more commonly known as APIs, which allow you to retrieve data from social media platforms, government websites, or other forms of open data, in a machine-readable format. We then discuss how to do web scraping in a narrower sense to retrieve data from websites that do not offer an API. We also discuss how to deal with authentication mechanisms, cookies, and the like, as well as ethical, legal, and practical considerations.
+
+**Keywords.** web scraping, application programming interface (API), crawling, HTML parsing
+
+**Objectives:**
+
+-  Be able to use APIs for data retrieval
+ -  Be able to write your own web scraper
+ -  Assess basics of legal, ethical, and practical constraints
+
+::: {.callout-note icon=false collapse=true}
+## Packages used in this chapter
+
+This chapter uses in particular *httr* (R) and *requests* (Python) to retrieve data, *json* (Python) and *jsonlite* (R) to handle JSON responses, and *lxml* and *Selenium* for web scraping.
+
+You can install these and some additional packages (e.g., for geocoding) with the code below if needed  (see Section [-@sec-installing] for more details):
+
+::: {.panel-tabset}
+## Python code
+```{python chapter12install-python}
+#| eval: false
+!pip3 install requests geopandas geopy selenium lxml
+```
+## R code
+```{r chapter12install-r}
+#| eval: false
+install.packages(c("tidyverse", 
+                   "httr", "jsonlite", "glue", 
+                   "data.table"))
+```
+:::
+ After installing, you need to import (activate) the packages every session:
+
+::: {.panel-tabset}
+## Python code
+```{python chapter12library-python}
+# accessing APIs and URLs
+import requests
+
+# handling of JSON responses
+import json
+from pprint import pprint
+from pandas import json_normalize
+
+# general data handling
+# note: you need to additionally install geopy
+import geopandas as gpd
+import pandas as pd
+
+# static web scraping
+from urllib.request import urlopen
+from lxml.html import parse, fromstring
+
+# selenium
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.common.by import By
+
+import time
+```
+
+```{python pprint-mock}
+import json
+def pprint(x, *kargs, **kwarg):
+    x = json.dumps(x, indent=2)
+    for line in x.split("\n")[:10]:
+        print(line)
+    print("...")
+```
+
+## R code
+```{r chapter12library-r}
+library("tidyverse")
+library("httr")
+library("jsonlite")
+library("rvest")
+library("xml2")
+library("glue")
+library("data.table")
+```
+:::
+:::
+
+## Using Web APIs: From Open Resources to Twitter {#sec-apis}
+
+Let's assume we want to retrieve data from some online service. This
+could be some social media platform, but could also be a government website,
+some *open data* platform or initiative, or sometimes a
+commercial organization that provides some online service.  Of course,
+we could surf to their website, enter a search query, and somehow save
+the result. This would result in a lot of impracticalities,
+though. Most notably, websites are designed such that they are
+perfectly readable and understandable for humans, but the cues that
+are used often have no "meaning" for a computer program. As humans,
+we have no problem understanding which parts of a web page refer to
+the author of some item on a web page, what the numbers "2006" and
+"2008" mean, and on. But it is not trivial to think of a way to
+explain to a computer program how to identify variables like
+`author`, `title`, or `year` on a web page.
+We will learn how to do exactly that in Section [-@sec-webpages]. Writing
+such a *parser* is often necessary, but it is also error-prone
+and  a detour, as we are trying to bring some information
+that has been optimized for human reading *back* to a more
+structured data structure.
+
+Luckily, however, many online services  not only have web interfaces
+optimized for human reading, but also offer another possibility to
+access the data they provide: an API (Application Programming
+Interface).
+The vast amount of contemporary web APIs work like this: you send a
+*request* to some URL, and you get back a  JSON object. As you
+learned in Section [-@sec-reading], JSON is a nested data structure, very
+much like a Python dictionary or R named list (and, in fact, JSON data are typically 
+represented as such in Python and R). In other words: APIs directly
+gives us machine-readable data that we can work with without any need
+to develop a custom parser.
+
+Discussing specific APIs in a book can be a bit tricky, as there is a
+chance that it will be outdated: after all, the API provider may change
+it at any time. We therefore decided not to include a chapter on very
+specific applications such as "How to use the Twitter API" or similar --
+given the popularity of such APIs, a quick online search will produce
+enough up-to-date (and out-of-date) tutorials on these. Instead,
+we discuss the generic principles of APIs that should easily translate
+to  examples other than ours.
+
+In its simplest form, using an API is nothing more than visiting
+a specific URL. The first part of the URL specifies the so-called
+API endpoint: the address of the specific API you want to use. This
+address is then followed by a `?` and one or more key-value pairs with an
+equal sign like this: `key=value`. Multiple key-value pairs are
+separated with a `\&`.
+
+For instance, at the time of the writing of this book, Google offers
+an API endpoint, `https://www.googleapis.com/books/v1/volumes`, to search for books on Google Books.
+If you want to search for books about Python, you can supply a key `q` (which stands for query) with
+the value "python" (Example [-@exm-googleapi1]). We do not need any specific
+software for this -- we could, in fact, use a web browser as well.
+Popular packages that allow us to do it programatically are *httr*
+in combination with *jsonlite* (R) and *requests* (Python).
+
+But how do we know which parameters (i.e., which key-value pairs) we can use?
+We need to look it up in the documentation of the API we are
+interested in (in this example [developers.google.com/books/docs/v1/using](https://developers.google.com/books/docs/v1/using)).
+There is no other way of knowing that the key to submit a query
+is called `q`, and which other parameters can be specified.
+
+::: {.callout-note icon=false collapse=true}
+
+In our example, we used a simple value to include in the request:
+  the string "python".  But what if we want to submit a string that
+  contains, let's say, a space, or a character like `&` or `?` which,
+  as we have seen, have a special meaning in the request? In these
+  cases, you need to "encode" your URL using a mechanism called URL
+  encoding or percent encoding. You may have seen this earlier: a
+  space, for instance, is represented by `\%20`
+:::
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-googleapi1}
+Retrieving JSON data from the Google Books API.
+
+::: {.panel-tabset}
+## Python code
+```{python googleapi1-python}
+r = requests.get("https://www.googleapis.com//books/v1/volumes?q=python")
+data = r.json()
+print(data.keys())  # "items" seems most promising
+pprint(data["items"][0])  # let's print the 1st one
+```
+
+## R code
+
+```{r googleapi1-r}
+#| cache: true
+url = str_c("https://www.googleapis.com/books/v1/volumes?q=python")
+r = GET(url)
+data = content(r, as="parsed")
+print(names(data))
+print(data$items[[1]])
+```
+:::
+:::
+:::
+
+The data our request returns are nested data, and hence, they do not
+really "fit" in a tabular data frame. We could keep the data as they
+are (and then, for instance, just extract the key-value pairs that we
+are interested in), but -- for the sake of getting a quick overview --
+let's flatten the data so that they can be represented in a data frame
+(Example [-@exm-googleapi2]). This works quite well here, but may be more
+problematic when the items have a widely varying structure. If that
+is the case, we probably would want to write a loop to iterate
+over the different items and extract the information we are interested in.
+
+::: {.callout-note appearance="simple" icon=false}
+::: {#exm-googleapi2}
+Transforming the data into a data frame.
+
+::: {.panel-tabset}
+## Python code
+```{python googleapi2-python}
+#| cache: true
+d = json_normalize(data["items"])
+d.head()
+```
+## R code
+```{r googleapi2-r}
+r_text = content(r, "text")
+#| cache: true
+data_json = fromJSON(r_text, flatten=T)
+d = as_tibble(data_json)
+head(d)
+```
+:::
+:::
+:::
+
+You may have realized that you did not get *all* results.
+This protects you from accidentally downloading a huge dataset (you
+may have underestimated the number of Python books available on the
+market), and saves the provider of the API a lot of bandwidth.
+This does not mean that you cannot get more data. In fact, many APIs work
+with *pagination*: you first get the first "page" of results,
+then the next, and so on. Sometimes, the API response contains
+a specific key-value pair (sometimes called a "continuation key")
+that you can use to get the next results; sometimes, you can just
+say at which result you want to start (say, result number 11) and
+then get the next "page". You can then write a loop to retrieve
+as many results as you need (Example [-@exm-googleapi3]) -- just make sure
+that you do not get stuck in an eternal loop. When you start playing
+around with APIs, make sure you do not cause unnecessary traffic,
+but limit the number of calls that are made (see also Section [-@sec-ethicallegalpractical]).
+
+::: {.callout-note appearance="simple" icon=false}
+::: {#exm-googleapi3}
+Full script including pagination.
+
+::: {.panel-tabset}
+## Python code
+```{python googleapi3-python}
+#| cache: true
+
+allitems = []
+i = 0
+while True:
+    r = requests.get(
+        "https://www.googleapis.com/"
+        "books/v1/volumes?q=python&maxResults="
+        f"40&startIndex={i}"
+    )
+    data = r.json()
+    if not "items" in data:
+        print(f"Retrieved {len(allitems)}," "it seems like that's it")
+        break
+    allitems.extend(data["items"])
+    i += 40
+d = json_normalize(allitems)
+
+```
+## R code
+```{r googleapi3-r}
+#| cache: true
+
+i = 0
+j = 1
+url = str_c("https://www.googleapis.com/books/",
+            "v1/volumes?q=python&maxResults=40",
+            "&startIndex={i}")
+alldata = list()
+while (TRUE) {
+    r = GET(glue(url))
+    r_text = content(r, "text")
+    data_json = fromJSON(r_text, flatten=T)
+    if (length(data_json$items)==0) {break}
+    alldata[[j]] = as.data.frame(data_json)
+    i = i + 40
+    j = j + 1} 
+d = rbindlist(alldata, fill=TRUE)
+```
+:::
+:::
+:::
+
+Many APIs work very much like the example we discussed, and you
+can adapt the logic above to many APIs once you have read their
+documentation. You would usually start by playing around with
+single requests, and then try to automate the process by means
+of a loop.
+
+However, many APIs have restrictions regarding who can use them,
+how many requests can be made, and so on.
+For instance, you may need to limit the number of requests per minute
+by calling a `sleep` function within your loop to delay the
+execution of the next call. Or, you may need to authenticate
+yourself. In the example of the Google Books API, this will
+allow you to request more data (such as whether you own an
+(electronic) copy of the books you retrieved). In this case,
+the documentation outlines that you can simply pass an authentication
+token as a parameter with the URL. However, many APIs use
+more advanced authentication methods such as OAuth (see Section [-@sec-authentication]).
+
+Lastly, for many APIs that are very popular with social
+scientists, specific wrapper packages exist (such as *tweepy* (Python) or *rtweet* (R) for downloading twitter messages)
+which are a bit more user-friendly and handle things like authentication, pagination,
+respecting rate-limits, etc., for you.
+
+## Retrieving and Parsing Web Pages {#sec-webpages}
+
+Unfortunately, not all online services we may be interested in offer
+an API -- in fact, it has even been suggested that computational
+researchers have arrived in an "post-API age" [@Freelon2018], as
+API access for researchers has become increasingly restricted.
+
+If data cannot be collected using an API (or a similar service, such
+as RSS feeds), we need to resort to web scraping. Before you start a
+web scraping project, make sure to ask the appropriate  authorities for
+ethical and legal advice (see also Section [-@sec-ethicallegalpractical]).
+
+Web scraping (sometimes also referred to as harvesting), in essence,
+boils down to automatically downloading web pages aimed at a human
+audience, and extracting meaningful information out of them. One could
+also say that we are reverse-engineering the way the information was
+published on the web. For instance, a news site may always use a
+specific formatting to denote the title of an article -- and we would
+then use this to extract the title. This process is called "parsing",
+which in this context is just a fancy term for "extracting meaningful
+information".
+
+When scraping data from the web, we can distinguish two different
+tasks: (1) downloading a (possibly large) number of webpages, and (2)
+parsing the content of the webpages. Often, both go hand in
+hand. For instance, the URL of the next page to be downloaded might
+actually be parsed from the content of the current page; or some
+overview page may contain the links and thus has to be parsed first in
+order to download subsequent pages.
+
+We will first discuss how to parse a single HTML page (say, the page
+containing one specific product review, or one specific news article),
+and then describe how to "scale up" and repeat the process in a
+loop (to scrape, let's say, all reviews for the product; or all
+articles in a specific time frame).
+
+### Retrieving and Parsing an HTML Page {#sec-parsehtml}
+
+In order to parse an HTML file, you need to have a basic understanding
+of the structure of an HTML file. Open your web browser, visit a
+website of your choice (we suggest to use a simple page, such as
+[css-book.net/d/restaurants/index.html](http://css-book.net/d/restaurants/index.html)), and
+ inspect its underlying HTML code (almost all browsers have a
+function called something like "view source", which enables you to
+do so).
+
+You will see that there are some regular patterns in there. For
+example, you may see that each paragraph is enclosed with the tags
+`<p>` and `</p>`. Thinking back to Section [-@sec-regular], you may figure out
+that you could, for instance, use a regular expression to extract
+the text of the first paragraph. In fact, packages like *beautifulsoup*
+under the hood use regular expressions to do exactly that.
+
+Writing your own set of regular expressions to parse an HTML
+page is usually not a good idea (but it can be a last resort when
+everything else fails). Chances are high that you will make
+a mistake or  not handle some edge case correctly; and besides,
+it would be a bit like re-inventing the wheel. Packages like
+*rvest* (R), *beautifulsoup*, and *lxml* (both Python)
+already do this for you.
+
+In order to use them, though, you need to have a basic
+understanding of what an HTML page looks like. Here is a simplified
+example:
+
+```
+<html>
+<body>
+<h1>This is a title</h1>
+<div id="main">
+<p> Some text with one <a href="test.html">link </a> </p>
+<img src = "plaatje.jpg">an image </img>
+</div>
+<div id="body">
+<p class="lead"> Some more text </p>
+<p> Even more... </p>
+<p> And more. </p>
+</div>
+</body>
+</html>
+```
+
+For now, it is not too important to understand the function of each
+specific tag (although it might help, for instance, to realize that
+`a` denotes a link, `h1` a first-level heading,
+`p` a paragraph and `div` some kind of section).
+
+What is important, though, is to realize that each tag is opened and
+closed (e.g., `<p>` is closed by `</p>`).
+Because tags can be nested, we can actually
+draw the code as a tree. In our example, this would look like this:
+
+<ul style='list-style-type: "↪"'><li>html</li><ul style='list-style-type: "↪"'><li>body</li><ul style='list-style-type: "↪"'><li>h1</li><li>div\#main</li><ul style='list-style-type: "↪"'><li>p</li><ul style='list-style-type: "↪"'><li>a</li></ul><li>img</li></ul><li>div</li><ul style='list-style-type: "↪"'><li>p.lead</li><li>p</li><li>p</li></ul></ul></ul></ul>
+
+Additionally, tags can have *attributes*. For instance, the
+makers of a page with customer reviews may use attributes to specify
+what a section contains. For example, they may have written
+`<p class="lead"> ... </div>` to mark the lead paragraph of an article,
+and `<a href=test.html"> ...</a>` to specify the target of a hyperlink.
+Especially important here are the `id` and `class` attributes,
+which are often used by webpages to control the formatting.
+`id` (indicated with the hash sign `#` above) gives a unique ID to a single element,
+while `class` (indicated with a period) assigns a class label to one or more elements.
+This enables web sites to specify their layout and formatting using a technique called Cascading Style Sheets (CSS).
+For example, the web page could set the lead paragraph to be bold.
+The nice thing is that we can exploit
+this information to tell our parser where to find the elements we
+are interested in.
+
+<!--# WvA: I added a manual 'break' in the first 'advanced' example below, maybe this can be solved more elegantly? --> 
+
+
+|Example                        | CSS Select             | XPath                         |
+|-------------------------------|------------------------|-------------------------------|
+|**Basic tree navigation**                                                               |
+| `h1`anywhere in document      | `h1`                   | `//h1`                        |
+| `h1`inside a body             | `body h1`              | `//body//h1`                  |
+| `h1`directly inside`div`      | `div > h1`             | `//div/h1`                    |
+| Any node directly inside`div` | `div *`                | `//div/*`                     |
+| `p`next to a`h1`              | `h1   p`               | `//h1/following-sibling::p`   |
+| `p`next to a`h1`              | `h1 + p`               | `//h1/following-sibling::p[1]`|
+|**Node attributes**                                                                     |
+| `<div id='x1'>`               | `div#x1`               | `//div[@id='x1']`             |
+| any node with`id x1`          | `#x1`                  | `//*[@id='x1']`               |
+| `<div class='row'>`           | `div.row`              | `//div[@class='row']`         |
+| any node with`class row`      | `.row`                 | `//*[@class='row']`           |
+| `a`with`href="#"`             | `a[href="#"]`          | `//a[@href="#"]`              |
+|<span style="white-space:nowrap">**Advanced tree navigation**</span>                    |
+| `a`in a`div`with class 'meta' directly in the `main` | `#main > div.meta a` | `//*[@id='main']` `/div[@class='meta']//a`|
+| First`p`in a`div`             | `div p:first-of-type`  | `//div/p[1]`                  |
+| First child of a`div`         | `div :first-child`     | `//div/*[1]`                  |
+| Second`p`in a`div`            | `div p:nth-of-type(2)` | `//div/p[2]`                  |
+| Second`p`in a`div`            | `div p:nth-of-type(2)` | `//div/p[2]`                  |
+| <span style="white-space:nowrap">parent of the`div`with id`x1`</span> | (not possible) | `//div[@id='x1']/parent::*`|
+: Overview of CSSSelect and XPath syntax {#tbl-cssselect}
+
+**CSS Selectors.** The easiest way to specify our parser to look for a specific element is to use a *CSS Selector*,
+which might be familiar to you if you have created web pages.
+For example, to find the lead paragraph(s) we specify `p.lead`.
+To find the node with `id="body"`, we can specify `\#body`.
+You can also use this to specify relations between nodes. For example,
+to find all paragraphs within the body element we would write `\#body p`.
+
+Table [-@tbl-cssselect] gives an overview of the possibilities of CSS Select.
+In general, a CSS selector is a set of node specifiers (like `h1`, `.lead` or `div\#body`),
+optionally with relation specifiers between them.
+So, `\#body p` finds a `p` anywhere inside the `id=body` element,
+while `\#body > p` requires the `p` to be directly contained inside the body
+(with no other nodes in between).
+
+**XPath.**
+An alternative to CSS Selectors is *XPath*.
+Where CSS Selectors are directly based on HTML and CSS styling,
+XPath is a general way to describe nodes in XML (and HTML) documents.
+The general form of XPath is similar to CSS Select:
+a sequence of node descriptors (such as `h1` or `\*[@id='body']`).
+Contrary to CSS Select, you always have to specify the relationship, where
+`//` means any direct or indirect descendant and `/` means a direct child.
+If the relationship is not a child or descendant relationship (but for example a sibling or parent),
+you specify the `axis` with e.g. `//a/parent::p` meaning an `a` anywhere in the document (`//a`) which has a direct parent (`/parent::`) that is a `p`.
+
+A second difference with CSS Selectors is that the *class* and *id* attributes are not given special treatment,
+but can be used with the general `[@attribute='value']` pattern.
+Thus, to get the lead paragraph you would specify `//p[@class='lead']`.
+
+The advantage of XPath is that it is a very powerful tool.
+Everything that you can describe with a CSS Selector can also be described with an XPath pattern,
+but there are some things that CSS Selectors cannot describe,
+such as parents.
+On the other hand, XPath patterns can be a bit harder to write, read, and debug.
+You can choose to use either tool, and you can even mix and match them in a single script,
+but our general recommendation is to use CSS Selectors unless you need to use the specific abilities of XPath.
+
+Example [-@exm-htmlparse1] shows how to use XPATHs and CSS selectors to parse
+an HTML page. To fully understand it, open
+[cssbook.net/d/restaurants/index.html](https://cssbook.net/d/restaurants/index.html) in a browser and
+look at its source code (all modern browsers have a function "View
+page source" or similar), or -- more comfortable -- right-click on an
+element you are interested in (such as a restaurant name) and select
+"Inspect element" or similar. This will give you a user-friendly
+view of the HTML code.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-htmlparse1}
+Parsing websites using XPATHs or CSS selectors
+
+::: {.panel-tabset}
+## Python code
+```{python htmlparse1-python}
+tree = parse(urlopen("https://cssbook.net/d/eat/index.html"))
+
+# get the restaurant names via XPATH
+print([e.text_content().strip() for e in tree.xpath("//h3")])
+
+# get the restaurant names via CSS Selector
+print([e.text_content().strip() for e in tree.getroot().cssselect("h3")])
+
+```
+## R code
+```{r htmlparse1-r}
+url = "https://cssbook.net/d/eat/index.html"
+page = read_html(url)
+
+# get the restaurant names via XPATH
+page %>% html_nodes(xpath="//h3") %>% html_text()
+
+# get the restaurant names via CSS Selector
+page %>% html_nodes("h3") %>% html_text() 
+```
+:::
+:::
+:::
+
+Of course, Example [-@exm-htmlparse1] only parses one possible element of interest: the restaurant names. Try to retrieve other elements as well!
+
+Notably, you may want to parse links. In HTML, links use a specific tag, `a`. These tags have an attribute, `href`, which contains the link itself. Example [-@exm-htmlparse3] shows how, after selecting the `a` tags, we can access these attributes.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-htmlparse3}
+Parsing link texts and links
+
+::: {.panel-tabset}
+## Python code
+```{python htmlparse3-python}
+#| cache: true
+
+linkelements = tree.xpath("//a")
+linktexts = [e.text for e in linkelements]
+links = [e.attrib["href"] for e in linkelements]
+
+print(linktexts)
+print(links)
+
+```
+## R code
+```{r htmlparse3-r}
+#| cache: true
+
+page %>% 
+  html_nodes(xpath="//a") %>% 
+  html_text() 
+page %>% 
+  html_nodes(xpath="//a") %>% 
+  html_attr("href")
+
+```
+:::
+:::
+:::
+
+{{< include chapter12-note-text.qmd >}}
+
+::: {.callout-note icon=false collapse=true}
+## Pretending to be a specific browser.
+  When *lxml*, *rvest*, or your web browser download an HTML page, they send a so-called HTTP request. This request contains the URL, but also some meta-data, such as a so-called user-agent string. This string specifies the name and version of the browser. Some sites may block specific user agents (such as, for instance, the ones that *lxml* or *rvest* use); and sometimes, they deliver different content for different browsers. By using a more powerful module for downloading the HTML code (such as *requests* or *httr*) before parsing it, you can specify your own user-agent string and thus pretend to be a specific browser. If you do a web search, you will quickly find long lists with popular strings. In the code below, we rewrote [@exm-htmlparse1] such that a custom user-agent can be specified:
+
+::: {.panel-tabset}
+## Python code
+```{python htmlparse1useragent-python}
+headers = {
+    "User-Agent": "Mozilla/5.0 (Windows "
+    "NT 10.0; Win64; x64; rv:60.0) "
+    "Gecko/20100101 Firefox/60.0"
+}
+
+htmlsource = requests.get(
+    "https://cssbook.net/d/eat/index.html", headers=headers
+).text
+tree = fromstring(htmlsource)
+print([e.text_content().strip() for e in tree.xpath("//h3")])
+```
+## R code
+```{r htmlparse1useragent-r}
+#| cache: true
+r = GET("https://cssbook.net/d/eat/index.html",
+    user_agent=str_c("Mozilla/5.0 (Windows NT ",
+    "10.0; Win64; x64; rv:60.0) Gecko/20100101 ",
+    "Firefox/60.0"))
+page = read_html(r)
+page %>% html_nodes(xpath="//h3") %>% html_text()
+
+```
+:::
+:::
+
+### Crawling Websites {#sec-crawling}
+
+Once we have mastered parsing a single HTML page, it is time to scale
+up. Only rarely are we interested in parsing a single page. In most
+cases, we want to use an HTML page as a starting point, parse it,
+follow a link to some other interesting page, parse it as well, and so
+on. There are some dedicated frameworks for this such as *scrapy*,
+but in our experience, it may be more of a burden to learn that
+framework than to just implement your crawler yourself.
+
+Staying with the example of a restaurant review website, we might be
+interested in retrieving all restaurants from a specific city, and for
+all of these restaurants, all available reviews.
+
+Our approach, thus, could look as follows:
+
+-  Retrieve the overview page.
+	 -  Parse the names of the restaurants and the corresponding links.
+	 -  Loop over all the links, retrieve the corresponding pages.
+	 -  On each of these pages, parse the interesting content (i.e., the reviews, ratings, and so on).
+
+So, what if there are multiple overview pages (or multiple pages with
+reviews)? Basically, there are two possibilities: the first
+possibility is to look for the link to the next page, parse it,
+download the next page, and so on.  The second possibility exploits
+the fact that often, URLs are very systematic: for instance, the first
+page of restaurants might have a URL such as
+[myreviewsite.com/amsterdam/restaurants.html?page=1](http://myreviewsite.com/amsterdam/restaurants.html?page=1).  If this
+is the case, we can simply construct a list with all possible URLs
+([@exm-createurls])
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-createurls}
+Generating a list of URLs that follow the same pattern.
+
+::: {.panel-tabset}
+## Python code
+```{python createurls-python}
+#| cache: true
+baseurl = "https://reviews.com/?page="
+tenpages = [f"{baseurl}{i+1}" for i in range(10)]
+print(tenpages)
+```
+## R code
+```{r createurls-r}
+#| cache: true
+baseurl="https://reviews.com/?page="
+tenpages=glue("{baseurl}{1:10}")
+print(tenpages)
+```
+:::
+:::
+:::
+
+Afterwards, we would just loop over this list and retrieve all the
+pages (a bit like how we approached [@exm-googleapi3] in [@sec-apis]).
+
+However, often, things are not as straightforward, and we need to find
+the correct links on a page that we have been parsing -- that's why we
+*crawl* through the website.
+
+Writing a good crawler can take some time, and they will look very
+differently for different pages. The best advice is to build them up
+step-by-step. Carefully inspect the website you are interested in.
+Take a sheet of paper, draw its structure, and try to find out which
+pages you need to parse, and how you can get from one page to the next.
+Also think about how the data that you want to extract should be organized.
+
+We will illustrate this process using our mock-up review website [cssbook.net/d/restaurants/](https://cssbook.net/d/restaurants/).
+First, have a look at the site and try to understand its structure.
+
+You will see that it has an overview page, `index.html`, with the
+names of all restaurants and, per restaurant, a link to a page with reviews.
+Click on these links, and note your observations, such as:
+ -  the pages have different numbers of reviews;
+ -  each review consists of an author name, a review text, and a rating;
+ -  some, but not all, pages have a link saying "Get older reviews"
+ - &hellip;
+
+If you combine what you just learned about extracting text and links from HTML
+pages with your knowledge about control structures like loops and conditional
+statements (Section [-@sec-controlstructures]), you can now write your own crawler.
+
+Writing a scraper is a craft, and there are several ways of achieving your goal.
+You probably want to develop your scraper in steps: first write a function to
+parse the overview page, then a function to parse the review pages, then try
+to combine all elements into one script. Before you read on, try to write
+such a scraper.
+
+To show you one possible solution, we implemented a scraper in Python
+that crawls and parses all reviews for all restaurants
+(Example [-@exm-crawling]), which we describe in detail below.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-crawling}
+Crawling a website in Python
+```{python crawling-python}
+#| cache: true
+BASEURL = "https://cssbook.net/d/eat/"
+
+def get_restaurants(url):
+    """takes the URL of an overview page as input
+    returns a list of (name, link) tuples"""
+    tree = parse(urlopen(url))
+    names = [
+        e.text.strip() for e in tree.xpath("//div[@class='restaurant']/h3")
+    ]
+    links = [
+        e.attrib["href"] for e in tree.xpath("//div[@class='restaurant']//a")
+    ]
+    return list(zip(names, links))
+
+def get_reviews(url):
+    """yields reviews on the specified page"""
+    while True:
+        print(f"Downloading {url}...")
+        tree = parse(urlopen(url))
+        names = [
+            e.text.strip() for e in tree.xpath("//div[@class='review']/h3")
+        ]
+        texts = [e.text.strip() for e in tree.xpath("//div[@class='review']/p")]
+        ratings = [e.text.strip() for e in tree.xpath("//div[@class='rating']")]
+        for u, txt, rating in zip(names, texts, ratings):
+            review = {}
+            review["username"] = u.replace("wrote:", "")
+            review["reviewtext"] = txt
+            review["rating"] = rating
+            yield review
+        bb = tree.xpath("//span[@class='backbutton']/a")
+        if bb:
+            print("Processing next page")
+            url = BASEURL + bb[0].attrib["href"]
+        else:
+            print("No more pages found.")
+            break
+
+print("Retrieving all restaurants...")
+links = get_restaurants(BASEURL + "index.html")
+print(links)
+
+with open("reviews.json", mode="w") as f:
+    for restaurant, link in links:
+        print(f"Processing {restaurant}...")
+        for r in get_reviews(BASEURL + link):
+            r["restaurant"] = restaurant
+            f.write(json.dumps(r))
+            f.write("\n")
+
+# You can process the results with pandas
+# (using lines=True since it"s one json per line)
+df = pd.read_json("reviews.json", lines=True)
+print(df)
+```
+:::
+:::
+
+First, we need to get a list of all restaurants and the links to their
+reviews. That's what is done in the function *get_restaurants*. This
+is actually the first thing we do (see line 32).
+
+We now want to loop over these links and retrieve the reviews.  We
+decided to use a *generator* (Section [-@sec-controlstructures]): instead of writing a
+function that collects *all* reviews in a list first, we let the
+function yield each review immediately -- and then append that review
+to a file. This has a big advantage: if our scraper fails (for
+instance, due to a time out, a block, or a programming error), then we
+have already saved the reviews we got so far.
+
+We loop over the links to the restaurants (line 36) and call the
+function *get_reviews* (line 38). Each review it returns (the review
+is a dict) gets the name of the restaurant as an extra key, and then
+gets written to a file which contains one JSON-object per line (also
+known as a jsonlines-file).
+
+The function `get_reviews` takes a link to a review page as input and
+yields reviews. If we knew all pages with reviews already, then we
+would not need the while loop statement in line 12 and the lines
+24--29. However, as we have seen, some review pages contain a link to
+older reviews. We therefore use a loop that runs forever (that is what
+`while True:` does), *unless* it encounters a `break` statement
+(line 29).  An inspection of the HTML code shows that these links have
+a `span` tag with the attribute `class="backbutton"`. We therefore
+check if such a button exists (line 24), and if so, we get its `href`
+attribute (i.e., the link itself), overwrite the `url` variable with
+it, and then go back to line 16, the beginning of the loop, so that we
+can download and parse this next URL.  This goes on until such a
+link is no longer found.
+
+### Dynamic Web Pages {#sec-selenium}
+
+You may have realized that all our scraping efforts until now
+proceeded in two steps: we retrieved (downloaded) the HTML source of a
+web page and then parsed it. However, modern websites more and more frequently 
+are dynamic rather than static. For example, after being loaded, they
+load additional content, or what is displayed changes based on what
+the user does. Frequently, some JavaScript is run within the user's
+browser to do that. However, we do not have a browser here. The HTML
+code we downloaded may contain some instructions for the browser that
+some code needs to be run, but in the absence of a browser, our Python
+or R script cannot do this.
+
+As a first test to check out whether this is a concern, you can simply
+check whether the HTML code in your browser is the same as that you would
+get if you downloaded it with R or Python.  After having retrieved the
+page ([@exm-htmlparse1]), you simply dump it to a file
+([@exm-htmltofile]) and open this file in your browser to verify that
+you indeed downloaded what you intended to download (and not, for
+instance, a login page, a cookie wall, or an error message).
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-htmltofile}
+Dumping the HTML source to a file
+
+::: {.panel-tabset}
+## Python code
+```{python htmltofile-python}
+#| cache: true
+#| results: hide
+with open("test.html", mode="w") as fo:
+    fo.write(htmlsource)
+
+```
+## R code
+```{r htmltofile-r}
+#| cache: true
+fileConn<-file("test.html")
+writeLines(content(r, as = "text"), fileConn)
+close(fileConn)
+```
+:::
+:::
+:::
+
+If this test  shows that the data you are interested in is
+indeed not part of the HTML code you can retrieve with R or Python,
+and use the following checklist to find
+
+-  Does using a different user-agent string (see above) solve the issue?
+ -  Is the issue due to some cookie that needs to be accepted or requires you to log in (see below)?
+ -  Is a different page delivered for different browsers, devices, display settings, etc.?
+
+If all of this does not help, or if you already know for sure that the
+content you are interested in is dynamically fetched via JavaScript or
+similar, you can use *Selenium* to literally start a browser and
+extract the content you are interested in from there. Selenium has
+been designed for testing web sites and allows you to automate clicks 
+in a browser window, and also supports CSS selectors and Xpaths
+to specify parts of the web page.
+
+Using Selenium may require some additional setup on your computer,
+which may depend on your operating system and the software versions you
+are using -- check out the usual online sources for guidance if
+needed.  It is possible to use  Selenium through R using
+*Rselenium*. However, doing so can be quite a hassle and requires,
+ running a separate Selenium server, for instance,  using
+Docker. If you opt to use Selenium for web scraping, your safest bet
+is probably to follow an online tutorial and/or to dive into the
+documentation. To give you a first impression of the general working,
+Example [-@exm-selenium] shows you how to (at the time of writing of this
+book) open Firefox, surf to Google, google for Tintin by entering that
+string and pressing the return key, click on the first link containing
+that string, and take a screenshot of the result.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-selenium}
+Using Selenium to literally open a browser, input text, click on a link, and take a screenshot.
+
+```{python selenium-python}
+#| eval: false
+driver = webdriver.Firefox()
+driver.implicitly_wait(10)
+driver.get("https://www.duckduckgo.com")
+element = driver.find_element("name", "q")
+element.send_keys("TinTin")
+element.send_keys(Keys.RETURN)
+try:
+    driver.find_element("css selector", "#links a").click()
+    # let"s be cautious and wait 10 seconds
+    # so that everything is loaded
+    time.sleep(10)
+    driver.save_screenshot("screenshotTinTin.png")
+finally:
+    # whatever happens, close the browser
+    driver.quit()
+
+```
+:::
+:::
+
+::: {.callout-note icon=false collapse=true}
+## Losing your head
+
+If you want to run long-lasting scraping processes using Selenium in
+the background (or on a server without a graphical user interface),
+you may want to look into what is called a "headless" browser. For
+instance, Selenium can start Firefox in "headless" mode, which means
+that it will run without making any connection to a graphical
+interface. Of course, that also means that you cannot watch Selenium
+scrape, which may make debugging more difficult. You could opt for
+developing your scraper first using a normal browser, and then
+changing it to use a headless browser once everything works.
+:::
+
+## Authentication, Cookies, and Sessions {#sec-authentication}
+
+### Authentication and APIs {#sec-authapi}
+
+When we introduced APIs in Section [-@sec-apis], we used the example of an
+API where you did not need to authenticate yourself. As we have seen,
+using such an API is as simple as sending an HTTP request to an
+endpoint and getting a response (usually, a JSON object) back. And
+indeed, there are plenty of interesting APIs (think for instance of
+open government APIs) that work this way.
+
+While this has obvious advantages for you, it also has some serious
+downsides from the perspective of the API provider as well as from
+a security and privacy standpoint. The more confidential the data is,
+the more likely it is that the API provider needs to know who you
+are in order to determine which data you are allowed to retrieve;
+and even if the data are not confidential, authentication may be
+used to limit the number of requests that an individual can make
+in a given time frame.
+
+In its most simple form, you just need to provide a unique key that
+identifies you as a user. For instance, Example [-@exm-textrazor] shows how
+such a key can be passed along as an HTTP header, essentially as
+additional information next to the URL that you want to retrieve (see
+also Section [-@sec-authweb]). The example shows a call to an endpoint
+of a commercial API for natural language processing to inform how
+many requests we have made today.
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-textrazor}
+Passing a key as HTTP request header to authenticate at an API endpoint
+
+::: {.panel-tabset}
+## Python code
+```{python textrazor-python}
+#| cache: true
+requests.get(
+    "https://api.textrazor.com/account/", headers={"x-textrazor-key": "SECRET"}
+).json()
+
+```
+## R code
+```{r textrazor-r}
+#| cache: true
+r = GET("https://api.textrazor.com/account/", 
+  add_headers("x-textrazor-key"="SECRET"))
+cat(content(r, "text"))
+```
+:::
+:::
+:::
+
+As you see, using an API that requires authentication by passing a key
+as an HTTP header is hardly more complicated than using APIs that do
+not require authentication such as outlined in Section [-@sec-apis].
+However, many APIs use more complex protocols for authentication.
+
+The most popular one is called OAuth, and it is used by many APIs
+provided by major players such as Google, Facebook, Twitter, GitHub,
+LinkedIn, etc. Here, you have a client ID and a client secret
+(sometimes also called consumer key and consumer secret, or API key and API secret) and an
+access token with associated access token secret. The first pair
+authenticates you as a user, the second pair authenticates the
+specific "app" (i.e., your script). Once authenticated, your
+script can then interact with the API. While it is possible to
+directly work with OAuth HTTP requests using *requests_oauthlib*
+(Python) or *httr* (R), chances are relatively low that you
+have to do so, unless you plan on really developing your own app
+or even your own API: for all popular API's, so-called wrappers,
+packages that provide a simpler interface to the API, are available
+on pypi and CRAN. Still, all of these require to have at least
+a consumer key and a consumer secret. The access token sometimes
+is generated via a web interface where you manage your account
+(e.g., in the case of Twitter), or can be acquired by your script
+itself, which then will redirect the user to a website in which
+they are asked to authenticate the app. The nice thing about this
+is that it only needs to happen once: once your app is authenticated,
+it can keep making requests.
+
+### Authentication and Webpages {#sec-authweb}
+
+In this section, we briefly discuss different approaches for dealing
+with websites where you need to log on, accept something (e.g., a
+so-called cookie wall), or have to otherwise authenticate yourself.
+One approach can be the use of a web testing framework like Selenium
+(see Section [-@sec-selenium]): you let your script literally open a browser
+and, for instance, fill in your login information.
+
+However, sometimes that's not necessary and we can still use simpler
+and more efficient webscraping without invoking a browser. As we have already
+seen in Section [-@sec-parsehtml], when making an HTTP request, we can transmit
+additional information, such as the so-called user-agent string. In a
+similar way, we can pass other information, such as cookies.
+
+In the developer tools of your browser (which we already used to determine
+XPATHs and CSS selectors), you can look up which cookies a specific website
+has placed. For instance, you could inspect all cookies *before* you
+logged on (or passed a cookie wall) and again inspect them afterwards to
+determine what has changed. With this kind of reverse-engineering, you
+can find out what cookies you need to manually set.
+
+In Example [-@exm-cookiewall], we illustrate this for a specific page  (at the
+time of writing of our book). Here, by inspecting the cookies in Firefox,
+we found out that clicking "Accept" on the cookie wall landing page
+caused a cookie with the name `cpc` and the value `10` to be set.   To set those cookies in our scraper, the easiest way is to retrieve that page first and store the cookies sent by the server. In Example [-@exm-cookiewall], we therefore start a *session*
+and try to download the page. We know that this will only show us the
+cookie wall -- but it will also generate the necessary cookies. We then
+store these cookies, and add the cookie that we want to be set (`cpc=10`)
+to this cookie jar. Now, we have all cookies that we need for future
+requests. They will stay there for the whole session.
+
+If we only want to get a single page, we may not need to start a session
+to remember all the cookies, and we can just directly pass the single
+cookie we care about to a request instead (Example [-@exm-cookiewall2]).
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-cookiewall}
+Explicitly setting a cookie to circumvent a cookie wall
+
+::: {.panel-tabset}
+## Python code
+
+```{python cookie-url-python}
+URL = "https://www.geenstijl.nl/5160019/page"
+```
+```{python cookiewall-python}
+#| cache: true
+# circumvent cookie wall by setting a specific
+# cookie: the key-value pair (cpc: 10)
+client = requests.session()
+r = client.get(URL)
+
+cookies = client.cookies.items()
+cookies.append(("cpc", "10"))
+response = client.get(URL, cookies=dict(cookies))
+# end circumvention
+
+tree = fromstring(response.text)
+allcomments = [e.text_content().strip() for e in tree.cssselect(".cmt-content")]
+print(f"There are {len(allcomments)} comments.")
+
+```
+## R code
+```{r cookiewall-r}
+#| cache: true
+URL = "https://www.geenstijl.nl/5160019/page/"
+
+# circumvent cookie wall by setting a specific
+# cookie: the key-value pair (cpc: 10)
+r = GET(URL)
+cookies = setNames(cookies(r)$value, 
+                   cookies(r)$name)
+cookies = c(cookies, cpc=10)
+r = GET(URL, set_cookies(cookies))
+# end circumvention
+
+allcomments = r %>% 
+  read_html() %>%
+  html_nodes(".cmt-content") %>% 
+  html_text()
+
+glue("There are {length(allcomments)} comments.")
+
+```
+:::
+:::
+:::
+
+::: {.callout-note appearance="simple" icon=false}
+
+::: {#exm-cookiewall2}
+Shorter version of  for single requests
+
+::: {.panel-tabset}
+## Python code
+```{python cookiewall2-python}
+#| cache: true
+r = requests.get(URL, cookies={"cpc": "10"})
+tree = fromstring(r.text)
+allcomments = [e.text_content().strip() for e in tree.cssselect(".cmt-content")]
+print(f"There are {len(allcomments)} comments.")
+
+```
+## R code
+```{r cookiewall2-r}
+#| cache: true
+r = GET(URL, set_cookies(cpc=10))
+allcomments = r %>% 
+  read_html() %>%
+  html_nodes(".cmt-content") %>% 
+  html_text()
+glue("There are {length(allcomments)} comments.")
+```
+:::
+:::
+:::
+
+## Ethical, Legal, and Practical Considerations {#sec-ethicallegalpractical}
+
+Web scraping is a powerful tool, but it needs to be handled
+responsibly. Between the white area of sites that explicitly consented
+to creating a copy of their data (for instance, by using a creative
+commons license) and the black area of an exact copy of copyrighted
+material and redistributing it as it is, there is a large gray area
+where it is less clear what is acceptable and what is not.
+
+There is a tension between legitimate interests of the operators of
+web sites and the producers of content on the one hand, and the
+societal interest of studying online communication on the other
+hand. Which interest prevails may differ on a case-to-case basis. For
+instance, when using APIs as described in Section [-@sec-apis], in most
+cases, you have to consent to the terms of service (TOS) of the API
+provider.
+
+For example, Twitter's TOS allow you to redistribute the numerical
+tweet ids, but not the tweets themselves, and therefore, it is common
+to share such lists of ids with fellow researchers instead of the
+"real" Twitter datasets. Of course, this is not optimal from a
+reproducibility point of view: if another researcher has to retrieve
+the tweets again based on their ids, then this is not only cumbersome,
+but most likely also leads to a slightly different dataset, because
+tweets may have been deleted in the meantime. At the same time, it is
+a compromise most people can live with.
+
+Other social media platforms have closed their APIs or tightened the
+restrictions a lot, making it impossible to study many pressing
+research questions. Therefore, some have even called researchers to
+neglect these TOS, because "in some circumstances the benefits to
+society from breaching the terms of service outweigh the detriments to
+the platform itself" [@Bruns2019 p.~1561 ]. Others acknowledge
+the problem, but doubt that this is a good solution
+[@Puschmann2019].
+In general, one needs to distinguish between the act of collecting the
+data and sharing the data. For instance, in many jurisdictions, there
+are legal exemptions for collecting data for scientific purposes, but
+that does not mean that they can be re-distributed as they are
+[@VanAtteveldt2019].
+
+This chapter can by no means replace the consultation of a legal
+expert and/or an ethics board, but we would like to offer some
+strategies to minimize potential problems.
+
+**Be nice.** Of course, you could send hundreds of requests per minute (or second) to a website and try to download everything that they have ever published. However, this causes unnecessary load on their servers (and you would probably  get blocked). If, on the other hand, you carefully think about what you really need to download, and include a lot of waiting times (for instance, using `sys.sleep` (R) or `time.sleep` (Python) so that your script essentially does the same as could be done by hiring a couple of student assistants to copy-paste the data manually, then problems are much less likely to arise.
+
+**Collaborate.** Another way to minimize traffic and server load is to collaborate more. A concerted effort with multiple researchers may lead to less duplicate data and in the end probably an even better, re-usable dataset.
+
+**Be extra careful with personal data.** Both from an ethical and a legal point of view, the situation changes drastically as soon as personal data are involved. Especially since the General Data Protection Regulation (GDPR) regulations took effect in the European Union, collecting and processing such data requires a lot of additional precaution and is usually subject to explicit consent. It is clearly infeasible to ask every Twitter user  for consent to process their tweet and doing so is probably covered by research exceptions, the general advice is to store as little personal data as possible and only what is absolutely needed. Most likely, you need to have a data management plan in place, and should get appropriate  advice from your legal department. Therefore, think carefully whether you really need, for instance, the user names of the authors of reviews you are going to scrape, or whether the text alone suffices.
+
+Once all ethical and legal concerns are sorted out and you have made sure that you have written a scraper in such a way that it does not cause unnecessary traffic and load on the servers from which you are scraping, and after doing some test runs, it is time to think about how to actually run it on a larger scale. You may already have figured that you probably do not want to run your scraper from a Jupyter Notebook that is constantly open in your browser on your personal laptop. Also here, we would like to offer some suggestions.
+
+**Consider using a database.** Imagine the following scenario: your scraper visits hundreds of websites, collects its results in a list or in a data frame, and after hours of running suddenly crashes -- maybe because some element that you were sure must exist on each page,  exists only on 999 out of 1000 pages, because a connection timed out, or any other error. Your data is lost, you need to start again (not only annoying, but also undesirable from a traffic minimization point of view). A better strategy may be to immediately write the data for each page  to a file. But then, you need to handle a potentially huge number of files later on. A much better approach, especially if you plan to run your scraper repeatedly over a long period of time, is to consider the use of a database in which you dump the results immediately after a page has been scraped (see Section [-@sec-databases]).
+
+**Run your script from the command line.** Store your scraper as a .py or .R script and run it from your terminal (your command line) by typing `python myscript.py` or `R myscript.R` rather than using an IDE such as Spyder or R Studio or a Jupyter Notebook. You may want to have your script print a lot of status information (for instance, which page it is currently scraping), so that you can watch what it is doing. If you want to, you can have your computer run this script in regular intervals (e.g., once an hour). On Linux and MacOS, for instance, you can use a so-called *cron* job to automate this.
+
+**Run your script on a server.** If your scraper runs for longer than a couple of hours, you may not want to run it on your laptop, especially if your Internet connection is not stable. Instead, you may consider using a server. As we will explain in Section [-@sec-cloudcomputing], it is quite affordable to set up a Linux VM on a cloud computing platform (and next to commercial services, in some countries and institutions there are free services for academics). You can then use tools like *nohup* or *screen* to run your script on the background, even if you are no longer connected to the server (see Section [-@sec-cloudcomputing]).
+
+
+
+```{bash cleanup}
+#| echo: false
+rm -f screenshotTinTin.png geckodriver.log reviews.json test.html
+```
+
