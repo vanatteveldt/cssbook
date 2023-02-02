@@ -1,0 +1,24 @@
+```{python}
+#| echo: false
+import warnings; warnings.filterwarnings('ignore')
+def print(x, *args, **kargs):
+  x = str(x)
+  for line in x.split("\n"):
+    if len(line) > 75:
+        line = line[:75] + "..."
+    __builtins__.print(line, *args, **kargs)
+```
+
+
+```{r interceptprint}
+#| echo: false
+print = function(x, ...) {
+    if (is.list(x) & !is.null(names(x)) ) {
+        base::print(x[names(x)[1:3]])
+        cat("...")
+    } else {
+        if (length(x) == 1 && nchar(x) > 70) x = paste0(substr(x, 1, 70), "...")
+        base::print(x, ...)
+    }
+}
+```
