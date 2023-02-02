@@ -1,0 +1,29 @@
+body {
+    background-color: lightblue;
+}
+
+h1 {
+    color: navy;
+    margin-left: 20px;
+}
+
+[class="restaurant"] {
+    background-color: lightyellow;
+    margin-left: 40px;
+}
+
+
+[class="review"] {
+    background-color: lightyellow;
+    margin-left: 5px;
+}
+
+
+[class="rating"] {
+    font-weight: bold;
+}
+
+
+[class="footer"] {
+    font-size:70%;
+}
