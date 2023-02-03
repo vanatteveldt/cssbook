@@ -16,22 +16,22 @@ The open access edition of the published version is available at [cssbook.net](h
 
 ::: {.column width="50%"}
 #### Table of Contents {.unnumbered}
-- [Introduction](chapter01.qmd)
-- [Fun with Data](chapter02.qmd)
-- [Programming Concepts](chapter03.qmd)
-- [How to write code](chapter04.qmd)
-- [Files and Data Frames](chapter05.qmd)
-- [Data Wrangling](chapter06.qmd)
-- [Exploratory data analysis](chapter07.qmd)
-- [Machine Learning](chapter08.qmd)
-- [Processing text](chapter09.qmd)
-- [Text as data](chapter10.qmd)
-- [Automatic analysis of text](chapter11.qmd)
-- [Scraping online data](chapter12.qmd)
-- [Network Data](chapter13.qmd)
-- [Multimedia data](chapter14.qmd)
-- [Scaling up and distributing](chapter15.qmd)
-- [Where to go next](chapter16.qmd)
+- [Introduction](content/chapter01.qmd)
+- [Fun with Data](content/chapter02.qmd)
+- [Programming Concepts](content/chapter03.qmd)
+- [How to write code](content/chapter04.qmd)
+- [Files and Data Frames](content/chapter05.qmd)
+- [Data Wrangling](content/chapter06.qmd)
+- [Exploratory data analysis](content/chapter07.qmd)
+- [Machine Learning](content/chapter08.qmd)
+- [Processing text](content/chapter09.qmd)
+- [Text as data](content/chapter10.qmd)
+- [Automatic analysis of text](content/chapter11.qmd)
+- [Scraping online data](content/chapter12.qmd)
+- [Network Data](content/chapter13.qmd)
+- [Multimedia data](content/chapter14.qmd)
+- [Scaling up and distributing](content/chapter15.qmd)
+- [Where to go next](content/chapter16.qmd)
 :::
 ::::
 
