@@ -8,25 +8,25 @@ book:
   favicon: img/favicon.png
   chapters:
     - index.qmd
-    - chapter01.qmd
-    - chapter02.qmd
-    - chapter03.qmd
-    - chapter04.qmd
-    - chapter05.qmd
-    - chapter06.qmd
-    - chapter07.qmd
-    - chapter08.qmd
-    - chapter09.qmd
-    - chapter10.qmd
-    - chapter11.qmd
-    - chapter12.qmd
-    - chapter13.qmd
-    - chapter14.qmd
-    - chapter15.qmd
-    - chapter16.qmd
-    - references.qmd
+    - content/chapter01.qmd
+    - content/chapter02.qmd
+    - content/chapter03.qmd
+    - content/chapter04.qmd
+    - content/chapter05.qmd
+    - content/chapter06.qmd
+    - content/chapter07.qmd
+    - content/chapter08.qmd
+    - content/chapter09.qmd
+    - content/chapter10.qmd
+    - content/chapter11.qmd
+    - content/chapter12.qmd
+    - content/chapter13.qmd
+    - content/chapter14.qmd
+    - content/chapter15.qmd
+    - content/chapter16.qmd
+    - content/references.qmd
 
-bibliography: references.bib
+bibliography: content/references.bib
 
 format:
   html:

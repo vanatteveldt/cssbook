@@ -3,17 +3,17 @@ env
 /.quarto/
 
 # Cache files from various chapters
-/*.udpipe
-/glove*.txt
-/reviewdata.pickle.bz2
-/reviewdata.rds
-/w2v_320d_trimmed
-/mnist_784.pickle
+/content/*.udpipe
+/content/glove*.txt
+/content/reviewdata.pickle.bz2
+/content/reviewdata.rds
+/content/w2v_320d_trimmed
+/content/mnist_784.pickle
 
 /env/
 
-/*_cache/
-/*_files/
+/content/*_cache/
+/content/*_files/
 /tikz*.log
 /.RData
 /.Rhistory
