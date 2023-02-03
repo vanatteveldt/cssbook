@@ -1,0 +1,4 @@
+- source: project
+  netlify:
+    - id: d941c9c2-6028-431e-bd4d-abdfcb5aad2e
+      url: 'https://statuesque-pony-87679c.netlify.app'

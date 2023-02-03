@@ -1,6 +1,13 @@
 This is the online version of the book *Computational Analysis of Communication* published with [Wiley-Blackwell](https://www.wiley.com/en-us/Computational+Analysis+of+Communication-p-9781119680239). 
 To buy a hard copy or eBook version of the book, please visit your local academic or independent bookstore or use the link above to order.
 
+::: {.callout-warning}
+This is the draft version of the book, which is actively being updated.
+The open access edition of the published version is available at [cssbook.net](https://cssbook.net)
+:::
+
+
+
 :::: {.columns}
 
 ::: {.column width="50%"}
