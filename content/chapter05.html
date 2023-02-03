@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.2.335">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+
+<title>Computational Analysis of Communication - 5&nbsp; From file to data frame and back</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1.6em;
+  vertical-align: middle;
+}
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}
+</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../content/chapter06.html" rel="next">
+<link href="../content/chapter04.html" rel="prev">
+<link href="../img/favicon.png" rel="icon" type="image/png">
+<script src="../site_libs/quarto-html/quarto.js"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 20,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit"
+  }
+}</script>
+
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+</head>
+
+<body class="nav-sidebar floating">
+
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+    <div class="container-fluid d-flex justify-content-between">
+      <h1 class="quarto-secondary-nav-title"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">From file to data frame and back</span></h1>
+      <button type="button" class="quarto-btn-toggle btn" aria-label="Show secondary navigation">
+        <i class="bi bi-chevron-right"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">Computational Analysis of Communication</a> 
+    </div>
+      </div>
+      <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+      </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">Table of Contents</a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/chapter01.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">Introduction</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/chapter02.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Getting started: Fun with data and visualizations</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/chapter03.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Programming concepts for data analysis</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/chapter04.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">How to write code</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/chapter05.html" class="sidebar-item-text sidebar-link active"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">From file to data frame and back</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/chapter06.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Data Wrangling</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/chapter07.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Exploratory data analysis</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/chapter08.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Statistical Modeling and Supervised Machine Learning</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/chapter09.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">Processing text</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/chapter10.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Text as data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/chapter11.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Automatic analysis of text</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/chapter12.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">12</span>&nbsp; <span class="chapter-title">Scraping online data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/chapter13.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">13</span>&nbsp; <span class="chapter-title">Network Data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/chapter14.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">14</span>&nbsp; <span class="chapter-title">Multimedia data</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/chapter15.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">15</span>&nbsp; <span class="chapter-title">Scaling up and distributing</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/chapter16.html" class="sidebar-item-text sidebar-link"><span class="chapter-number">16</span>&nbsp; <span class="chapter-title">Where to go next</span></a>
+  </div>
+</li>
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../content/references.html" class="sidebar-item-text sidebar-link">References</a>
+  </div>
+</li>
+    </ul>
+    </div>
+</nav>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#sec-dataframes" id="toc-sec-dataframes" class="nav-link active" data-scroll-target="#sec-dataframes"><span class="toc-section-number">5.1</span>  Why and When Do We Use Data Frames?</a></li>
+  <li><a href="#sec-reading" id="toc-sec-reading" class="nav-link" data-scroll-target="#sec-reading"><span class="toc-section-number">5.2</span>  Reading and Saving Data</a>
+  <ul class="collapse">
+  <li><a href="#the-role-of-files" id="toc-the-role-of-files" class="nav-link" data-scroll-target="#the-role-of-files"><span class="toc-section-number">5.2.1</span>  The Role of Files</a></li>
+  <li><a href="#sec-encodings" id="toc-sec-encodings" class="nav-link" data-scroll-target="#sec-encodings"><span class="toc-section-number">5.2.2</span>  Encodings and Dialects</a></li>
+  <li><a href="#file-handling-beyond-data-frames" id="toc-file-handling-beyond-data-frames" class="nav-link" data-scroll-target="#file-handling-beyond-data-frames"><span class="toc-section-number">5.2.3</span>  File handling beyond data frames</a></li>
+  </ul></li>
+  <li><a href="#sec-gathering" id="toc-sec-gathering" class="nav-link" data-scroll-target="#sec-gathering"><span class="toc-section-number">5.3</span>  Data from online sources</a></li>
+  </ul>
+</nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><span id="sec-chap-filetodata" class="quarto-section-identifier d-none d-lg-block"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">From file to data frame and back</span></span></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    
+  
+    
+  </div>
+  
+
+</header>
+
+<div class="cell">
+
+</div>
+<p><strong>Abstract.</strong> This chapter teaches you the basics of file handling, such as different file formats and encodings. It introduces csv files, json files, plain text files, and binary file formats. We discuss different approaches to organizing data in files, and how to write data frames to and read them from these files. Finally, we provide guidance for retrieving example datasets.</p>
+<p><strong>Keywords.</strong> file formats, encodings, reading and writing files, data frames, datasets</p>
+<p><strong>Objectives:</strong></p>
+<ul>
+<li>Know how to handle different encodings and dialects</li>
+<li>Make an informed choice for a file format</li>
+<li>Know how to access existing datasets</li>
+</ul>
+<div class="callout-note callout callout-style-default no-icon callout-captioned">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Packages used in this chapter
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>This chapter relies mostly on the <em>pandas</em> (Python) and <em>tidyverse</em> (R) functionality to read and write files. Additionally, <em>haven</em> is used to read data from other tools such as SPSS. Finally, we show how to use existing data from packages such as <em>sotu</em> (R) and <em>nltk</em> and <em>scikit-learn</em> (Python). If needed, you can install these packages with the code below (see Section <a href="chapter01.html#sec-installing"><span>1.4</span></a> for more details):</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-1-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-1" role="tab" aria-controls="tabset-1-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-1-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-1-2" role="tab" aria-controls="tabset-1-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-1-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-1-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="op">!</span>pip3 install pandas nltk scikit<span class="op">-</span>learn</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-1-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-1-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">"sotu"</span>, <span class="st">"haven"</span>, <span class="st">"tidyverse"</span>, </span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>                   <span class="st">"glue"</span>, <span class="st">"jsonlite"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+<p>After installing, you need to import (activate) the packages every session:</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-2-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-1" role="tab" aria-controls="tabset-2-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-2-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-2-2" role="tab" aria-controls="tabset-2-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-2-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-2-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> json</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> urllib</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> pandas <span class="im">as</span> pd</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> nltk</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> nltk.corpus <span class="im">import</span> state_union</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>nltk.download(<span class="st">"punkt"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>True
+
+[nltk_data] Downloading package punkt to /home/runner/nltk_data...
+[nltk_data]   Unzipping tokenizers/punkt.zip.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> sklearn.datasets <span class="im">import</span> fetch_20newsgroups</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-2-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-2-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(haven)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(sotu)</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(glue)</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(jsonlite)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<section id="sec-dataframes" class="level2" data-number="5.1">
+<h2 data-number="5.1" class="anchored" data-anchor-id="sec-dataframes"><span class="header-section-number">5.1</span> Why and When Do We Use Data Frames?</h2>
+<p>In Section <a href="chapter03.html#sec-datatypes"><span>3.1</span></a>, we introduced basic data types: strings (which contain text), integers (which contain whole numbers, or numbers without anything “behind the dot”), floats (floating point numbers; numbers with decimals), and bools (boolean values, True or False). We also learned that a series of multiple values (e.g., multiple integers, multiple strings) can be stored in what we call a vector (R) or a list (Python).</p>
+<p>In most social-scientific applications, however, we do not deal with isolated series of values. We rather want to link multiple values to each other. One way to achieve this is by the use of dictionaries (see Section <a href="chapter03.html#sec-datatypes"><span>3.1</span></a>). Such data structures are really useful for nested data: For example, if we do not want to only store people’s ages, but also their addresses, we could store a dict within a dict.</p>
+<p>In fact, as we will see later in this chapter, much of the data used by computational social scientists comes in such a format. For instance, data about an online product can contain many reviews which in turn have various pieces of information on the review author.</p>
+<p>But ultimately, for many social-scientific analyses, a tabular data format is preferred. We are used to thinking of observations (cases) as rows with columns containing information or measurements about these observations (e.g., age, gender, days per week of newspaper reading, …). It also simplifies how we can run many statistical analyses later on.</p>
+<p>We could simply construct a list of lists to achieve such a tabular data format. In fact, this list-of-lists technique is often used to store tabular data or matrices, and you will probably encounter it in some examples in this book or elsewhere. The list-of-lists approach is very low-level, though: if we wanted, for instance, to insert a column or a row at a specific place, writing the code to do so could be cumbersome. There are also no things like column headers, and no consistency checks: nothing would warn us if one row actually contained more “columns” than another, which should not be the case in a rectangular table.</p>
+<p>To make our lives easier, we can therefore use a data structure called a data frame. Data frames can be generated from list-of-list structures, from dictionaries, and many others. One way of doing this is shown in Example <a href="#exm-createdataframe"><span>5.1</span></a>, but very often, you’d rather read data from a file or an online resource directly into a data frame (see Section <a href="#sec-reading"><span>5.2</span></a>).</p>
+<div class="callout-note callout callout-style-simple no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<div id="exm-createdataframe" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.1 </strong></span>Creating a data frame from other data structures</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-3-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-1" role="tab" aria-controls="tabset-3-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-3-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-3-2" role="tab" aria-controls="tabset-3-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-3-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-3-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create two lists that will be columns</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>list1 <span class="op">=</span> [<span class="st">"Anna"</span>, <span class="st">"Peter"</span>, <span class="st">"Sarah"</span>, <span class="st">"Kees"</span>]</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>list2 <span class="op">=</span> [<span class="dv">40</span>, <span class="dv">33</span>, <span class="dv">40</span>, <span class="dv">77</span>]</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co"># or we could have a list of lists instead</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>mytable <span class="op">=</span> [[<span class="st">"Anna"</span>, <span class="dv">40</span>], [<span class="st">"Peter"</span>, <span class="dv">33</span>], [<span class="st">"Sarah"</span>, <span class="dv">40</span>], [<span class="st">"Kees"</span>, <span class="dv">77</span>]]</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert an array to a dataframe</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(mytable)</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Or create the data frame directly from vectors</span></span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>df2 <span class="op">=</span> pd.DataFrame.from_records(<span class="bu">zip</span>(list1, list2))</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="co"># No. of rows, no. of columns, and shape</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"</span><span class="sc">{</span><span class="bu">len</span>(df)<span class="sc">}</span><span class="ss"> rows x </span><span class="sc">{</span><span class="bu">len</span>(df.columns)<span class="sc">}</span><span class="ss"> cols"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>4 rows x 2 cols</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Its shape is </span><span class="sc">{</span>df<span class="sc">.</span>shape<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Its shape is (4, 2)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Element-wise equality of df and df2:"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Element-wise equality of df and df2:</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(df <span class="op">==</span> df2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>      0     1
+0  True  True
+1  True  True
+2  True  True
+3  True  True</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-3-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-3-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Create two vectors that will be columns</span></span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a>vector1 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Anna"</span>,<span class="st">"Peter"</span>,<span class="st">"Sarah"</span>,<span class="st">"Kees"</span>)</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>vector2 <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">40</span>,<span class="dv">33</span>,<span class="dv">40</span>,<span class="dv">77</span>)</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true" tabindex="-1"></a><span class="co"># Create an array of four rows and two columns</span></span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true" tabindex="-1"></a>myarray <span class="ot">&lt;-</span> <span class="fu">array</span>(<span class="fu">c</span>(vector1,vector2), <span class="at">dim=</span><span class="fu">c</span>(<span class="dv">4</span>,<span class="dv">2</span>))</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Convert an array to a dataframe</span></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true" tabindex="-1"></a>df1<span class="ot">=</span><span class="fu">data.frame</span>(myarray)</span>
+<span id="cb15-10"><a href="#cb15-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-11"><a href="#cb15-11" aria-hidden="true" tabindex="-1"></a><span class="co"># Or create the data frame directly from vectors</span></span>
+<span id="cb15-12"><a href="#cb15-12" aria-hidden="true" tabindex="-1"></a>df2<span class="ot">=</span><span class="fu">data.frame</span>(vector1, vector2)</span>
+<span id="cb15-13"><a href="#cb15-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb15-14"><a href="#cb15-14" aria-hidden="true" tabindex="-1"></a><span class="co"># No. of rows, no. of columns, and dimension</span></span>
+<span id="cb15-15"><a href="#cb15-15" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">glue</span>(<span class="st">"{ncol(df1)} rows x {nrow(df1)} cols"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>2 rows x 4 cols</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">dim</span>(df1))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 4 2</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="st">"Element-wise equality of df1 and df2:"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "Element-wise equality of df1 and df2:"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(df1 <span class="sc">==</span> df2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>       X1   X2
+[1,] TRUE TRUE
+[2,] TRUE TRUE
+[3,] TRUE TRUE
+[4,] TRUE TRUE</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>In this book, we use data frames a lot, because they are very convenient for handling tabular data, and because they provide a lot of useful functionalities, instead of requiring us to re-invent the wheel all the time. In the next section, we will discuss some of them.</p>
+<p>Of course, there are some situations when data frames are <em>not</em> a good choice to organize your data: - Your data is one-dimensional. Think, for example, of resources like a list of stopwords, or a list of texts without any meta-information. - Your data do not have a tabular structure. Think, for example, of deeply nested data, network data or of very messy data. - Your data are so large that you cannot (or do not want to) load it into memory. For instance, if you want to process the text of all articles on Wikipedia, you probably want to process them one-by-one instead of loading all articles at the same time.</p>
+<p>Therefore, you will come across (and we will introduce you to) examples in which we do <em>not</em> use data frames to organize our data. But in most cases we will, because they make our life easier: once we have constructed our data frame, we have a range of handy functions at our disposal that allow us to select rows or columns, add new rows or columns, apply functions to them, and so on. We will discuss these in Chapter <a href="chapter06.html"><span>6</span></a>.</p>
+<p>But how do we – toy examples like those in Example <a href="#exm-createdataframe"><span>5.1</span></a> aside – get data into and out of data frames?</p>
+</section>
+<section id="sec-reading" class="level2" data-number="5.2">
+<h2 data-number="5.2" class="anchored" data-anchor-id="sec-reading"><span class="header-section-number">5.2</span> Reading and Saving Data</h2>
+<section id="the-role-of-files" class="level3" data-number="5.2.1">
+<h3 data-number="5.2.1" class="anchored" data-anchor-id="the-role-of-files"><span class="header-section-number">5.2.1</span> The Role of Files</h3>
+<p>In statistical software like SPSS or Stata, or in all typical office applications for that matter, you <em>open</em> a file, do some work on it, and then <em>save</em> the changes to the same file once you are done. You basically “work on that file”.</p>
+<p>That’s not how your typical workflow in R or Python looks. Here, you work on one or multiple data frames (or some other data structures). That means that you might start by <em>reading</em> the contents of some file into a data frame, but once that is done, there is no link between the data frame and that file any more. Once your work is done, you can save your data frame to a file, of course, but it is a good practice not to overwrite your input file, so that you can always go back to where you started. A typical workflow would look like this:</p>
+<ul>
+<li>Read raw data from file <code>myrawdata.csv</code> into data frame <code>df</code> - Do some operations and analyses on <code>df</code> - Save <code>df</code> to file <code>myfinaldata.csv</code> Note that the last step is not even necessary, but may be handy if running the script takes very long, or if you want to re-distribute the resulting file.</li>
+</ul>
+<p>The format in which we read files into a data frame and the format to which we save our final data frame by no means needs to be identical. We can, for example, read data created by someone else in Stata’s proprietary <code>.dta</code> format into a data frame and later save it to a .csv table.</p>
+<p>While we sometimes do not have the choice in which format we get our input data, we have a range of options regarding our output data. We usually prefer formats that are <em>open</em> and <em>interoperable</em> for this, which ensures that they can be used by as many people as possible, and that they are not tied to any specific (proprietary) software tool which might not be available to everyone and can be discontinued in the future.</p>
+<p>The most common file formats that are relevant to us are listed in Table <a href="#tbl-fileformats"><span>5.1</span></a>. <code>txt</code> files are particularly useful for long texts (think of one file containing one newspaper article or even a whole book), but they are bad for storing associated meta data. <code>csv</code> files are the default choice for tabular data, and <code>json</code> files allow us to store nested data in a dictionary-like format.</p>
+<p>For the sake of completeness, we also listed the native Python and R formats pickle, RDS, and RDA. Because of their lack of interoperability, they are not very suitable for long-term storage or for sharing data, but they can have a place in a workflow as an intermediate step to solve the issue that none of the other formats are able to store all properties of a data frame (e.g., the csv file cannot store whether a given column in an R data frame is to be understood as containing strings such as “man”, “woman”, “non-binary” or a factor with the three levels man, woman, non-binary). If it is important to store an object (such as a data frame) exactly as-it-is, we can use these formats. One of the rare instances where we use these formats is in Example <a href="chapter11.html#exm-reuse"><span>11.8</span></a>, where we store machine learning models for later reuse.</p>
+<div id="tbl-fileformats" class="anchored">
+<table class="table">
+<caption>Table&nbsp;5.1: Basics of data frame handling</caption>
+<thead>
+<tr class="header">
+<th></th>
+<th>Used for?</th>
+<th>open</th>
+<th>interoperable?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>txt</td>
+<td>plain text</td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+<tr class="even">
+<td>csv</td>
+<td>tabular data</td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+<tr class="odd">
+<td>json</td>
+<td>nested data, key-value pairs</td>
+<td>yes</td>
+<td>yes</td>
+</tr>
+<tr class="even">
+<td>pickle</td>
+<td>Python objects</td>
+<td>yes</td>
+<td>no</td>
+</tr>
+<tr class="odd">
+<td>RDS/RDA</td>
+<td>R objects</td>
+<td>yes</td>
+<td>no</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="sec-encodings" class="level3" data-number="5.2.2">
+<h3 data-number="5.2.2" class="anchored" data-anchor-id="sec-encodings"><span class="header-section-number">5.2.2</span> Encodings and Dialects</h3>
+<p>Plain <code>txt</code> files, <code>csv</code> files, and <code>json</code> files are all files that are based on text. Unlike binary file formats, you can read them in any text editor. Try it yourself to understand what is going on under the hood.</p>
+<p>Download a csv file (such as <a href="https://cssbook.net/d/gun-polls.csv">cssbook.net/d/gun-polls.csv</a>) and open it in a text editor of your choice. Some people swear that their preferred editor is the best (google to learn about the vi versus emacs war for some entertainment), but if you have no strong feeling, then Notepad++, Atom, or Sublime may be good choices that you may want to look into.</p>
+<p>As you will see (Figure <a href="#fig-csv-in-editor"><span>5.1</span></a>), a csv file internally just looks like a bunch of text in which each line represents a row and in which the columns are separated by a comma (hence the name comma separated values (csv)). Looking at the data in a text editor is a very good way to find out what happens if reading your files into a data frame does not work as expected – which can happen more frequently than you would expect.</p>
+<p>Mostly due to historical reasons, not every text based file (which, as we have seen, includes csv files) is internally stored in the same way. For a long time, it was common to <em>encode</em> in such a way that one character mapped to one byte. That was easy from a programming perspective (after all, the <span class="math inline">\(n\)</span>th character of a text can be directly read from and written to the <span class="math inline">\(n\)</span>th byte of a file) and was also storage-efficient. But given that a byte consists of 8 bits, that means that there are only 256 possible characters. All letters in the alphabet in uppercase, again in lowercase, numbers, punctuation, some control characters – and you are out of characters. Due to this limitation, there were different encodings or codepages for different languages that told a program which value should be interpreted as which character.</p>
+<p>We all know the phenomenon of garbled special characters, like German umlauts or Scandinavian characters like ø, å, or œ being displayed as something completely different. This happens when files are read with a different encoding than the encoding that was used for creating them.</p>
+<p>In principle, this issue has been solved due to the advent of Unicode. Unicode allows all characters from all scripts to be handled, including emoticons, Korean and Chinese characters, and so on. The most popular encoding for Unicode characters is called UTF-8, and it has been around for decades.</p>
+<p>To avoid any data loss, it is advisable to make sure that your whole workflow uses UTF-8 files. Most modern applications support UTF-8, even though some still by default use a different encoding (e.g., “Windows-1252”) to store data. As Figure <a href="#fig-csv-in-editor"><span>5.1</span></a> illustrates, you can use a text editor to find out what encoding your data has, and many editors also offer an option to change the encoding. However, you cannot recover what has been lost (e.g., if at one point you saved your data with an encoding that only allows 256 different characters, it follows logically that you cannot recover that information).</p>
+<div id="fig-csv-in-editor" class="quarto-figure quarto-figure-center anchored">
+<figure class="figure">
+<p><img src="img/ch6_csv-in-editor.png" class="img-fluid figure-img"></p>
+<p></p><figcaption class="figure-caption">Figure&nbsp;5.1: A csv file opened in a text editor, illustrating that the columns are separated by commas, and showing the encoding and the line endings.</figcaption><p></p>
+</figure>
+</div>
+<p>As we will show in the practical code examples below, you can also force Python and R to use a specific encoding, which can come in handy if your data arrives in a legacy encoding.</p>
+<p>Related to the different encodings a file can have, but less problematic, are different conventions of how a <em>line ending</em> is denoted. Windows-based programs have been using a Carriage Return followed by a Line Feed (denoted as <code>\r\n</code>), very old versions of MacOS used a Carriage Return only (<code>\r</code>), and newer versions of MacOS as well as Linux use a Line Feed only (<code>n</code>). In our field, the Linux (or Unix) style line endings have become most dominant, and Python 3 even automatically converts Windows style line endings to Unix style line endings when reading a file – even on Windows itself.</p>
+<p>A third difference is the use of so-called <em>byte-order markers</em> (BOM). In essence, a BOM is an additional byte added to the beginning of a text file to indicate that it is a UTF-encoded file and to indicate in which order the bytes are to be read (the so-called endianness). While informative, this can cause trouble if your program does not expect that byte to be there. In that case, you might either want to remove it or explicitly specify the encoding as such. For instance, you can add an argument such as <code>encoding="UTF-8"</code> or <code>encoding="UTF-8bom"</code> to the <code>open</code> (Python) or <code>scan</code> (R) command.</p>
+<p>In short, the most standard form in which you probably want to encode your data is in UTF-8 with Linux-style line endings without the use of a byte-order marker.</p>
+<p>In the case of reading and writing csv files, we thus need to know the encoding, and potentially also the line ending conventions and the presence of a byte-order marker. However, there are also some additional variations that we need to consider. There is no single definition of what a csv file needs to look like, and there are multiple dialects that are widely used. They mainly differ in two aspects: the delimiter that is chosen, and the quoting and/or escaping of values.</p>
+<p>First, even though csv stands for comma separated values, one could use other characters instead of a comma to separate the columns. In fact, because many countries use a comma instead of a dot as a decimal separator ($10.30 versus 10,30€), in these countries a semicolon (;) is used instead of a comma as the column delimiter. To avoid any possible confusion, others use a tab character (<code>t</code>) to separate columns. Sometimes, these files are then called a tab-separated file, and instead of .csv, they may have a file extension such as <code>.tsv</code>, <code>.tab</code>, or even <code>.txt</code>. However, this does not change the way how you can read them – but what you need to know is whether your columns are separated by <code>,</code>, <code>;</code>, or <code>t</code>.</p>
+<p>Second, there may be different ways to deal with strings as values in a csv file. For instance, it may be that a specific value contains the same character that is also used as a delimiter. These cases are usually resolved by either putting all strings into quotes, putting only strings that contain such ambiguities in quotes, or by prepending the ambiguous character with a specific escape character. Most likely, all of this is just handled automatically under the hood, but in case of problems, you might want to look into this and check out the documentation of the packages you are using on how to specify which strategy is to be used.</p>
+<p>Let’s get practical and try out reading and writing files into a data frame (Example <a href="#exm-readfiles"><span>5.2</span></a>).</p>
+<div class="callout-note callout callout-style-simple no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<div id="exm-readfiles" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.2 </strong></span>Reading files into a data frame</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-4-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-1" role="tab" aria-controls="tabset-4-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-4-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-4-2" role="tab" aria-controls="tabset-4-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-4-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-4-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://cssbook.net/d/media.csv"</span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Directly read a csv file from internet</span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(url)</span>
+<span id="cb23-4"><a href="#cb23-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-5"><a href="#cb23-5" aria-hidden="true" tabindex="-1"></a><span class="co"># We can also explicitly specify delimiter etc.</span></span>
+<span id="cb23-6"><a href="#cb23-6" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.read_csv(url, delimiter<span class="op">=</span><span class="st">","</span>)</span>
+<span id="cb23-7"><a href="#cb23-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: use help(pd.read_csv) to see all options</span></span>
+<span id="cb23-8"><a href="#cb23-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb23-9"><a href="#cb23-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Save dataframe to a csv:</span></span>
+<span id="cb23-10"><a href="#cb23-10" aria-hidden="true" tabindex="-1"></a>df.to_csv(<span class="st">"mynewcsvfile.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+<div id="tabset-4-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-4-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">=</span> <span class="st">"https://cssbook.net/d/media.csv"</span></span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Directly read a csv file from internet</span></span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">read_csv</span>(url)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="co"># We can also explicitly specify delimiter etc.</span></span>
+<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>df <span class="ot">=</span> <span class="fu">read_delim</span>(url, <span class="at">delim =</span> <span class="st">","</span>)</span>
+<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: use ?read_csv to see all options</span></span>
+<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Save dataframe to a csv:</span></span>
+<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="fu">write_csv</span>(df,<span class="st">"mynewcsvfile.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Of course, we can read more than just csv files. In the Python example, you can use tabcompletion to get an overview of all file formats Python supports: type <code>pd.read</code> and then press the TAB key to get a list of all supported files. For instance, you could <code>pd.read_excel('test.xlsx')</code>, <code>df3 = pd.read_stata('test.dta')</code>, or <code>df4 = pd.read_json('test.json')</code> Similarly, for R, you can hit TAB after typing <code>haven::</code> to get an overview over functions such as <code>read_spss</code>.</p>
+</section>
+<section id="file-handling-beyond-data-frames" class="level3" data-number="5.2.3">
+<h3 data-number="5.2.3" class="anchored" data-anchor-id="file-handling-beyond-data-frames"><span class="header-section-number">5.2.3</span> File handling beyond data frames</h3>
+<p>Data frames are a very useful data structure for organizing and analyzing data, and will occur in many examples in this book. However, not all things that we might want to read from a file needs to go into a data frame. Imagine if we have a list of words that we later want to remove from some texts (so-called stopwords, see Chapter <a href="chapter09.html"><span>9</span></a>). We could make a list (or vector) of such words directly in our code. But if we have more than a couple of such words, it is easier and more readable to keep them in an external file. We could create a file <code>stopwords.txt</code> in a text editor with one of such words per line:</p>
+<pre><code>and
+or
+a
+an</code></pre>
+<p>If you do not wish to create this list yourself, you could also download one from <a href="https://cssbook.net/d/stopwords.txt">cssbook.net/d/stopwords.txt</a> and save it in the same directory as your Python or R script.</p>
+<p>Then, you can read this file into a vector or list (see Example <a href="#exm-readingstopwords"><span>5.3</span></a>).</p>
+<div class="callout-note callout callout-style-simple no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<div id="exm-readingstopwords" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.3 </strong></span>Reading files without data frames</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-5-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-1" role="tab" aria-controls="tabset-5-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-5-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-5-2" role="tab" aria-controls="tabset-5-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-5-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-5-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define stopword list in the code itself</span></span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>stopwords <span class="op">=</span> [<span class="st">"and"</span>, <span class="st">"or"</span>, <span class="st">"a"</span>, <span class="st">"an"</span>, <span class="st">"the"</span>]</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Better idea: Download stopwords file and read it</span></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a>url <span class="op">=</span> <span class="st">"https://cssbook.net/d/stopwords.txt"</span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>urllib.request.urlretrieve(url, <span class="st">"stopwords.txt"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>('stopwords.txt', &lt;http.client.HTTPMessage object at 0x7f8bb6c7e650&gt;)</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"stopwords.txt"</span>) <span class="im">as</span> f:</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>    stopwords <span class="op">=</span> [w.strip() <span class="cf">for</span> w <span class="kw">in</span> f]</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>stopwords</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>['and', 'or', 'a', 'an', 'the']</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-5-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-5-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Define stopword list in the code itself </span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>stopwords <span class="ot">=</span> <span class="fu">c</span>(<span class="st">"and"</span>, <span class="st">"or"</span>, <span class="st">"a"</span>, <span class="st">"an"</span>, <span class="st">"the"</span>)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Better idea: Download stopwords file and read it</span></span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>url <span class="ot">=</span> <span class="st">"https://cssbook.net/d/stopwords.txt"</span></span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a><span class="fu">download.file</span>(url, <span class="st">"stopwords.txt"</span>)</span>
+<span id="cb30-7"><a href="#cb30-7" aria-hidden="true" tabindex="-1"></a>stopwords <span class="ot">=</span>  <span class="fu">scan</span>(<span class="st">"stopwords.txt"</span>, <span class="at">what=</span><span class="st">"string"</span>)</span>
+<span id="cb30-8"><a href="#cb30-8" aria-hidden="true" tabindex="-1"></a>stopwords</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "and" "or"  "a"   "an"  "the"</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout-note callout callout-style-simple no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<div id="exm-extendedfilehandling" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.4 </strong></span>More examples for reading from and writing to files.</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-6-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-1" role="tab" aria-controls="tabset-6-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-6-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-6-2" role="tab" aria-controls="tabset-6-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-6-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-6-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Modify the stopword list and save it:</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>stopwords <span class="op">+=</span> [<span class="st">"somenewstopword"</span>, <span class="st">"andanotherone"</span>]</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"newstopwords.txt"</span>, mode<span class="op">=</span><span class="st">"w"</span>) <span class="im">as</span> f:</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    f.writelines(stopwords)</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Use json to read/write dictionaries</span></span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a>somedict <span class="op">=</span> {<span class="st">"label"</span>: <span class="st">"Report"</span>, <span class="st">"entries"</span>: [<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>]}</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"test.json"</span>, mode<span class="op">=</span><span class="st">"w"</span>) <span class="im">as</span> f:</span>
+<span id="cb32-10"><a href="#cb32-10" aria-hidden="true" tabindex="-1"></a>    json.dump(somedict, f)</span>
+<span id="cb32-11"><a href="#cb32-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb32-12"><a href="#cb32-12" aria-hidden="true" tabindex="-1"></a><span class="cf">with</span> <span class="bu">open</span>(<span class="st">"test.json"</span>, mode<span class="op">=</span><span class="st">"r"</span>) <span class="im">as</span> f:</span>
+<span id="cb32-13"><a href="#cb32-13" aria-hidden="true" tabindex="-1"></a>    d <span class="op">=</span> json.load(f)</span>
+<span id="cb32-14"><a href="#cb32-14" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>{'label': 'Report', 'entries': [1, 2, 3, 4]}</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-6-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-6-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Modify the stopword list and save it:</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>stopwords <span class="ot">=</span> <span class="fu">c</span>(stopwords, </span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>              <span class="st">"somenewstopword"</span>, <span class="st">"andanotherone"</span>)</span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a>fileConn<span class="ot">&lt;-</span><span class="fu">file</span>(<span class="st">"newstopwords.txt"</span>)</span>
+<span id="cb34-5"><a href="#cb34-5" aria-hidden="true" tabindex="-1"></a><span class="fu">writeLines</span>(stopwords, fileConn)</span>
+<span id="cb34-6"><a href="#cb34-6" aria-hidden="true" tabindex="-1"></a><span class="fu">close</span>(fileConn)</span>
+<span id="cb34-7"><a href="#cb34-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-8"><a href="#cb34-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Use json to read/write named lists</span></span>
+<span id="cb34-9"><a href="#cb34-9" aria-hidden="true" tabindex="-1"></a>somedict <span class="ot">=</span> <span class="fu">list</span>(<span class="at">label=</span><span class="st">"Report"</span>,</span>
+<span id="cb34-10"><a href="#cb34-10" aria-hidden="true" tabindex="-1"></a>               <span class="at">entries=</span><span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">3</span>,<span class="dv">4</span>))</span>
+<span id="cb34-11"><a href="#cb34-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-12"><a href="#cb34-12" aria-hidden="true" tabindex="-1"></a><span class="fu">write_json</span>(somedict, <span class="st">"/tmp/x.json"</span>, <span class="at">auto_unbox=</span>T)</span>
+<span id="cb34-13"><a href="#cb34-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb34-14"><a href="#cb34-14" aria-hidden="true" tabindex="-1"></a>d<span class="ot">=</span><span class="fu">read_json</span>(<span class="st">"/tmp/x.json"</span>, <span class="at">simplifyVector =</span> T)</span>
+<span id="cb34-15"><a href="#cb34-15" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>$label
+[1] "Report"
+
+$entries
+[1] 1 2 3 4</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>Example <a href="#exm-extendedfilehandling"><span>5.4</span></a> provides you with some more elaborate code examples that allows us to dig a bit deeper into the general way of handling files.</p>
+<p>In the Python example, we can open a file and assign a handle to it that allows us to refer to it (the name of the handle is arbitrary, let’s just call it <code>f</code> here). Then, we can use a for loop to iterate over all lines in the file and add it to a list.</p>
+<p>The <code>mode = 'r'</code> specifies that we want to read from the file. <code>mode = 'w'</code> would open the file for writing, create it if necessary, and immediately deletes all content that may have been in there if the file already existed (!). Note that the <code>.strip()</code> is necessary to remove the line ending itself, and also any possible whitespace at the beginning or end of a line. If we want to save our stopwords, we can do this in a similar way: we first open the file (this time, for writing), and then use the file handle’s methods to write to it. We are not limited to plain text files, here. For instance, we can use the same approach to read json files into a Python dict or to store a Python dict into a json file.</p>
+<p>We could also combine this with a for loop that goes over all files in a dictionary. Imagine we have a folder full of positive movie reviews, and another one full of negative movie reviews that we want to use to train a machine learning classifier (see Section <a href="chapter11.html#sec-supervised"><span>11.4</span></a>). Let’s further assume that all these reviews are saved as <code>.txt</code> files. We can iterate over all of them, as shown in Example <a href="chapter11.html#exm-reviewdata"><span>11.1</span></a>. If you want to read text files into a data frame in R, the <em>readtext</em> package may be interesting for you.</p>
+</section>
+</section>
+<section id="sec-gathering" class="level2" data-number="5.3">
+<h2 data-number="5.3" class="anchored" data-anchor-id="sec-gathering"><span class="header-section-number">5.3</span> Data from online sources</h2>
+<p>Many data that are interesting to those analyzing communication are nowadays gathered online. In Chapter <a href="chapter12.html"><span>12</span></a>, you will learn how to use APIs to retrieve data from web services, and how to write your own web scraper to automatically download large numbers of web pages and extract relevant information. For instance, you might want to retrieve customer reviews from a website or articles from news sites.</p>
+<p>In this section, however, we will focus on how to re-use existing datasets that others have made available online. For instance, the open science movement has led to more and more datasets being shared openly using repositories such as Dataverse, Figshare, or others. Re-using existing data can be very good for several reasons: first, to confirm (or not) the conclusions drawn by others; second, to avoid wasting resources by re-collecting very similar or even identical data all over again; and third, because gathering a large, high-quality dataset might just not be feasible with your means. This is especially true when you need annotated (i.e., hand-coded) data for supervised machine learning purposes (Chapter <a href="chapter08.html"><span>8</span></a>).</p>
+<p>We can distinguish between two types of existing online datasets: datasets that are inherently interesting, and so-called toy datasets.</p>
+<p>Toy datasets may include made-up data, but often, they contain real data. However, they are not analyzed to gain scientific insights (any more), as they may be too small, outdated, or already analyzed all-over again. These provide a great way, though, to learn and explore new techniques: after all, the results and the characteristics of the data are already known. Hence, such toy datasets are often even included in R and Python packages. Some of them are really well-known in teaching (e.g., the iris dataset containing measurements of some flowers; or the titanic dataset containing statistics on survival rates of passengers on the Titanic; MINIST for image classification; or the MPG dataset on car fuel consumption). Many of these are included in packages like <em>scikit-learn</em>, <em>seaborn</em>, or <em>ggplot2</em>– and you can have a look at their documentation.</p>
+<p>For instance, the 20 Newsgroups dataset contains <span class="math inline">\(18846\)</span> posts from newsgroups plus the groups where they were posted (Example <a href="#exm-20newsgroups"><span>5.5</span></a>). This can be an interesting resource for practicing with natural language processing, unsupervised, and supervised machine learning. Other interesting resource are collections of political speeches, such as the state-of-the-union speeches from the US, which are available in multiple packages (Example <a href="#exm-sotudata"><span>5.6</span></a>). Other interesting datasets with large collections of textual data may be the Financial News dataset compiled by <span class="citation" data-cites="Chen2017">Chen (<a href="references.html#ref-Chen2017" role="doc-biblioref">2017</a>)</span> or the political news dataset compiled by <span class="citation" data-cites="Horne2018">Horne et al. (<a href="references.html#ref-Horne2018" role="doc-biblioref">2018</a>)</span>.</p>
+<div class="callout-note callout callout-style-simple no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<div id="exm-20newsgroups" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.5 </strong></span>In Python, scikit-learn has a convenience function to automatically download the 20 newsgroup dataset and automatically clean it up. In R, you can download the raw version (there are multiple copies floating around on the internet) and perform the cleaning yourself.</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-7-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-1" role="tab" aria-controls="tabset-7-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-7-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-7-2" role="tab" aria-controls="tabset-7-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-7-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-7-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: use fetch_20newsgroups? for more options</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> fetch_20newsgroups(remove<span class="op">=</span>(<span class="st">"headers"</span>, <span class="st">"footers"</span>, <span class="st">"quotes"</span>))</span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a>df <span class="op">=</span> pd.DataFrame(<span class="bu">zip</span>(d[<span class="st">"data"</span>], d[<span class="st">"target_names"</span>]))</span>
+<span id="cb36-4"><a href="#cb36-4" aria-hidden="true" tabindex="-1"></a>df.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>                                                   0                         1
+0  I was wondering if anyone out there could enli...               alt.atheism
+1  A fair number of brave souls who upgraded thei...             comp.graphics
+2  well folks, my mac plus finally gave up the gh...   comp.os.ms-windows.misc
+3  \nDo you have Weitek's address/phone number?  ...  comp.sys.ibm.pc.hardware
+4  From article &lt;C5owCB.n3p@world.std.com&gt;, by to...     comp.sys.mac.hardware</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-7-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-7-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>url <span class="ot">=</span> <span class="st">"https://cssbook.net/d/20_newsgroups.csv"</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>d <span class="ot">=</span> <span class="fu">read_csv</span>(url)</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(d)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 6 × 3
+   ...1 target text                                                             
+  &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;                                                            
+1     0      9 "From: cubbie@garnet.berkeley.edu (                             …
+2     1      4 "From: gnelson@pion.rutgers.edu (Gregory Nelson) Subject: Thanks…
+3     2     11 "From: crypt-comments@math.ncsu.edu Subject: Cryptography FAQ 10…
+4     3      4 "From:  () Subject: Re: Quadra SCSI Problems??? Organization: Ap…
+5     4      0 "From: keith@cco.caltech.edu (Keith Allan Schneider) Subject: Re…
+6     5      4 "From: taihou@chromium.iss.nus.sg (Tng Tai Hou) Subject: ADB and…</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="callout-note callout callout-style-simple no-icon">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon no-icon"></i>
+</div>
+<div class="callout-body-container">
+<div id="exm-sotudata" class="theorem example">
+<p><span class="theorem-title"><strong>Example 5.6 </strong></span>A collection of US state-of-the-union speeches is available in multiple packages in various forms.</p>
+<div class="panel-tabset">
+<ul class="nav nav-tabs" role="tablist"><li class="nav-item" role="presentation"><a class="nav-link active" id="tabset-8-1-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-1" role="tab" aria-controls="tabset-8-1" aria-selected="true">Python code</a></li><li class="nav-item" role="presentation"><a class="nav-link" id="tabset-8-2-tab" data-bs-toggle="tab" data-bs-target="#tabset-8-2" role="tab" aria-controls="tabset-8-2" aria-selected="false">R code</a></li></ul>
+<div class="tab-content">
+<div id="tabset-8-1" class="tab-pane active" role="tabpanel" aria-labelledby="tabset-8-1-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Note: download is only needed once...</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>nltk.download(<span class="st">"state_union"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>True
+
+[nltk_data] Downloading package state_union to
+[nltk_data]     /home/runner/nltk_data...
+[nltk_data]   Unzipping corpora/state_union.zip.</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>sentences <span class="op">=</span> state_union.sents()</span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"There are </span><span class="sc">{</span><span class="bu">len</span>(sentences)<span class="sc">}</span><span class="ss"> sentences."</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>There are 17930 sentences.</code></pre>
+</div>
+</div>
+</div>
+<div id="tabset-8-2" class="tab-pane" role="tabpanel" aria-labelledby="tabset-8-2-tab">
+<div class="cell">
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>speeches <span class="ot">=</span> sotu_meta</span>
+<span id="cb44-2"><a href="#cb44-2" aria-hidden="true" tabindex="-1"></a><span class="co"># show only first 50 characters</span></span>
+<span id="cb44-3"><a href="#cb44-3" aria-hidden="true" tabindex="-1"></a>speeches <span class="sc">%&gt;%</span> </span>
+<span id="cb44-4"><a href="#cb44-4" aria-hidden="true" tabindex="-1"></a>    <span class="fu">mutate</span>(<span class="at">text =</span> <span class="fu">substr</span>(sotu_text,<span class="dv">0</span>,<span class="dv">50</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb44-5"><a href="#cb44-5" aria-hidden="true" tabindex="-1"></a>    <span class="fu">head</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>  X         president year years_active       party sotu_type
+1 1 George Washington 1790    1789-1793 Nonpartisan    speech
+2 2 George Washington 1790    1789-1793 Nonpartisan    speech
+3 3 George Washington 1791    1789-1793 Nonpartisan    speech
+4 4 George Washington 1792    1789-1793 Nonpartisan    speech
+5 5 George Washington 1793    1793-1797 Nonpartisan    speech
+6 6 George Washington 1794    1793-1797 Nonpartisan    speech
+                                                  text
+1   Fellow-Citizens of the Senate and House of Represe
+2 \n\n Fellow-Citizens of the Senate and House of Repr
+3 \n\n Fellow-Citizens of the Senate and House of Repr
+4   Fellow-Citizens of the Senate and House of Represe
+5 \n\n Fellow-Citizens of the Senate and House of Repr
+6 \n\n Fellow-Citizens of the Senate and House of Repr</code></pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<p>There are also some more generic resources that you may want to consider for finding more datasets to play around with. On <a href="https://datasetsearch.research.google.com">datasetsearch.research.google.com</a>, you can search for datasets of all kinds, both really interesting ones and toy datasets. Another great research is <a href="https://kaggle.com">kaggle.com</a>, a site that hosts data science competitions.</p>
+<div class="cell">
+
+</div>
+
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="doc-bibliography" style="display: none">
+<div id="ref-Chen2017" class="csl-entry" role="doc-biblioentry">
+Chen, Lizi. 2017. <span>“<span>News-Processed-Dataset</span>.”</span> <a href="https://doi.org/10.6084/m9.figshare.5296357.v1">https://doi.org/10.6084/m9.figshare.5296357.v1</a>.
+</div>
+<div id="ref-Horne2018" class="csl-entry" role="doc-biblioentry">
+Horne, Benjamin D., William Dron, Sara Khedr, and Sibel Adali. 2018. <span>“<span class="nocase">Sampling the News Producers: A Large News and Feature Data Set for the Study of the Complex Media Landscape</span>.”</span> In <em>12th International AAAI Conference on Web and Social Media (ICWSM)</em>, 518–27. Icwsm. <a href="http://arxiv.org/abs/1803.10124">http://arxiv.org/abs/1803.10124</a>.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    target: function(trigger) {
+      return trigger.previousElementSibling;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+  function tippyHover(el, contentFn) {
+    const config = {
+      allowHTML: true,
+      content: contentFn,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start'
+    };
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      return note.innerHTML;
+    });
+  }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../content/chapter04.html" class="pagination-link">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">How to write code</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../content/chapter06.html" class="pagination-link">
+        <span class="nav-page-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Data Wrangling</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav>
+</div> <!-- /content -->
+
+
+
+</body></html>
