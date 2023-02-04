@@ -5,6 +5,16 @@
 import warnings; warnings.filterwarnings('ignore')
 ```
 
+::: {.callout-warning}
+# Update planned: R Tidymodels
+
+At the time of writing this chapter, `caret` was the state of the art Machine Learning package for R.
+We now think that the (newer) `tidymodels` package is a better choice in many regards.
+For this reason, we are planning to rewrite this chapter using that package. 
+See [the draft updated version of this chapter](https://v2.cssbook.net/content/chapter08.html) and/or the [relevant github issue](https://github.com/vanatteveldt/cssbook/issues/6) for more information. 
+:::
+
+
 **Abstract.** This chapter introduces the reader to the world of supervised machine learning. It starts by outlining how classical statistical techniques such as regression models can be used for prediction. It then provides an overview of frequently-used techniques from Naïve Bayes classifiers to neural networks.
 
 **Keywords.** supervised machine learning

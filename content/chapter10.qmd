@@ -15,6 +15,18 @@ print = function(x, ...) {
   base::print(x, ...)
 }
 ```
+
+::: {.callout-warning}
+# Update planned: R Tidytext
+
+At the time of writing this chapter, `quanteda` was our package of choice for text analysis in R.
+We now think that the `tidytext` package is easier to learn for students who have just leared the `tidyverse` data wrangling package.
+For this reason, we are planning to rewrite this chapter using that package. 
+See [the draft updated version of this chapter](https://v2.cssbook.net/content/chapter10.html) and/or the [relevant github issue](https://github.com/vanatteveldt/cssbook/issues/5) for more information. 
+:::
+
+
+
 **Abstract.**
   This chapter shows how you can analyze texts that are stored as a data frame column or variable using functions from the package *quanteda* in R and the package *sklearn* in Python and R.
   Please see Chapter [-@sec-chap-protext] for more information on reading and cleaning text.

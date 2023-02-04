@@ -1,6 +1,18 @@
 
 #  Automatic analysis of text {#sec-chap-text}
 
+::: {.callout-warning}
+# Update planned: R Tidymodels and tidytext
+
+At the time of writing this chapter, `quanteda` and `caret` were our packages of choice for machine learning and text analysis in R,
+even though (as noted below) we felt that especially supervised text analysis was much better supported in Python than in R.
+We now think that the `tidymodels` and `tidytext` packages are a better choice for text analysis, 
+especially for students who have just learned to work with the `tidyverse` data wrangling package.
+For this reason, we are planning to rewrite this chapter using those packages. 
+See [the draft updated version of this chapter](https://v2.cssbook.net/content/chapter11.html) and/or the relevant github issues for [tidytext](https://github.com/vanatteveldt/cssbook/issues/5) and [tidymodels](https://github.com/vanatteveldt/cssbook/issues/5) for more information. 
+:::
+
+
 <!--# 
 Edit history 
 - Bugfix: txt_* -> text_* 
