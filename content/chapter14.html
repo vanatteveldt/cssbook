@@ -452,11 +452,11 @@ Packages used in this chapter
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(myimg1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;PIL.JpegImagePlugin.JpegImageFile image mode=RGB size=805x453 at 0x7F7E30D...</code></pre>
+<pre><code>&lt;PIL.JpegImagePlugin.JpegImageFile image mode=RGB size=805x453 at 0x7FC66DB...</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(myimg2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;PIL.PngImagePlugin.PngImageFile image mode=RGBA size=1540x978 at 0x7F7E30D...</code></pre>
+<pre><code>&lt;PIL.PngImagePlugin.PngImageFile image mode=RGBA size=1540x978 at 0x7FC66DB...</code></pre>
 </div>
 </div>
 </div>
@@ -1047,7 +1047,7 @@ Name: class, dtype: uint8</code></pre>
 </div>
 </div>
 <p>Once we are ready to model the numbers we choose one of the shallow algorithms explained in Section <a href="chapter08.html#sec-nb2dnn"><span>8.3</span></a> to deploy a binary or multi-class image classification task. In the case of binary, we should select a number of reference (for instance “3”) and then create the model of that number against all the others (to answer questions such as “What’s the probability of this digit of being number 3?”). On the other hand, if we choose multi-class classification our model can predict any of the ten numbers (0, 1, 2, 3, 4, 5, 6, 7, 8, 9) included in our examples.</p>
-<p>Now, we used the basic concepts of the Random Forest algorithm (see <span class="quarto-unresolved-ref">?sec-randomforest</span>) to create and fit a model with 100 trees (<code>forest_clf</code>). In Example <a href="#exm-multiclass"><span>14.10</span></a> we use again the <em>randomForest</em> package in R and <em>sklearn</em> package in Python to estimate a model for the ten classes using the corpus of 60000 images (classes were similarly balanced, $$9–11% each). As we do in the examples, you can check the predictions for the first ten images of the test set (<code>X_test</code>), which correctly correspond to the right digits, and also check the (<code>predictions</code>) for the whole test set and then get some metrics of the model. The accuracy is over 0.97 which means the classification task is performed very well.</p>
+<p>Now, we used the basic concepts of the Random Forest algorithm (see <a href="chapter08.html#sec-randomforest"><span>Section&nbsp;8.3.4</span></a>) to create and fit a model with 100 trees (<code>forest_clf</code>). In Example <a href="#exm-multiclass"><span>14.10</span></a> we use again the <em>randomForest</em> package in R and <em>sklearn</em> package in Python to estimate a model for the ten classes using the corpus of 60000 images (classes were similarly balanced, $$9–11% each). As we do in the examples, you can check the predictions for the first ten images of the test set (<code>X_test</code>), which correctly correspond to the right digits, and also check the (<code>predictions</code>) for the whole test set and then get some metrics of the model. The accuracy is over 0.97 which means the classification task is performed very well.</p>
 <div class="callout-note callout callout-style-simple no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -1096,19 +1096,19 @@ Call:
                      Number of trees: 100
 No. of variables tried at each split: 28
 
-        OOB estimate of  error rate: 3.47%
+        OOB estimate of  error rate: 3.43%
 Confusion matrix:
      0    1    2    3    4    5    6    7    8    9 class.error
-0 5838    1    9    2    7    8   20    1   33    4  0.01435084
-1    1 6640   41   13   14    2    3   14   10    4  0.01512904
-2   23   10 5764   28   23    2   20   41   40    7  0.03256126
-3   12    7   88 5806    3   73    6   48   59   29  0.05300930
-4   12   10    7    1 5655    2   26    8   18  103  0.03200959
-5   30    5   12   73    9 5189   49    2   34   18  0.04279653
-6   20   10    7    1   12   40 5811    0   17    0  0.01808043
-7    7   26   58    7   32    0    0 6041   14   80  0.03575419
-8   11   31   35   53   31   51   31    4 5544   60  0.05246966
-9   19   13    8   67   87   21    7   53   42 5632  0.05328627</code></pre>
+0 5845    2    7    3    6    5   22    0   29    4  0.01316900
+1    0 6645   34   12   11    5    5   13   10    7  0.01438742
+2   26   11 5764   32   28    3   15   37   34    8  0.03256126
+3    8    5   84 5820    8   81    6   42   53   24  0.05072582
+4    9    9   14    2 5646    4   22   10   19  107  0.03355015
+5   20    9   12   87    7 5176   38    7   36   29  0.04519461
+6   27   12    5    3   11   29 5814    0   17    0  0.01757350
+7    8   22   53    9   35    1    0 6057   16   64  0.03320032
+8   12   31   33   47   28   57   21    6 5552   64  0.05110238
+9   19   10   13   68   93   23    2   51   44 5626  0.05429484</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(rf_clf, X_test[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1121,7 +1121,7 @@ Levels: 0 1 2 3 4 5 6 7 8 9</code></pre>
 <span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(cm<span class="sc">$</span>overall[<span class="st">"Accuracy"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Accuracy 
-  0.9703 </code></pre>
+    0.97 </code></pre>
 </div>
 </div>
 </div>
@@ -1135,9 +1135,9 @@ Levels: 0 1 2 3 4 5 6 7 8 9</code></pre>
 </section>
 <section id="sec-deep" class="level3" data-number="14.4.2">
 <h3 data-number="14.4.2" class="anchored" data-anchor-id="sec-deep"><span class="header-section-number">14.4.2</span> Deep Learning for Image Analysis</h3>
-<p>Even though they require heavy computations, Deep Neural Networks (DNN) are nowadays the best way to conduct image classification because their performance is normally higher than shallow algorithms. The reason is that we broaden the learning process using intermediate hidden layers, so each of these layers can learn different patterns or aspects of the image with different levels of abstraction: e.g., from detecting lines or contours in the first layers to catching higher feature representation of an image (such as the color of skin, the shapes of the eyes or the noses) in the next layers. In Section <span class="quarto-unresolved-ref">?sec-neural</span> and Section <a href="chapter11.html#sec-deeplearning"><span>11.4.4</span></a> we introduced the general concepts of a DNN (such as perceptrons, layers, hidden layers, back or forward propagation, and output functions), and now we will cover some common architectures for image analysis.</p>
+<p>Even though they require heavy computations, Deep Neural Networks (DNN) are nowadays the best way to conduct image classification because their performance is normally higher than shallow algorithms. The reason is that we broaden the learning process using intermediate hidden layers, so each of these layers can learn different patterns or aspects of the image with different levels of abstraction: e.g., from detecting lines or contours in the first layers to catching higher feature representation of an image (such as the color of skin, the shapes of the eyes or the noses) in the next layers. In Section <a href="chapter08.html#sec-neural"><span>8.3.5</span></a> and Section <a href="chapter11.html#sec-deeplearning"><span>11.4.4</span></a> we introduced the general concepts of a DNN (such as perceptrons, layers, hidden layers, back or forward propagation, and output functions), and now we will cover some common architectures for image analysis.</p>
 <p>One of the simplest DNNs architectures is the Multilayer Perceptron (MLP) which contains one input layer, one or many hidden layers, and one output layer (all of them <em>fully</em> connected and with bias neurons except for the output layer). Originally in a MLP the signals propagate from the inputs to the outputs (in one direction), which we call a feedforward neural network (FNN), but using Gradient Decent as an optimizer we can apply <em>backpropagation</em> (automatically computing the gradients of the network’s errors in two stages: one forward and one backward) and then obtain a more efficient training.</p>
-<p>We can use MLPs for binary and multi-class classification. In the first case, we normally use a single output neuron with the <em>sigmoid</em> or <em>logistic</em> activation function (probability from 0 to 1) (see <span class="quarto-unresolved-ref">?sec-logreg</span>); and in the second case we will need one output neuron per class with the <em>softmax</em> activation function (probabilities from 0 to 1 for each class but they must add up to 1 if the classes are exclusive. This is the function used in multinomial logistic regression). To predict probabilities, in both cases we will need a <em>loss</em> function and the one that is normally recommended is the <em>cross entropy loss</em> or simply <em>log loss</em>.</p>
+<p>We can use MLPs for binary and multi-class classification. In the first case, we normally use a single output neuron with the <em>sigmoid</em> or <em>logistic</em> activation function (probability from 0 to 1) (see <a href="chapter08.html#sec-logreg"><span>Section&nbsp;8.3.2</span></a>); and in the second case we will need one output neuron per class with the <em>softmax</em> activation function (probabilities from 0 to 1 for each class but they must add up to 1 if the classes are exclusive. This is the function used in multinomial logistic regression). To predict probabilities, in both cases we will need a <em>loss</em> function and the one that is normally recommended is the <em>cross entropy loss</em> or simply <em>log loss</em>.</p>
 <p>The state-of-the-art library for neural networks in general and for computer vision in particular is <em>TensorFlow</em><a href="#fn6" class="footnote-ref" id="fnref6" role="doc-noteref"><sup>6</sup></a> (originally created by Google and later publicly released) and the high-level Deep Learning API <em>Keras</em>, although you can find other good implementation packages such as <em>PyTorch</em> (created by Facebook), which has many straightforward functionalities and has also become popular in recent years (see for example the image classification tasks for social sciences conducted in <em>PyTorch</em> by <span class="citation" data-cites="williams2020images">Williams, Casas, and Wilkerson (<a href="references.html#ref-williams2020images" role="doc-biblioref">2020</a>)</span>). All these packages have current versions for both R and Python.</p>
 <p>Now, let’s train an MLP to build an image classifier to recognize fashion items using the Fashion MNIST dataset<a href="#fn7" class="footnote-ref" id="fnref7" role="doc-noteref"><sup>7</sup></a>. This dataset contains 70000 (60000 for training and 10000 for test) gray scale examples (<span class="math inline">\(28\times 28\)</span>) of ten different classes that include ankle boots, bags, coats, dresses, pullovers, sandals, shirts, sneakers, t-shirts/tops and trousers (Figure <a href="#fig-fashion"><span>14.6</span></a>). If you compare this dataset with the MINST, you will find that figures of fashion items are more complex than handwritten digits, which normally generates a lower accuracy in supervised classification.</p>
 <div id="fig-fashion" class="quarto-figure quarto-figure-center anchored">
@@ -1146,7 +1146,7 @@ Levels: 0 1 2 3 4 5 6 7 8 9</code></pre>
 <p></p><figcaption class="figure-caption">Figure&nbsp;14.6: Examples of Fashion MNIST items.</figcaption><p></p>
 </figure>
 </div>
-<p>You can use <em>Keras</em> to load the Fashion MNIST. In Example <a href="#exm-fashion"><span>14.11</span></a> we load the complete dataset and create the necessary objects for modeling (<code>X_train_full</code>, <code>y_train_full</code>, <code>X_test</code>, <code>y_test</code>). In addition we rescaled all the input features from 0–255 to 0–1 by dividing them by 255 in order to apply Gradient Decent. Then, we obtained three sets with <span class="math inline">\(28\times 28\)</span> arrays: 60000 in the training, and 10000 in the test. We could also generate here a validation set (e.g., <code>X_valid</code> and <code>y_valid</code>) with a given amount of records extracted from the training set (e.g., 5000), but as you will later see <em>Keras</em> allows us to automatically generate the validation set as a proportion of the training set (e.g., 0.1, which would be 6000 records in our example) when fitting the model (check the importance to work with a validation set to avoid over-fitting, explained in Section <a href="chapter08.html#sec-train"><span>8.3.2</span></a>).</p>
+<p>You can use <em>Keras</em> to load the Fashion MNIST. In Example <a href="#exm-fashion"><span>14.11</span></a> we load the complete dataset and create the necessary objects for modeling (<code>X_train_full</code>, <code>y_train_full</code>, <code>X_test</code>, <code>y_test</code>). In addition we rescaled all the input features from 0–255 to 0–1 by dividing them by 255 in order to apply Gradient Decent. Then, we obtained three sets with <span class="math inline">\(28\times 28\)</span> arrays: 60000 in the training, and 10000 in the test. We could also generate here a validation set (e.g., <code>X_valid</code> and <code>y_valid</code>) with a given amount of records extracted from the training set (e.g., 5000), but as you will later see <em>Keras</em> allows us to automatically generate the validation set as a proportion of the training set (e.g., 0.1, which would be 6000 records in our example) when fitting the model (check the importance to work with a validation set to avoid over-fitting, explained in Section <a href="chapter08.html#sec-train"><span>8.5.2</span></a>).</p>
 <div class="callout-note callout callout-style-simple no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -1170,11 +1170,10 @@ Levels: 0 1 2 3 4 5 6 7 8 9</code></pre>
 Downloading data from https://storage.googleapis.com/tensorflow/tf-keras-datasets/train-images-idx3-ubyte.gz
 
     8192/26421880 [..............................] - ETA: 0s
- 5087232/26421880 [====&gt;.........................] - ETA: 0s
-11321344/26421880 [===========&gt;..................] - ETA: 0s
-15081472/26421880 [================&gt;.............] - ETA: 0s
-17915904/26421880 [===================&gt;..........] - ETA: 0s
-21266432/26421880 [=======================&gt;......] - ETA: 0s
+  802816/26421880 [..............................] - ETA: 1s
+ 4202496/26421880 [===&gt;..........................] - ETA: 0s
+14106624/26421880 [===============&gt;..............] - ETA: 0s
+25247744/26421880 [===========================&gt;..] - ETA: 0s
 26421880/26421880 [==============================] - 0s 0us/step
 Downloading data from https://storage.googleapis.com/tensorflow/tf-keras-datasets/t10k-labels-idx1-ubyte.gz
 
@@ -1182,6 +1181,7 @@ Downloading data from https://storage.googleapis.com/tensorflow/tf-keras-dataset
 Downloading data from https://storage.googleapis.com/tensorflow/tf-keras-datasets/t10k-images-idx3-ubyte.gz
 
    8192/4422102 [..............................] - ETA: 0s
+ 925696/4422102 [=====&gt;........................] - ETA: 0s
 4422102/4422102 [==============================] - 0s 0us/step</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb78"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>class_names <span class="op">=</span> [<span class="st">"T-shirt/top"</span>, <span class="st">"Trouser"</span>, <span class="st">"Pullover"</span>,</span>
@@ -1326,7 +1326,7 @@ ________________________________________________________________________________
 </div>
 <div class="sourceCode cell-code" id="cb90"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(model.evaluate(X_test, y_test, verbose<span class="op">=</span><span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[0.42348363995552063, 0.849399983882904]</code></pre>
+<pre><code>[0.4696454107761383, 0.8309999704360962]</code></pre>
 </div>
 </div>
 </div>
@@ -1338,13 +1338,13 @@ ________________________________________________________________________________
 <span id="cb92-4"><a href="#cb92-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(history<span class="sc">$</span>metrics)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$loss
-[1] 0.7199813 0.4858611 0.4404781 0.4132177 0.3926118
+[1] 0.7314489 0.4865300 0.4420610 0.4155026 0.3949344
 
 $accuracy
-[1] 0.7642593 0.8311667 0.8445926 0.8545741 0.8610556
+[1] 0.7610000 0.8308148 0.8448704 0.8543148 0.8609074
 
 $val_loss
-[1] 0.5026248 0.5082368 0.4278803 0.4099424 0.3830624
+[1] 0.5390297 0.5013266 0.4185368 0.4302060 0.4073453
 
 ...</code></pre>
 </div>
@@ -1355,8 +1355,8 @@ $val_loss
 </div>
 <div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(score)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>    loss accuracy 
-1818.863    0.078 </code></pre>
+<pre><code>     loss  accuracy 
+1872.3418    0.0823 </code></pre>
 </div>
 </div>
 </div>
@@ -1410,7 +1410,7 @@ $val_loss
 <section id="sec-tuning" class="level3" data-number="14.4.3">
 <h3 data-number="14.4.3" class="anchored" data-anchor-id="sec-tuning"><span class="header-section-number">14.4.3</span> Re-using an Open Source CNN</h3>
 <p>Training complex images such as photographs is normally a more sophisticated task if we compare it to the examples included in the last sections. On the one hand, it might not be a good idea to build a deep neural network from scratch as we did in section <a href="#sec-deep"><span>14.4.2</span></a> to train a MLP. This means that you can re-use some lower layers of other DNNs and deploy <em>transfer learning</em> to save time with less training data. On the other hand, we should also move from traditional MLPs to other kinds of DNNs such as Convolutional Neural Networks (CNNs) which are nowadays the state-of-the-art approach in computer vision. Moreover, to get good results we should also build or explore different CNNs architectures that can produce more accurate predictions in image classification. In this section we will show how to re-use an open source CNN architecture and will suggest an example of how to fine-tune an existing CNN for a social science problem.</p>
-<p>As explained in Section <span class="quarto-unresolved-ref">?sec-cnnbasis</span> a CNN is a specific type of DNN that has had great success in complex visual tasks (image classification, object detection or semantic segmentation) and voice recognition<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a>. Instead of using <em>fully connected</em> layers like in a typical MLP, a CNN uses only <em>partially connected</em> layers inspired on how “real” neurons connect in the visual cortex: some neurons only react to stimuli located in a limited <em>receptive field</em>. In other words, in a CNN every neuron is connected to some neurons of the previous layer (and not to all of them), which significantly reduces the amount of information transmitted to the next layer and helps the DNN to detect complex patterns. Surprisingly, this reduction in the number of parameters and weights involved in the model works better for larger and more complex images, different from those shown in MNIST.</p>
+<p>As explained in Section <a href="chapter08.html#sec-cnnbasis"><span>8.4.1</span></a> a CNN is a specific type of DNN that has had great success in complex visual tasks (image classification, object detection or semantic segmentation) and voice recognition<a href="#fn10" class="footnote-ref" id="fnref10" role="doc-noteref"><sup>10</sup></a>. Instead of using <em>fully connected</em> layers like in a typical MLP, a CNN uses only <em>partially connected</em> layers inspired on how “real” neurons connect in the visual cortex: some neurons only react to stimuli located in a limited <em>receptive field</em>. In other words, in a CNN every neuron is connected to some neurons of the previous layer (and not to all of them), which significantly reduces the amount of information transmitted to the next layer and helps the DNN to detect complex patterns. Surprisingly, this reduction in the number of parameters and weights involved in the model works better for larger and more complex images, different from those shown in MNIST.</p>
 <p>Building a CNN is quite similar to a MLP, except for the fact that you will have to work with <em>convolutional</em> and <em>pooling</em> layers. The convolutional layers include a <em>bias term</em> and are the most important blocks of a CNN because they establish the specific connections among the neurons. In simpler words: a given neuron of a high-level layer is connected only to a rectangular group of neurons (the receptive field) of the low-level layer and not to all of them<a href="#fn11" class="footnote-ref" id="fnref11" role="doc-noteref"><sup>11</sup></a>. For more technical details of the basis of a CNN you can go to specific literature such as <span class="citation" data-cites="geron2019hands">Géron (<a href="references.html#ref-geron2019hands" role="doc-biblioref">2019</a>)</span>.</p>
 <p>Instead of building a CNN from scratch, there are many pre-trained and open-source architectures that have been optimized for image classification. Besides a stack of convolutional and pooling layers, these architectures normally include some fully connected layers and a regular output layer for prediction (just like in MLPs). We can mention here some of these architectures: LeNet-5, AlexNet, GoogLeNet, VGGNet, ResNet, Xception or SENet<a href="#fn12" class="footnote-ref" id="fnref12" role="doc-noteref"><sup>12</sup></a>. All these CNNs have been previously tested in image classification with promising results, but you still have to look at the internal composition of each of them and their metrics to choose the most appropriate for you. You can implement and train most of them from scratch either in <em>keras</em> or <em>PyTorch</em>, or you can just use them directly or even fine-tune the pre-trained model in order to save time.</p>
 <p>Let’s use the pre-trained model of a Residual Network (ResNet) with 50 layers, also known as <em>ResNet50</em>, to show you how to deploy a multi-class classifier over pictures. The ResNet architecture (also with 34, 101 and 152 layers) is based on residual learning and uses <em>skip connections</em>, which means that the input layer not only feeds the next layer but this signal is also added to the output of another high-level layer. This allows you to have a much deeper network and in the case of ResNet152 it has achieved a top-five error rate of 3.6%. As we do in Example <a href="#exm-resnet50"><span>14.15</span></a>, you can easily import into your workspace a ResNet50 architecture and include the pre-trained weights of a model trained with ImageNet (uncomment the second line of the code to visualize the complete model!).</p>
@@ -1432,19 +1432,22 @@ $val_loss
 <pre><code>Downloading data from https://storage.googleapis.com/tensorflow/keras-applications/resnet/resnet50_weights_tf_dim_ordering_tf_kernels.h5
 
      8192/102967424 [..............................] - ETA: 0s
-  4202496/102967424 [&gt;.............................] - ETA: 1s
- 12607488/102967424 [==&gt;...........................] - ETA: 0s
- 21184512/102967424 [=====&gt;........................] - ETA: 0s
- 29941760/102967424 [=======&gt;......................] - ETA: 0s
- 39018496/102967424 [==========&gt;...................] - ETA: 0s
- 48128000/102967424 [=============&gt;................] - ETA: 0s
- 56893440/102967424 [===============&gt;..............] - ETA: 0s
- 65896448/102967424 [==================&gt;...........] - ETA: 0s
- 74203136/102967424 [====================&gt;.........] - ETA: 0s
- 82984960/102967424 [=======================&gt;......] - ETA: 0s
- 91987968/102967424 [=========================&gt;....] - ETA: 0s
-100950016/102967424 [============================&gt;.] - ETA: 0s
-102967424/102967424 [==============================] - 1s 0us/step</code></pre>
+   827392/102967424 [..............................] - ETA: 6s
+  4202496/102967424 [&gt;.............................] - ETA: 3s
+  8396800/102967424 [=&gt;............................] - ETA: 2s
+ 13885440/102967424 [===&gt;..........................] - ETA: 2s
+ 18636800/102967424 [====&gt;.........................] - ETA: 2s
+ 25198592/102967424 [======&gt;.......................] - ETA: 1s
+ 33562624/102967424 [========&gt;.....................] - ETA: 1s
+ 41951232/102967424 [===========&gt;..................] - ETA: 1s
+ 47448064/102967424 [============&gt;.................] - ETA: 1s
+ 53379072/102967424 [==============&gt;...............] - ETA: 0s
+ 58728448/102967424 [================&gt;.............] - ETA: 0s
+ 67117056/102967424 [==================&gt;...........] - ETA: 0s
+ 75505664/102967424 [====================&gt;.........] - ETA: 0s
+ 83894272/102967424 [=======================&gt;......] - ETA: 0s
+ 92282880/102967424 [=========================&gt;....] - ETA: 0s
+102967424/102967424 [==============================] - 2s 0us/step</code></pre>
 </div>
 </div>
 </div>

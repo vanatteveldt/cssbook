@@ -466,14 +466,14 @@ Note
 <div class="cell-output cell-output-stdout">
 <pre><code>{
   "kind": "books#volume",
-  "id": "RQ6xDwAAQBAJ",
-  "etag": "F22nTSbA0Z4",
-  "selfLink": "https://www.googleapis.com/books/v1/volumes/RQ6xDwAAQBAJ",
+  "id": "LqmaDwAAQBAJ",
+  "etag": "l3GXaHXuaMA",
+  "selfLink": "https://www.googleapis.com/books/v1/volumes/LqmaDwAAQBAJ",
   "volumeInfo": {
-    "title": "Automate the Boring Stuff with Python, 2nd Edition",
-    "subtitle": "Practical Programming for Total Beginners",
+    "title": "Python For Dummies",
     "authors": [
-      "Al Sweigart"
+      "Stef Maruch",
+      "Aahz Maruch"
 ...</code></pre>
 </div>
 </div>
@@ -493,10 +493,10 @@ Note
 [1] "books#volume"
 
 $id
-[1] "RQ6xDwAAQBAJ"
+[1] "LqmaDwAAQBAJ"
 
 $etag
-[1] "cgRp6evgYj4"
+[1] "v62UwsK75pw"
 
 ...</code></pre>
 </div>
@@ -525,12 +525,12 @@ $etag
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> json_normalize(data[<span class="st">"items"</span>])</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>d.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>           kind  ...                        accessInfo.pdf.acsTokenLink
-0  books#volume  ...                                                NaN
-1  books#volume  ...  http://books.google.com/books/download/Python_...
-2  books#volume  ...  http://books.google.com/books/download/Effecti...
-3  books#volume  ...  http://books.google.com/books/download/Python_...
-4  books#volume  ...                                                NaN
+<pre><code>           kind            id  ... saleInfo.buyLink saleInfo.offers
+0  books#volume  LqmaDwAAQBAJ  ...              NaN             NaN
+1  books#volume  Chr1NDlUcI8C  ...              NaN             NaN
+2  books#volume  aJQILlLxRmAC  ...              NaN             NaN
+3  books#volume  bTUFCAAAQBAJ  ...              NaN             NaN
+4  books#volume  H9emM_LGFDEC  ...              NaN             NaN
 
 [5 rows x 50 columns]</code></pre>
 </div>
@@ -546,20 +546,20 @@ $etag
 <div class="cell-output cell-output-stdout">
 <pre><code># A tibble: 6 × 3
   kind          totalItems items$k…¹ $id   $etag $self…² $volu…³ $volu…⁴ $volu…⁵
-  &lt;chr&gt;              &lt;int&gt; &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;chr&gt;   &lt;list&gt; 
-1 books#volumes       1522 books#vo… RQ6x… cgRp… https:… Automa… Practi… &lt;chr&gt;  
-2 books#volumes       1522 books#vo… Lqma… Ta6n… https:… Python… &lt;NA&gt;    &lt;chr&gt;  
-3 books#volumes       1522 books#vo… bTUF… SHP7… https:… Effect… 59 Spe… &lt;chr&gt;  
-4 books#volumes       1522 books#vo… aJQI… 14Rg… https:… Python… An Int… &lt;chr&gt;  
-5 books#volumes       1522 books#vo… H9em… k3qq… https:… Progra… A Comp… &lt;chr&gt;  
-6 books#volumes       1522 books#vo… Chr1… E92I… https:… Python… &lt;NA&gt;    &lt;chr&gt;  
-# … with 43 more variables: items$volumeInfo.publisher &lt;chr&gt;,
-#   $volumeInfo.publishedDate &lt;chr&gt;, $volumeInfo.description &lt;chr&gt;,
-#   $volumeInfo.industryIdentifiers &lt;list&gt;, $volumeInfo.pageCount &lt;int&gt;,
-#   $volumeInfo.printType &lt;chr&gt;, $volumeInfo.categories &lt;list&gt;,
-#   $volumeInfo.averageRating &lt;dbl&gt;, $volumeInfo.ratingsCount &lt;int&gt;,
-#   $volumeInfo.maturityRating &lt;chr&gt;, $volumeInfo.allowAnonLogging &lt;lgl&gt;,
-#   $volumeInfo.contentVersion &lt;chr&gt;, $volumeInfo.language &lt;chr&gt;, …</code></pre>
+  &lt;chr&gt;              &lt;int&gt; &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;list&gt;  &lt;chr&gt;  
+1 books#volumes       1677 books#vo… Lqma… v62U… https:… Python… &lt;chr&gt;   John W…
+2 books#volumes       1677 books#vo… Chr1… 4AwS… https:… Python… &lt;chr&gt;   Addiso…
+3 books#volumes       1677 books#vo… aJQI… DBxp… https:… Python… &lt;chr&gt;   Frankl…
+4 books#volumes       1677 books#vo… bTUF… 5UNa… https:… Effect… &lt;chr&gt;   Pearso…
+5 books#volumes       1677 books#vo… H9em… jgzV… https:… Progra… &lt;chr&gt;   Addiso…
+6 books#volumes       1677 books#vo… RQ6x… /yGO… https:… Automa… &lt;chr&gt;   No Sta…
+# … with 43 more variables: items$volumeInfo.publishedDate &lt;chr&gt;,
+#   $volumeInfo.description &lt;chr&gt;, $volumeInfo.industryIdentifiers &lt;list&gt;,
+#   $volumeInfo.pageCount &lt;int&gt;, $volumeInfo.printType &lt;chr&gt;,
+#   $volumeInfo.categories &lt;list&gt;, $volumeInfo.averageRating &lt;dbl&gt;,
+#   $volumeInfo.ratingsCount &lt;int&gt;, $volumeInfo.maturityRating &lt;chr&gt;,
+#   $volumeInfo.allowAnonLogging &lt;lgl&gt;, $volumeInfo.contentVersion &lt;chr&gt;,
+#   $volumeInfo.language &lt;chr&gt;, $volumeInfo.previewLink &lt;chr&gt;, …</code></pre>
 </div>
 </div>
 </div>
@@ -598,7 +598,7 @@ $etag
 <span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>    allitems.extend(data[<span class="st">"items"</span>])</span>
 <span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    i <span class="op">+=</span> <span class="dv">40</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Retrieved 586,it seems like that's it</code></pre>
+<pre><code>Retrieved 590,it seems like that's it</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> json_normalize(allitems)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>

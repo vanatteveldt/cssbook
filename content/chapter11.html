@@ -318,6 +318,19 @@ div.csl-indent {
 
 </header>
 
+<div class="callout-warning callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Update planned: R Tidymodels and tidytext
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>At the time of writing this chapter, <code>quanteda</code> and <code>caret</code> were our packages of choice for machine learning and text analysis in R, even though (as noted below) we felt that especially supervised text analysis was much better supported in Python than in R. We now think that the <code>tidymodels</code> and <code>tidytext</code> packages are a better choice for text analysis, especially for students who have just learned to work with the <code>tidyverse</code> data wrangling package. For this reason, we are planning to rewrite this chapter using those packages. See <a href="https://v2.cssbook.net/content/chapter11.html">the draft updated version of this chapter</a> and/or the relevant github issues for <a href="https://github.com/vanatteveldt/cssbook/issues/5">tidytext</a> and <a href="https://github.com/vanatteveldt/cssbook/issues/5">tidymodels</a> for more information.</p>
+</div>
+</div>
 <!--# 
 Edit history 
 - Bugfix: txt_* -> text_* 
@@ -339,7 +352,7 @@ Edit history
 <li>Be able to use these techniques</li>
 </ul>
 <div class="callout-note callout callout-style-default no-icon callout-captioned">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -348,7 +361,7 @@ Packages used in this chapter
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>This chapter uses the basic text and data handling that were described in <a href="chapter10.html"><span>Chapter&nbsp;10</span></a> (<em>tidyverse</em>, <em>readtext</em>, and <em>quanteda</em> for R, <em>pandas</em> and <em>nltk</em> for Python). For supervised text analysis, we use <em>quanteda.textmodels</em> in R, and <em>sklearn</em> and <em>keras</em> in Python. For topic models we use <em>topicmodels</em> (R) and <em>gensim</em> (Python). You can install these packages with the code below if needed (see <a href="chapter01.html#sec-installing"><span>Section&nbsp;1.4</span></a> for more details):</p>
 <div class="panel-tabset">
@@ -451,7 +464,7 @@ Packages used in this chapter
 <p>Before we get into the details and implementations, let us discuss some use cases of the three main approaches for the computational analysis of text: dictionary (or rule-based) approaches, supervised machine learning, and unsupervised machine learning.</p>
 <p>Dictionary approaches excel under three conditions. First, the variable we want to code is <em>manifest and concrete</em> rather than <em>latent and abstract</em>: names of actors, specific physical objects, specific phrases, etc., rather than feelings, frames, or topics. Second, all synonyms to be included must be known beforehand. And third, the dictionary entries must not have multiple meanings. For instance, coding for how often gun control is mentioned in political speeches fits these criteria. There are only so many ways to talk about it, and it is rather unlikely that speeches about other topics contain a phrase like “gun control”. Similarly, if we want to find references to Angela Merkel, Donald Trump, or any other well-known politician, we can just directly search for their names – even though problems arise when people have very common surnames and are referred to by their surnames only.</p>
 <p>Sadly, most interesting concepts are more complex to code. Take a seemingly straightforward problem: distinguishing whether a news article is about the economy or not. This is really easy to do for humans: there may be some edge cases, but in general, people rarely need longer than a few seconds to grasp whether an article is about the economy rather than about sports, culture, etc. Yet, many of these articles won’t directly state that they are about the economy by explicitly using the word “economy”.</p>
-<p>We may think of extending our dictionary not only with <code>econom.+</code> (a regular expression that includes economists, economic, and so on), but also come up with other words like “stock exchange”, “market”, “company.” Unfortunately, we will quickly run into a problem that we also faced when we discussed the precision-recall trade-off in <span class="quarto-unresolved-ref">?sec-validation</span>: the more terms we add to our dictionary, the more false positives we will get: articles about the geographical space called “market”, about some celebrity being seen in “company” of someone else, and so on.</p>
+<p>We may think of extending our dictionary not only with <code>econom.+</code> (a regular expression that includes economists, economic, and so on), but also come up with other words like “stock exchange”, “market”, “company.” Unfortunately, we will quickly run into a problem that we also faced when we discussed the precision-recall trade-off in <a href="chapter08.html#sec-validation"><span>Section&nbsp;8.5</span></a>: the more terms we add to our dictionary, the more false positives we will get: articles about the geographical space called “market”, about some celebrity being seen in “company” of someone else, and so on.</p>
 <p>From this example, we can conclude that often (1) it is easy for humans to decide to which class a text belongs, but (2) it is very hard for humans to come up with a list of words (or rules) on which their judgment is based. Such a situation is perfect for applying supervised machine learning: after all, it won’t take us much time to annotate, say, 1000 articles based on whether they are about the economy or not (probably this takes less time than thoroughly fine tuning a list of words to include or exclude); and the difficult part, deciding on the exact rules underlying the decision to classify an article as economic is done by the computer in seconds. Supervised machine learning, therefore, has replaced dictionary approaches in many areas.</p>
 <p>Both dictionary (or rule-based) approaches and supervised machine learning assume that you know in advance which categories (positive versus negative; sports versus economy versus politics; …) exist. The big strength of unsupervised approaches such as topic models is that you can also apply them without this knowledge. They therefore allow you to find patterns in data that you did not expect and can generate new insights. This makes them particularly suitable for explorative research questions. Using them for confirmatory tests, in contrast, is less defensible: after all, if we are interested in knowing whether, say, news site A published more about the economy than news site B, then it would be a bit weird to pretend not to know that the topic “economy” exists. Also practically, mapping the resulting topics that the topic model produces onto such <em>a priori</em> existing categories can be challenging.</p>
 <p>Despite all differences, all approaches share one requirement: you need to “Validate. Validate. Validate” <span class="citation" data-cites="Grimmer2013">(<a href="references.html#ref-Grimmer2013" role="doc-biblioref">Grimmer and Stewart 2013</a>)</span>. Though it has been done in the past, simply applying a dictionary without comparing the performance to manual coding of the same concepts is not acceptable; neither is using a supervised machine learning classifier without doing the same; or blindly trusting a topic model without at least manually checking whether the scores the model assigns to documents really capture what the documents are about.</p>
@@ -600,13 +613,13 @@ Saving to reviewdata.pickle.bz2</code></pre>
 <span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sent =</span> pos <span class="sc">-</span> neg)</span>
 <span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(scores)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                             doc_id pos neg sent
-1    test/pos/2166_8.txt/2166_8.txt  11   2    9
-2    test/neg/2040_1.txt/2040_1.txt   5  11   -6
-3   train/pos/8461_7.txt/8461_7.txt  26  17    9
-4    test/neg/7040_3.txt/7040_3.txt  11  22  -11
-5   train/neg/2613_2.txt/2613_2.txt   6   9   -3
-6 train/neg/10310_2.txt/10310_2.txt   8   4    4</code></pre>
+<pre><code>                               doc_id pos neg sent
+1        test/neg/911_1.txt/911_1.txt   2   4   -2
+2        test/pos/674_9.txt/674_9.txt   8   5    3
+3      test/pos/9051_8.txt/9051_8.txt   6   3    3
+4      test/neg/7489_2.txt/7489_2.txt   5   5    0
+5 train/pos/10606_10.txt/10606_10.txt   7   3    4
+6     train/pos/8245_9.txt/8245_9.txt   7   3    4</code></pre>
 </div>
 </div>
 </div>
@@ -626,12 +639,12 @@ Saving to reviewdata.pickle.bz2</code></pre>
 <li>Code some articles manually and compare with the automated coding.</li>
 <li>Improve your dictionary and check again.</li>
 <li>Manually code a validation dataset of sufficient size. The required size depends a bit on how balanced your data is – if one code occurs very infrequently, you will need more data.</li>
-<li>Calculate the agreement. You could use standard intercoder reliability measures used in manual content analysis, but we would also advise you to calculate precision and recall (see Section <span class="quarto-unresolved-ref">?sec-validation</span>).</li>
+<li>Calculate the agreement. You could use standard intercoder reliability measures used in manual content analysis, but we would also advise you to calculate precision and recall (see Section <a href="chapter08.html#sec-validation"><span>8.5</span></a>).</li>
 </ul></li>
 </ul>
 <p>Very extensive dictionaries will have a high recall (it becomes increasingly unlikely that you “miss” a relevant document), but often suffer from low precision (more documents will contain one of the words even though they are irrelevant). Vice versa, a very short dictionary will often be very precise, but miss a lot of documents. It depends on your research question where the right balance lies, but to substantially interpret your results, you need to be able to quantify the performance of your dictionary-based approach.</p>
 <div class="callout-note callout callout-style-default no-icon callout-captioned">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -640,7 +653,7 @@ How many documents do you need to calculate agreement with human annotators?
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>To determine the number of documents one needs to determine the agreement between a human and a machine, one can follow the same standards that are recommended for traditional manual content analysis.</p>
 <p>For instance, <span class="citation" data-cites="Krippendorff2004">Krippendorff (<a href="references.html#ref-Krippendorff2004" role="doc-biblioref">2004</a>)</span> provides a convenience table to look up the required sample sizes for determining the agreement between two human coders (p.&nbsp;240). <span class="citation" data-cites="Riffe2019">Riffe et al. (<a href="references.html#ref-Riffe2019" role="doc-biblioref">2019</a>)</span> provide similar suggestions (p.&nbsp;114). In short, the sample size depends on the level of statistical significance the researcher deems acceptable as well as on the distribution of the data. In an extreme case, if only 5 out of 100 items are to be coded as <span class="math inline">\(x\)</span>, then in a sample of 20 items, such an item may not even occur. In order to determine agreement between the automated method and a human, we suggest that sample sizes that one would also use for the calculation of agreement between human coders are used. For specific calculations, we refer to content analysis books such as the two referenced here. To give a very rough ballpark figure (that shouldn’t replace a careful calculation!), roughly 100 to 200 items will cover many scenarios (assuming a small amount of reasonably balanced classes).</p>
@@ -662,7 +675,7 @@ How many documents do you need to calculate agreement with human annotators?
 <p>To illustrate the workflow, we will use the ACL IMDB dataset, a large dataset that consists of a training dataset of 25000 movie reviews (of which 12500 are positive and 12500 are negative) and an equally sized test dataset <span class="citation" data-cites="aclimdb">(<a href="references.html#ref-aclimdb" role="doc-biblioref">Maas et al. 2011</a>)</span>. It can be downloaded at <a href="https://ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz">ai.stanford.edu/~amaas/data/sentiment/aclImdb_v1.tar.gz</a></p>
 <p>These data do not come in one file, but rather in a set of text files that are sorted in different folders named after the dataset to which they belong (<code>test</code> or <code>train</code>) and their label (<code>pos</code> and <code>neg</code>). This means that we cannot simply use a pre-defined function to read them, but we need to think of a way of reading the content into a data structure that we can use. This data was loaded in <a href="#exm-reviewdata">Example&nbsp;<span>11.1</span></a> above.</p>
 <div class="callout-note callout callout-style-default no-icon callout-captioned">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -671,7 +684,7 @@ Sparse versus dense matrices in Python and R
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>In a document-term matrix, you would typically find a lot of zeros: most words do <em>not</em> appear in any given document. For instance, the reviews in the IMDB dataset contain more than 100000 unique words. Hence, the matrix has more than 100000 columns. Yet, most reviews only consist of a couple of hundred words. As a consequence, more than 99% of the cells in the table contain a zero. In a sparse matrix, we do not store all these zeros, but only store the values for cells that actually contain a value. This drastically reduces the memory needed. But even if you have a huge amount of memory, this does not solve the issue: in R, the number of cells in a matrix is limited to 2147483647. It is therefore impossible to store a matrix with 100000 features and 25000 documents as a dense matrix. Unfortunately, many models that you can run via <em>caret</em> in R will convert your sparse document-term matrix to a dense matrix, and hence are effectively only usable for very small datasets. An alternative is using the <em>quanteda</em> package, which does use sparse matrices throughout. However, at the time of writing this book, quanteda only provides a very limited number of models. As all of these problems do not arise in <em>scikit-learn</em>, you may want to consider using Python for many text classification tasks.</p>
 </div>
@@ -679,7 +692,7 @@ Sparse versus dense matrices in Python and R
 </div>
 <p>Let us now train our first classifier. We choose a Naïve Bayes classifier with a simple count vectorizer (<a href="#exm-imdbbaseline">Example&nbsp;<span>11.3</span></a>). In the Python example, pay attention to the fitting of the vectorizer: we fit on the training data <em>and</em> transform the training data with it, but we only transform the test data <em>without re-fitting the vectorizer</em>. Fitting, here, includes the decision about which words to include (by definition, words that are not present in the training data are not included; but we could also choose additional constraints, such as excluding very rare or very common words), but also assigning an (internally used) identifier (variable name) to each word. If we fit the classifier again, these would not be compatible any more. In R, the same is achieved in a slightly different way: two term-document matrices are created independently, before they are matched in such a way that only the features that are present in the training matrix are retained in the test matrix.</p>
 <div class="callout-note callout callout-style-default no-icon callout-captioned">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -688,7 +701,7 @@ Note
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>A word that is not present in the training data, but is present in the test data, is thus ignored. If you want to use the information such out-of-vocabulary words can entail (e.g., they may be synonyms), consider using a word embedding approach (see <a href="chapter10.html#sec-wordembeddings"><span>Section&nbsp;10.3.3</span></a>)</p>
 </div>
@@ -826,29 +839,29 @@ weighted avg       0.82      0.82      0.82     25000</code></pre>
 <pre><code>NB-count
 MultinomialNB()
         Precision   Recall
-pos:    0.87        0.77
 neg:    0.79        0.88
+pos:    0.87        0.77
 
 
 NB-TfIdf
 MultinomialNB()
         Precision   Recall
-pos:    0.87        0.78
 neg:    0.80        0.88
+pos:    0.87        0.78
 
 
 LR-Count
 LogisticRegression(solver='liblinear')
         Precision   Recall
-pos:    0.87        0.85
 neg:    0.85        0.87
+pos:    0.87        0.85
 
 
 LR-TfIdf
 LogisticRegression(solver='liblinear')
         Precision   Recall
-pos:    0.89        0.88
-neg:    0.88        0.89</code></pre>
+neg:    0.88        0.89
+pos:    0.89        0.88</code></pre>
 </div>
 </div>
 </div>
@@ -857,7 +870,7 @@ neg:    0.88        0.89</code></pre>
 </div>
 <p>The output of this little example already gives us quite a bit of insight into how to tackle our specific classification tasks: first, we see that a <span class="math inline">\(tf\cdot idf\)</span> classifier seems to be slightly but consistently superior to a count classifier (this is often, but not always the case). Second, we see that the logistic regression performs better than the Naïve Bayes classifier (again, this is often, but not always, the case). In particular, in our case, the logistic regression improved on the excessive misclassification of positive reviews as negative, and achieves a very balanced performance.</p>
 <p>There may be instances where one nevertheless may want to use a Count Vectorizer with a Naïve Bayes classifier instead (especially if it is too computationally expensive to estimate the other model), but for now, we may settle on the best performing combination, logistic regression with a <code>tf.idf</code> vectorizer. You could also try fitting a Support Vector Machine instead, but we have little reason to believe that our data isn’t linearly separable, which means that there is little reason to believe that the SVM will perform better. Given the good performance we already achieved, we decide to stick to the logistic regression for now.</p>
-<p>We can now go as far as we like, include more models, use crossvalidation and gridsearch (see <a href="chapter08.html#sec-crossvalidation"><span>Section&nbsp;8.3.3</span></a>), etc. However, our workflow now consists of <em>two</em> steps: fitting/transforming our input data using a vectorizer, and fitting a classifier. To make things easier, in scikit-learn, both steps can be combined into a so-called pipe. <a href="#exm-basicpipe">Example&nbsp;<span>11.5</span></a> shows how the loop in <a href="#exm-basiccomparisons">Example&nbsp;<span>11.4</span></a> can be re-written using pipes (the result stays the same).</p>
+<p>We can now go as far as we like, include more models, use crossvalidation and gridsearch (see <a href="chapter08.html#sec-crossvalidation"><span>Section&nbsp;8.5.3</span></a>), etc. However, our workflow now consists of <em>two</em> steps: fitting/transforming our input data using a vectorizer, and fitting a classifier. To make things easier, in scikit-learn, both steps can be combined into a so-called pipe. <a href="#exm-basicpipe">Example&nbsp;<span>11.5</span></a> shows how the loop in <a href="#exm-basiccomparisons">Example&nbsp;<span>11.4</span></a> can be re-written using pipes (the result stays the same).</p>
 <div class="callout-note callout callout-style-simple no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -879,32 +892,32 @@ neg:    0.88        0.89</code></pre>
 Pipeline(steps=[('countvectorizer', CountVectorizer(max_df=0.5, min_df=5)),
                 ('multinomialnb', MultinomialNB())])
         Precision   Recall
-pos:    0.87        0.77
 neg:    0.79        0.88
+pos:    0.87        0.77
 
 
 NB-TfIdf
 Pipeline(steps=[('tfidfvectorizer', TfidfVectorizer(max_df=0.5, min_df=5)),
                 ('multinomialnb', MultinomialNB())])
         Precision   Recall
-pos:    0.87        0.78
 neg:    0.80        0.88
+pos:    0.87        0.78
 
 
 LR-Count
 Pipeline(steps=[('countvectorizer', CountVectorizer(max_df=0.5, min_df=5)),
                 ('logisticregression', LogisticRegression(solver='liblinear'))])
         Precision   Recall
-pos:    0.87        0.85
 neg:    0.85        0.87
+pos:    0.87        0.85
 
 
 LR-TfIdf
 Pipeline(steps=[('tfidfvectorizer', TfidfVectorizer(max_df=0.5, min_df=5)),
                 ('logisticregression', LogisticRegression(solver='liblinear'))])
         Precision   Recall
-pos:    0.89        0.88
-neg:    0.88        0.89</code></pre>
+neg:    0.88        0.89
+pos:    0.89        0.88</code></pre>
 </div>
 </div>
 </div>
@@ -912,7 +925,7 @@ neg:    0.88        0.89</code></pre>
 </div>
 </div>
 <p>Such a pipeline lends itself very well to performing a gridsearch. <a href="#exm-gridsearchlogreg">Example&nbsp;<span>11.6</span></a> gives you an example. With <code>LogisticRegression?</code> and <code>TfIdfVectorizer?</code>, we can get a list of all possible hyperparameters that we may want to tune. For instance, these could be the minimum and maximum frequency for words to be included or whether we want to use only unigrams (single words) or also bigrams (combinations of two words, see <a href="chapter10.html#sec-ngram"><span>Section&nbsp;10.3</span></a>). For the Logistic Regression, it may be the regularization hyperparameter C, which applies a penalty for too complex models. We can put all values for these parameters that we want to consider in a dictionary, with a descriptive key (i.e., a string with the step of the pipeline followed by two underscores and the name of the hyperparameter) and a list of all values we want to consider as the corresponding value.</p>
-<p>The gridsearch procedure will then estimate all combinations of all values, using cross-validation (see <span class="quarto-unresolved-ref">?sec-validation</span>). In our example, we have <span class="math inline">\(2 x 2 x 2 x 2 x 3 = 24\)</span> different models, and <span class="math inline">\(24 models x 5 folds = 120\)</span> models to estimate. Hence, it may take you some time to run the code.</p>
+<p>The gridsearch procedure will then estimate all combinations of all values, using cross-validation (see <a href="chapter08.html#sec-validation"><span>Section&nbsp;8.5</span></a>). In our example, we have <span class="math inline">\(2 x 2 x 2 x 2 x 3 = 24\)</span> different models, and <span class="math inline">\(24 models x 5 folds = 120\)</span> models to estimate. Hence, it may take you some time to run the code.</p>
 <div class="callout-note callout callout-style-simple no-icon">
 <div class="callout-body d-flex">
 <div class="callout-icon-container">
@@ -958,8 +971,8 @@ neg:    0.88        0.89</code></pre>
 <span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(short_classification_report(y_test, pred))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>        Precision   Recall
-pos:    0.90        0.90
 neg:    0.90        0.90
+pos:    0.90        0.90
 None</code></pre>
 </div>
 </div>
@@ -1239,7 +1252,7 @@ Weight  Feature
 <span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>    urllib.request.urlretrieve(url, fn)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Downloading embeddings from https://cssbook.net/d/w2v_320d_trimmed
-('w2v_320d_trimmed', &lt;http.client.HTTPMessage object at 0x7f5556c24820&gt;)</code></pre>
+('w2v_320d_trimmed', &lt;http.client.HTTPMessage object at 0x7f6af8538820&gt;)</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>embeddings <span class="op">=</span> KeyedVectors.load_word2vec_format(fn)</span>
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>emb_matrix <span class="op">=</span> np.zeros((<span class="bu">len</span>(tokenizer.word_index) <span class="op">+</span> <span class="dv">1</span>, embeddings.vector_size))</span>
@@ -1360,7 +1373,7 @@ ________________________________________________________________________________
 <span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> np.asarray([[x] <span class="cf">for</span> x <span class="kw">in</span> train_labels])</span>
 <span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a>m.fit(train_data, labels, epochs<span class="op">=</span><span class="dv">5</span>, batch_size<span class="op">=</span><span class="dv">128</span>, verbose<span class="op">=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;keras.callbacks.History object at 0x7f5559170f70&gt;</code></pre>
+<pre><code>&lt;keras.callbacks.History object at 0x7f6af1328fa0&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>output <span class="op">=</span> m.predict(test_data, verbose<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -1370,7 +1383,7 @@ ________________________________________________________________________________
 <span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>acc <span class="op">=</span> <span class="bu">sum</span>(correct) <span class="op">/</span> <span class="bu">len</span>(pred)</span>
 <span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Accuracy: </span><span class="sc">{</span>acc<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Accuracy: 0.5508182601205857</code></pre>
+<pre><code>Accuracy: 0.5749354005167958</code></pre>
 </div>
 </div>
 </div>
@@ -1390,7 +1403,7 @@ ________________________________________________________________________________
 <span id="cb59-12"><a href="#cb59-12" aria-hidden="true" tabindex="-1"></a>eval<span class="ot">=</span><span class="fu">evaluate</span>(model, d_test<span class="sc">$</span>lemmata, d_test<span class="sc">$</span>value)</span>
 <span id="cb59-13"><a href="#cb59-13" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">glue</span>(<span class="st">"Accuracy: {eval['accuracy']}"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Accuracy: 0.444875121116638</code></pre>
+<pre><code>Accuracy: 0.444013774394989</code></pre>
 </div>
 </div>
 </div>
@@ -1400,7 +1413,7 @@ ________________________________________________________________________________
 </div>
 </div>
 </div>
-<p>First, <a href="#exm-rnndata">Example&nbsp;<span>11.11</span></a> loads a dataset described by <span class="citation" data-cites="vanatteveldt2021">Van Atteveldt, Van der Velden, and Boukes (<a href="references.html#ref-vanatteveldt2021" role="doc-biblioref">2021</a>)</span>, which consists of Dutch economic news headlines with a sentiment value. Next, in <a href="#exm-rnnmodel">Example&nbsp;<span>11.12</span></a> a model is defined consisting of several layers, corresponding roughly to <span class="quarto-unresolved-ref">?fig-cnn</span>. First, an <em>embedding</em> layer transforms the textual input into a semantic vector for each word. Next, the <em>convolutional</em> layer defines features (filters) over windows of vectors, which are then pooled in the <em>max-pooling</em> layer. This results in a vector of detected features for each document, which are then used in a regular (hidden) <em>dense</em> layer followed by an output layer.</p>
+<p>First, <a href="#exm-rnndata">Example&nbsp;<span>11.11</span></a> loads a dataset described by <span class="citation" data-cites="vanatteveldt2021">Van Atteveldt, Van der Velden, and Boukes (<a href="references.html#ref-vanatteveldt2021" role="doc-biblioref">2021</a>)</span>, which consists of Dutch economic news headlines with a sentiment value. Next, in <a href="#exm-rnnmodel">Example&nbsp;<span>11.12</span></a> a model is defined consisting of several layers, corresponding roughly to <a href="chapter08.html#fig-cnn">Figure&nbsp;<span>8.7</span></a>. First, an <em>embedding</em> layer transforms the textual input into a semantic vector for each word. Next, the <em>convolutional</em> layer defines features (filters) over windows of vectors, which are then pooled in the <em>max-pooling</em> layer. This results in a vector of detected features for each document, which are then used in a regular (hidden) <em>dense</em> layer followed by an output layer.</p>
 <p>Finally, in <a href="#exm-rnn">Example&nbsp;<span>11.13</span></a> we train the model on 4000 documents and test it against the remaining documents. The Python model, which uses pre-trained word embeddings (the <code>w2v_320d</code> file downloaded at the top), achieves a mediocre accuracy of about 56% (probably due to the low number of training sentences). The R model, which trains the embedding layer as part of the model, performs more poorly at 44% as this model is even more dependent on large training data to properly estimate the embedding layer.</p>
 </section>
 </section>
@@ -1428,7 +1441,7 @@ ________________________________________________________________________________
 <p>Unfortunately, there is no simple analytic solution to calculate these topic assignments like there is for OLS regression. Thus, like other more complicated statistical models such as multilevel regression, we need to use an iterative estimation that progressively optimizes the assignment to improve the fit until it converges.</p>
 <p>An estimation method that is often used for LDA is Gibbs sampling. Simply put, this starts with a random assignment of topics to words. Then, in each iteration, it reconsiders each word and recomputes what likely topics for that word are given the other topics in that document and the topics in which that word occurs in other documents. Thus, if a document already contains a number of words placed in a certain topic, a new word is more likely to be placed in that topic as well. After enough iterations, this converges to a solution.</p>
 <div class="callout-note callout callout-style-default no-icon callout-captioned">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -1437,7 +1450,7 @@ The Dirichlet Distribution and its Hyperparameters
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>The Dirichlet distribution can be seen as a distribution over multinomial distributions, that is, every draw from a Dirichlet distribution results in a multinomial distribution. An easy way to visualize this is to see the Dirichlet distribution as a bag of dice. You draw a die from the bag, and each die is a distribution over the numbers one to six.</p>
 <p>This distribution is controlled by a parameter called alpha (<span class="math inline">\(\alpha\)</span>), which is often called a <em>hyperparameter</em> because it is a parameter that controls how other parameters (the actual topic distributions) are estimated, similar to, e.g., the learning speed in many machine learning models. This alpha hyperparameter controls what kind of dice there are in the bag. A high alpha means that the dice are generally fair, i.e., give a uniform multinomial distribution. For topic models, this means that documents will in general contain an even spread of multiple topics. A low alpha means that each die is unfair in the sense of having a strong preference for some number(s), as if these numbers are weighted. You can then draw a die that prefers ones, or a die that prefers sixes. For topic models this means that each document tends to have one or two dominant topics. Finally, alpha can be symmetric (meaning dice are unfair, but randomly, so in the end each topic has the same chance) or asymmetric (they are still unfair, and now also favor some topics more than others). This would correspond to some topics being more likely to occur in all documents.</p>
@@ -1671,7 +1684,7 @@ docs      speaker mr vice president members congress first united around come
 <p>Especially noteworthy are <em>Structural Topic Models</em> (R package <em>stm</em>; <span class="citation" data-cites="stm">Roberts et al. (<a href="references.html#ref-stm" role="doc-biblioref">2014</a>)</span>), which allow you to model covariates as topic or word predictors. This allows you, for example, to model topic shifts over time or different words for the same topic based on, e.g., Republican or Democrat presidents.</p>
 <p>Python users should check out <em>Hierarchical Topic Modeling</em> <span class="citation" data-cites="hierarchicallda">(<a href="references.html#ref-hierarchicallda" role="doc-biblioref">Griffiths et al. 2004</a>)</span>. In hierarchical topic modeling, rather than the researcher specifying a fixed number of topics, the model returns a hierarchy of topics from few general topics to a large number of specific topics, allowing for a more flexible exploration and analysis of the data.</p>
 <div class="callout-note callout callout-style-default no-icon callout-captioned">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-7-contents" aria-controls="callout-7" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -1680,7 +1693,7 @@ How many topics?
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-6" class="callout-6-contents callout-collapse collapse">
+<div id="callout-7" class="callout-7-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>With topic modeling, the most important researcher choices are the <em>number of topics</em> and the value of <em>alpha</em>. These choices are called <em>hyperparameters</em>, since they determine how the model parameters (e.g.&nbsp;words per topic) are found.</p>
 <p>There is no good theoretical solution to determine the “right” number of topics for a given corpus and research question. Thus, a sensible approach can be to ask the computer to try many models, and see which works best. Unfortunately, because this is an unsupervised (inductive) method, there is no single metric that determines how good a topic model is.</p>

@@ -328,6 +328,19 @@ div.csl-indent {
 <div class="cell">
 
 </div>
+<div class="callout-warning callout callout-style-default callout-captioned">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-caption-container flex-fill">
+Update planned: R Tidytext
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>At the time of writing this chapter, <code>quanteda</code> was our package of choice for text analysis in R. We now think that the <code>tidytext</code> package is easier to learn for students who have just leared the <code>tidyverse</code> data wrangling package. For this reason, we are planning to rewrite this chapter using that package. See <a href="https://v2.cssbook.net/content/chapter10.html">the draft updated version of this chapter</a> and/or the <a href="https://github.com/vanatteveldt/cssbook/issues/5">relevant github issue</a> for more information.</p>
+</div>
+</div>
 <p><strong>Abstract.</strong> This chapter shows how you can analyze texts that are stored as a data frame column or variable using functions from the package <em>quanteda</em> in R and the package <em>sklearn</em> in Python and R. Please see Chapter <a href="chapter09.html"><span>9</span></a> for more information on reading and cleaning text.</p>
 <p><strong>Keywords.</strong> Text as Data, Document-Term Matrix</p>
 <p><strong>Objectives:</strong></p>
@@ -337,7 +350,7 @@ div.csl-indent {
 <li>Understand and use more advanced representations such as n-grams and embeddings</li>
 </ul>
 <div class="callout-note callout callout-style-default no-icon callout-captioned">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -346,7 +359,7 @@ Note
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse">
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>This chapter introduces the packages <em>quanteda</em> (R) and <em>sklearn</em> and <em>nltk</em> (Python) for converting text into a document-term matrix. It also introduces the <em>udpipe</em> package for natural language processing. You can install these packages with the code below if needed (see Section <a href="chapter01.html#sec-installing"><span>1.4</span></a> for more details):</p>
 <div class="panel-tabset">
@@ -533,7 +546,7 @@ text1 :
 <p>For R, we simply call the <code>tokens</code> function from the <em>quanteda</em> package. This keeps <code>haven't</code> and <code>John's</code> as a single word, which is probably less desirable than splitting the words but at least better than outputting the word <code>haven</code>.</p>
 <p>As this simple example shows, even a relatively simple sentence is tokenized differently by the tokenizers considered here (and see the box on tokenization in Python). Depending on the research question, these differences might or might not be important. However, it is always a good idea to check the output of this (and other) preprocessing steps so you understand what information is kept or discarded.</p>
 <div class="callout-note callout callout-style-default no-icon callout-captioned">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -542,7 +555,7 @@ Tokenization in Python
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div id="callout-3" class="callout-3-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>As you can see in the example, the built-in tokenizer in <code>scikit-learn</code>is not actually very good. For example, <em>haven’t</em> is tokenized to <em>haven</em>, which is an entirely different word. Fortunately, there are other tokenizers in the <em>nltk.tokenize</em> package that do better.</p>
 <p>For example, the <code>TreebankTokenizer</code> uses the tokenization rules for the Penn Treebank to tokenize, which produces better results:</p>
@@ -786,7 +799,7 @@ docs                   the first investment defrauded
 <p>Note that to display the matrix we turned it from a <em>sparse matrix</em> representation into a <em>dense matrix</em>. Briefly put, in a dense matrix, all entries are stored as a long list of numbers, including all the zeros. In a sparse matrix, only the non-zero entries and their location are stored. This conversion (using the function <code>as.matrix</code> and the method <code>todense</code> respectively), however, was only performed after selecting a small subset of the data. In general, it is very inefficient to store and work with the matrix in a <code>dense</code> format. For a reasonably large corpus with tens of thousands of documents and different words, this can quickly run to billions of numbers, which can cause problems even on modern computers and is, moreover, very inefficient. Because sparsity values are often higher than 99%, using a sparse matrix representation can easily reduce storage requirements by a hundred times, and in the process speed up calculations by reducing the number of entries that need to be inspected. Both <em>quanteda</em> and <code>scikit-learn</code>store DTMs as sparse matrices by default, and most analysis tools are able to deal with sparse matrices very efficiently (see, however, Section <a href="chapter11.html#sec-workflow"><span>11.4.1</span></a> for problems with machine learning on sparse matrices in R).</p>
 <p>A final note on the difference between Python and R in this example. The code in R is much simpler and produces nicer results since it also shows the words and the speech names. In Python, we wrote our own helper function to create the frequency statistics which is built into the R <em>quanteda</em> package. These differences between Python and R reflect a pattern that is true in many (but not all) cases: in Python libraries such as <code>numpy</code>and <code>scikit-learn</code>are setup to maximize performance, while in R a library such as <em>quanteda</em> or <em>tidyverse</em> is more geared towards ease of use. For that reason, the DTM in Python does not “remember” the actual words, it uses the index of each word, so it consumes less memory if you don’t need to use the actual words in e.g.&nbsp;a machine learning setup. R, on the other hand, stores the words and also the document IDs and metadata in the DFM object. This is easier to use if you need to look up a word or document, but it consumes (slightly) more memory.</p>
 <div class="callout-note callout callout-style-default no-icon callout-captioned">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-3-contents" aria-controls="callout-3" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -795,7 +808,7 @@ Note
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-3" class="callout-3-contents callout-collapse collapse">
+<div id="callout-4" class="callout-4-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p><strong>Python: Why fit_transform?</strong> In Python, you don’t have a function that directly transforms text into a DTM. Instead, you create an <em>transformer</em> called a CountVectorizer, which can then be used to “vectorize” texts (turn it into a row of numbers) by counting how often each word occurs. This uses the <code>fit_transform</code> function which is offered by all <code>scikit-learn</code>transformers. It “fits” the model on the training data, which in this case means learning the vocabulary. It can then be used to transform other data into a DTM with the exact same columns, which is often required for algorithms. Because the feature names (the words themselves) are stored in the CountVectorizer rather than the document-term matrix, you generally need to keep both objects.</p>
 </div>
@@ -859,7 +872,7 @@ Note
 <h2 data-number="10.2" class="anchored" data-anchor-id="sec-dtmselect"><span class="header-section-number">10.2</span> Weighting and Selecting Documents and Terms</h2>
 <p>So far, the DTMs you made in this chapter simply show the count of each word in each document. Many words, however, are not informative for many questions. This is especially apparent if you look at a <em>word cloud</em>, essentially a plot of the most frequent words in a <em>corpus</em> (set of documents).</p>
 <div class="callout-note callout callout-style-default no-icon callout-captioned">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-4-contents" aria-controls="callout-4" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -868,7 +881,7 @@ Vectors and a geometric interpretation of document-term matrices
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-4" class="callout-4-contents callout-collapse collapse">
+<div id="callout-5" class="callout-5-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>We said that a document is represented by a “vector” of numbers, where each number (for a document-term matrix) is the frequency of a specific word in that document. This term is also seen in the name for the tokenizer <code>scikit-learn</code>: a <em>vectorizer</em> or function to turn texts into vectors.</p>
 <p>The term <em>vector</em> here can be read as just a fancy word for a group of numbers. In this meaning, the term is also often used in R, where a column of a data frame is called a vector, and where functions that can be called on a whole vector at once are called <em>vectorized</em>.</p>
@@ -1191,7 +1204,7 @@ Tokenized:</code></pre>
 </div>
 <p>As a final example, Example <a href="#exm-tagcloud"><span>10.11</span></a> shows how to filter tokens for the whole corpus, but rather than removing hashtags it keeps only the hashtags to produce a tag cloud. In R, this is mostly a pipeline of <em>quanteda</em> functions to create the corpus, tokenize, keep only hashtags, and create a DFM. To spice up the output we use the <em>RColorBrewer</em> package to set random colors for the tags. In Python, you can see that we now have a nested list comprehension, where the outer loop iterates over the texts and the inner loop iterates over the tokens in each text. Next, we make a <code>do_nothing</code> function for the vectorizer since the results are already tokenized. Note that we need to disable lowercasing as otherwise it will try to call <code>.lower()</code> on the token lists.</p>
 <div class="callout-note callout callout-style-default no-icon callout-captioned">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-5-contents" aria-controls="callout-5" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-6-contents" aria-controls="callout-6" aria-expanded="false" aria-label="Toggle callout">
 <div class="callout-icon-container">
 <i class="callout-icon no-icon"></i>
 </div>
@@ -1200,7 +1213,7 @@ Lambda functions in Python.
 </div>
 <div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
 </div>
-<div id="callout-5" class="callout-5-contents callout-collapse collapse">
+<div id="callout-6" class="callout-6-contents callout-collapse collapse">
 <div class="callout-body-container callout-body">
 <p>Sometimes, we need to define a function that is very simple and that we need only once. An example for such a throwaway function is <code>do_nothing</code> in Example <a href="#exm-tagcloud"><span>10.11</span></a>. Instead of defining a reusable function with the <code>def</code> keyword and then to call it by its name when we need it later, we can therefore also directly define an unnamed function when we need it with the <code>lambda</code> keyword. The syntax is simple: <code>lambda argument: returnvalue</code>. A function that maps a value onto itself can therefore be written as <code>lambda x: x</code>. In Example <a href="#exm-tagcloud"><span>10.11</span></a>, instead of defining a named function, we could therefore also simply write <code>v = CountVectorizer(tokenizer=lambda x: x, lowercase=False)</code>. The advantages are that it saves you two lines of code here and you don’t clutter your environment with functions you do not intend to re-use anyway. The disadvantage is that it may be less clear what is happening, at least for people not familiar with lambda functions.</p>
 </div>
@@ -1582,7 +1595,7 @@ saddam_hussein         29        5</code></pre>
 <span id="cb119-4"><a href="#cb119-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> os.path.exists(glove_fn):</span>
 <span id="cb119-5"><a href="#cb119-5" aria-hidden="true" tabindex="-1"></a>    urllib.request.urlretrieve(url, glove_fn)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>('glove.6B.50d.10k.w2v.txt', &lt;http.client.HTTPMessage object at 0x7ff60c5b66e0&gt;)</code></pre>
+<pre><code>('glove.6B.50d.10k.w2v.txt', &lt;http.client.HTTPMessage object at 0x7f08f0cd2710&gt;)</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -1786,7 +1799,7 @@ Man is to football as woman is to: soccer</code></pre>
 <div class="callout-body-container">
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>('english-ewt-ud-2.4-190531.udpipe', &lt;http.client.HTTPMessage object at 0x7ff6130957b0&gt;)</code></pre>
+<pre><code>('english-ewt-ud-2.4-190531.udpipe', &lt;http.client.HTTPMessage object at 0x7f08f77097e0&gt;)</code></pre>
 </div>
 </div>
 <div id="exm-udpipe" class="theorem example">
