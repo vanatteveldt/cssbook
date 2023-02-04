@@ -537,6 +537,14 @@ Looking at the dispersion of points in the provided example you can infer that t
 
 We can check and measure the existence of this correlation by computing the Pearson correlation coefficient or Pearson's *r*, which is the most well-known correlation function. As you probably remember from your statistics class, a correlation refers to a relationship between two continuous variables and is usually applied to measure linear relationships (although there  also exist nonlinear correlation coefficients, such as Spearman's $\rho$). Specifically, Pearson's $r$  measures the linear correlation between two variables (*X* and *Y*) producing a value between $-1$ and $+1$, where 0 depicts the absence of correlation and values near to 1 a strong correlation. The signs ($+$ or $-$) represent the direction of the relationship (being positive if two variables variate in the same direction, and negative if they vary in the opposite direction). The correlation coefficient is usually represented with *r* or the Greek letter $\rho$ and mathematically expressed as:
 
+
+$$
+  r =
+  \frac{ \sum_{i=1}^{n}(x_i-\bar{x})(y_i-\bar{y}) }{%
+        \sqrt{\sum_{i=1}^{n}(x_i-\bar{x})^2}\sqrt{\sum_{i=1}^{n}(y_i-\bar{y})^2}}
+$$
+
+
 You can estimate this correlation coefficient with the *pandas* function `corr` in Python and the base R function `cor` in R. As shown in Example [-@exm-corr] the two variables plotted above are highly correlated with a coefficient of 0.95.
 
 ::: {.callout-note appearance="simple" icon=false}
@@ -855,7 +863,10 @@ clustering methods we will discuss later, it is very fast and does not
 consume many resources. This makes it especially useful for larger
 datasets.
 
-$k$-means cluster analysis is a method that takes any number of observations (cases) and groups them into a given number of clusters based on the proximity of each observation to the mean of the formed cluster (centroid).  Mathematically, we measure this proximity as the distance of any given point to its cluster center, and can be expressed as
+$k$-means cluster analysis is a method that takes any number of observations (cases) and groups them into a given number of clusters based on the proximity of each observation to the mean of the formed cluster (centroid).  Mathematically, we measure this proximity as the distance of any given point to its cluster center, and can be expressed as:
+
+$$J = \sum_{n=1}^{N} \sum_{k=1}^{K} r_{nk} \|x_n - \mu_k\|^2$$
+
 
 where $\|x_n - \mu_k\|$ is the distance between the data point $x_n$ and the center of the cluster $\mu_k$.
 
@@ -1173,6 +1184,9 @@ identical number of rows and columns, corresponding to the total
 number of dimensions of the original dataset. Specifically, we can
 calculate the covariance matrix of the variables *X* and *y*
 with the formula:
+
+$$cov_{x,y}=\frac{\sum_{i=1}^{N}(x_{i}-\bar{x})(y_{i}-\bar{y})}{N-1}$$
+
 
 Secondly, using the covariance matrix the algorithm computes the eigenvectors and their corresponding eigenvalues, and then drop the eigenvectors with the lowest eigenvalues. With this reduced matrix it transforms the original values to the new subspace in order to obtain the principal components that will synthesize the original dataset.
 
