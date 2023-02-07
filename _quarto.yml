@@ -3,10 +3,13 @@ project:
 
 book:
   title: "Computational Analysis of Communication"
+  description: "An open access computational social science textbook giving a practical introduction to the analysis of texts, networks, and images with code examples in Python and R"
   author: "Wouter van Atteveldt, Damian Trilling & Carlos Arcila"
   date: "2022-03-11"
-  favicon: img/favicon.png
-  chapters:
+  favicon: content/img/favicon.png
+  cover-image: content/img/cover.jpg
+  site-url: https://cssbook.net
+  chapters: 
     - index.qmd
     - content/chapter01.qmd
     - content/chapter02.qmd
@@ -25,6 +28,9 @@ book:
     - content/chapter15.qmd
     - content/chapter16.qmd
     - content/references.qmd
+  twitter-card:
+    creator: "@vanatteveldt"
+    image: content/img/cover.jpg
 
 bibliography: content/references.bib
 
