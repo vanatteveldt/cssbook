@@ -6,6 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="description" content="An open access computational social science textbook giving a practical introduction to the analysis of texts, networks, and images with code examples in Python and R">
 
 <title>Computational Analysis of Communication - 12&nbsp; Scraping online data</title>
 <style>
@@ -114,7 +115,7 @@ div.csl-indent {
 <meta name="quarto:offset" content="../">
 <link href="../content/chapter13.html" rel="next">
 <link href="../content/chapter11.html" rel="prev">
-<link href="../img/favicon.png" rel="icon" type="image/png">
+<link href="../content/img/favicon.png" rel="icon" type="image/png">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -145,6 +146,11 @@ div.csl-indent {
 }</script>
 
 
+<meta name="twitter:title" content="Computational Analysis of Communication - 12&nbsp; Scraping online data">
+<meta name="twitter:description" content="An open access computational social science textbook giving a practical introduction to the analysis of texts, networks, and images with code examples in Python and R">
+<meta name="twitter:image" content="https://cssbook.net/content/img/cover.jpg">
+<meta name="twitter:creator" content="@vanatteveldt">
+<meta name="twitter:card" content="summary_large_image">
 </head>
 
 <body class="nav-sidebar floating">
@@ -467,7 +473,7 @@ Note
 <pre><code>{
   "kind": "books#volume",
   "id": "LqmaDwAAQBAJ",
-  "etag": "l3GXaHXuaMA",
+  "etag": "1heKiZQNcEg",
   "selfLink": "https://www.googleapis.com/books/v1/volumes/LqmaDwAAQBAJ",
   "volumeInfo": {
     "title": "Python For Dummies",
@@ -496,7 +502,7 @@ $id
 [1] "LqmaDwAAQBAJ"
 
 $etag
-[1] "v62UwsK75pw"
+[1] "ntS1judrSLg"
 
 ...</code></pre>
 </div>
@@ -525,12 +531,12 @@ $etag
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> json_normalize(data[<span class="st">"items"</span>])</span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>d.head()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>           kind            id  ... saleInfo.buyLink saleInfo.offers
-0  books#volume  LqmaDwAAQBAJ  ...              NaN             NaN
-1  books#volume  Chr1NDlUcI8C  ...              NaN             NaN
-2  books#volume  aJQILlLxRmAC  ...              NaN             NaN
-3  books#volume  bTUFCAAAQBAJ  ...              NaN             NaN
-4  books#volume  H9emM_LGFDEC  ...              NaN             NaN
+<pre><code>           kind  ...                                    saleInfo.offers
+0  books#volume  ...                                                NaN
+1  books#volume  ...                                                NaN
+2  books#volume  ...  [{'finskyOfferType': 1, 'listPrice': {'amountI...
+3  books#volume  ...                                                NaN
+4  books#volume  ...                                                NaN
 
 [5 rows x 50 columns]</code></pre>
 </div>
@@ -547,12 +553,12 @@ $etag
 <pre><code># A tibble: 6 × 3
   kind          totalItems items$k…¹ $id   $etag $self…² $volu…³ $volu…⁴ $volu…⁵
   &lt;chr&gt;              &lt;int&gt; &lt;chr&gt;     &lt;chr&gt; &lt;chr&gt; &lt;chr&gt;   &lt;chr&gt;   &lt;list&gt;  &lt;chr&gt;  
-1 books#volumes       1677 books#vo… Lqma… v62U… https:… Python… &lt;chr&gt;   John W…
-2 books#volumes       1677 books#vo… Chr1… 4AwS… https:… Python… &lt;chr&gt;   Addiso…
-3 books#volumes       1677 books#vo… aJQI… DBxp… https:… Python… &lt;chr&gt;   Frankl…
-4 books#volumes       1677 books#vo… bTUF… 5UNa… https:… Effect… &lt;chr&gt;   Pearso…
-5 books#volumes       1677 books#vo… H9em… jgzV… https:… Progra… &lt;chr&gt;   Addiso…
-6 books#volumes       1677 books#vo… RQ6x… /yGO… https:… Automa… &lt;chr&gt;   No Sta…
+1 books#volumes       1631 books#vo… Lqma… ntS1… https:… Python… &lt;chr&gt;   John W…
+2 books#volumes       1631 books#vo… bTUF… 1+Y0… https:… Effect… &lt;chr&gt;   Pearso…
+3 books#volumes       1631 books#vo… RQ6x… N8Lx… https:… Automa… &lt;chr&gt;   No Sta…
+4 books#volumes       1631 books#vo… H9em… Gohq… https:… Progra… &lt;chr&gt;   Addiso…
+5 books#volumes       1631 books#vo… Chr1… o3Qi… https:… Python… &lt;chr&gt;   Addiso…
+6 books#volumes       1631 books#vo… aJQI… nmLz… https:… Python… &lt;chr&gt;   Frankl…
 # … with 43 more variables: items$volumeInfo.publishedDate &lt;chr&gt;,
 #   $volumeInfo.description &lt;chr&gt;, $volumeInfo.industryIdentifiers &lt;list&gt;,
 #   $volumeInfo.pageCount &lt;int&gt;, $volumeInfo.printType &lt;chr&gt;,
@@ -598,7 +604,7 @@ $etag
 <span id="cb18-13"><a href="#cb18-13" aria-hidden="true" tabindex="-1"></a>    allitems.extend(data[<span class="st">"items"</span>])</span>
 <span id="cb18-14"><a href="#cb18-14" aria-hidden="true" tabindex="-1"></a>    i <span class="op">+=</span> <span class="dv">40</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Retrieved 590,it seems like that's it</code></pre>
+<pre><code>Retrieved 586,it seems like that's it</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>d <span class="op">=</span> json_normalize(allitems)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>

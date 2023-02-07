@@ -6,6 +6,7 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
+<meta name="description" content="An open access computational social science textbook giving a practical introduction to the analysis of texts, networks, and images with code examples in Python and R">
 
 <title>Computational Analysis of Communication - 8&nbsp; Statistical Modeling and Supervised Machine Learning</title>
 <style>
@@ -114,7 +115,7 @@ div.csl-indent {
 <meta name="quarto:offset" content="../">
 <link href="../content/chapter09.html" rel="next">
 <link href="../content/chapter07.html" rel="prev">
-<link href="../img/favicon.png" rel="icon" type="image/png">
+<link href="../content/img/favicon.png" rel="icon" type="image/png">
 <script src="../site_libs/quarto-html/quarto.js"></script>
 <script src="../site_libs/quarto-html/popper.min.js"></script>
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
@@ -146,6 +147,11 @@ div.csl-indent {
 
   <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
 
+<meta name="twitter:title" content="Computational Analysis of Communication - 8&nbsp; Statistical Modeling and Supervised Machine Learning">
+<meta name="twitter:description" content="An open access computational social science textbook giving a practical introduction to the analysis of texts, networks, and images with code examples in Python and R">
+<meta name="twitter:image" content="https://cssbook.net/content/img/cover.jpg">
+<meta name="twitter:creator" content="@vanatteveldt">
+<meta name="twitter:card" content="summary_large_image">
 </head>
 
 <body class="nav-sidebar floating">
@@ -1429,17 +1435,17 @@ y_test     non-user user
 </div>
 <div class="sourceCode cell-code" id="cb124"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb124-1"><a href="#cb124-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(search.best_params_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>{'bootstrap': True, 'criterion': 'gini', 'n_estimators': 100}</code></pre>
+<pre><code>{'bootstrap': True, 'criterion': 'entropy', 'n_estimators': 50}</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb126"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb126-1"><a href="#cb126-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classification_report(y_test, search.predict(X_test)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>              precision    recall  f1-score   support
 
-    non-user       0.42      0.35      0.38       161
-        user       0.63      0.70      0.66       252
+    non-user       0.43      0.37      0.40       161
+        user       0.63      0.68      0.65       252
 
     accuracy                           0.56       413
-   macro avg       0.53      0.52      0.52       413
+   macro avg       0.53      0.53      0.53       413
 weighted avg       0.55      0.56      0.55       413</code></pre>
 </div>
 </div>
