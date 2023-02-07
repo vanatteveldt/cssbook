@@ -1,20 +1,16 @@
 # Text as data {#sec-chap-dtm}
 
-```{python}
-#| echo: false
-import warnings; warnings.filterwarnings('ignore')
-def print(x, *args, **kargs):
-  if len(x) > 75:
-    x = x[:75] + "..."
-  __builtins__.print(x, *args, **kargs)
-```
-```{r}
-#| echo: false
-print = function(x, ...) {
-  if (nchar(x) > 70) x = paste0(substr(x, 1, 70), "...")
-  base::print(x, ...)
-}
-```
+::: {.callout-warning}
+# Update planned: R Tidytext
+
+At the time of writing this chapter for the published book, `quanteda` was our package of choice for text analysis in R.
+We now think that the `tidytext` package is easier to learn for students who have just leared the `tidyverse` data wrangling package.
+For this reason, we are planning to rewrite this chapter using that package. 
+See the [relevant github issue](https://github.com/vanatteveldt/cssbook/issues/5) for more information. 
+:::
+
+{{< include common_setup.qmd >}}
+
 **Abstract.**
   This chapter shows how you can analyze texts that are stored as a data frame column or variable using functions from the package *quanteda* in R and the package *sklearn* in Python and R.
   Please see Chapter [-@sec-chap-protext] for more information on reading and cleaning text.
