@@ -31,12 +31,23 @@ book:
   twitter-card:
     creator: "@vanatteveldt"
     image: content/img/cover.jpg
-
+  
 bibliography: content/references.bib
 
 format:
   html:
     theme: cosmo
+    include-after-body:
+      text: |
+        <script>
+          var python = [];
+          var r = [];
+          document.querySelectorAll('a[data-bs-toggle="tab"]').forEach((a) => {
+            var target = a.textContent == "Python code"?python:r;
+            target.push(new bootstrap.Tab(a));
+            a.addEventListener('shown.bs.tab', () => target.forEach((tab) => tab.show()));
+           });
+        </script>
 
 editor: visual
 
