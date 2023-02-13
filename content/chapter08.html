@@ -1435,18 +1435,18 @@ y_test     non-user user
 </div>
 <div class="sourceCode cell-code" id="cb124"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb124-1"><a href="#cb124-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(search.best_params_)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>{'bootstrap': True, 'criterion': 'entropy', 'n_estimators': 50}</code></pre>
+<pre><code>{'bootstrap': True, 'criterion': 'entropy', 'n_estimators': 100}</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb126"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb126-1"><a href="#cb126-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(classification_report(y_test, search.predict(X_test)))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>              precision    recall  f1-score   support
 
-    non-user       0.43      0.37      0.40       161
-        user       0.63      0.68      0.65       252
+    non-user       0.45      0.37      0.41       161
+        user       0.64      0.71      0.68       252
 
-    accuracy                           0.56       413
-   macro avg       0.53      0.53      0.53       413
-weighted avg       0.55      0.56      0.55       413</code></pre>
+    accuracy                           0.58       413
+   macro avg       0.55      0.54      0.54       413
+weighted avg       0.57      0.58      0.57       413</code></pre>
 </div>
 </div>
 </div>
@@ -1756,6 +1756,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
+<script>
+  var python = [];
+  var r = [];
+  document.querySelectorAll('a[data-bs-toggle="tab"]').forEach((a) => {
+    var target = a.textContent == "Python code"?python:r;
+    target.push(new bootstrap.Tab(a));
+    a.addEventListener('shown.bs.tab', () => target.forEach((tab) => tab.show()));
+   });
+</script>
 
 
 

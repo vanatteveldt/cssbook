@@ -436,9 +436,9 @@ Packages used in this chapter
 <span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>g1 <span class="ot">=</span> <span class="fu">make_graph</span>(edges, <span class="at">directed =</span> <span class="cn">FALSE</span>)</span>
 <span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>g1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>IGRAPH a8ca25e UN-- 5 5 -- 
+<pre><code>IGRAPH 8526cd3 UN-- 5 5 -- 
 + attr: name (v/c)
-+ edges from a8ca25e (vertex names):
++ edges from 8526cd3 (vertex names):
 [1] Hillary Clinton--Donald Trump   Hillary Clinton--Bernie Sanders
 [3] Hillary Clinton--Barack Obama   Donald Trump   --John McCain   
 [5] Bernie Sanders --Barack Obama  </code></pre>
@@ -533,9 +533,9 @@ Packages used in this chapter
 <span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>g2 <span class="ot">=</span> <span class="fu">make_graph</span>(edges, <span class="at">directed =</span> <span class="cn">TRUE</span>)</span>
 <span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(g2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>IGRAPH a8bb091 DN-- 5 7 -- 
+<pre><code>IGRAPH f0a32ce DN-- 5 7 -- 
 + attr: name (v/c)
-+ edges from a8bb091 (vertex names):
++ edges from f0a32ce (vertex names):
 [1] Hillary Clinton-&gt;Donald Trump    Bernie Sanders -&gt;Hillary Clinton
 [3] Hillary Clinton-&gt;Barack Obama    John McCain    -&gt;Donald Trump   
 [5] Barack Obama   -&gt;Bernie Sanders  Hillary Clinton-&gt;Bernie Sanders 
@@ -767,7 +767,7 @@ Packages used in this chapter
 </div>
 <div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(g4.edges)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[('Donald Trump', 'John McCain')]</code></pre>
+<pre><code>[('John McCain', 'Donald Trump')]</code></pre>
 </div>
 </div>
 </div>
@@ -777,9 +777,9 @@ Packages used in this chapter
 <span id="cb39-2"><a href="#cb39-2" aria-hidden="true" tabindex="-1"></a>g3 <span class="ot">=</span> <span class="fu">induced_subgraph</span>(g1, <span class="fu">c</span>(<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">4</span>))</span>
 <span id="cb39-3"><a href="#cb39-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(g3)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>IGRAPH 4db5289 UN-- 3 3 -- 
+<pre><code>IGRAPH c232d39 UN-- 3 3 -- 
 + attr: name (v/c)
-+ edges from 4db5289 (vertex names):
++ edges from c232d39 (vertex names):
 [1] Hillary Clinton--Bernie Sanders Hillary Clinton--Barack Obama  
 [3] Bernie Sanders --Barack Obama  </code></pre>
 </div>
@@ -787,9 +787,9 @@ Packages used in this chapter
 <span id="cb41-2"><a href="#cb41-2" aria-hidden="true" tabindex="-1"></a>g4 <span class="ot">=</span> <span class="fu">induced_subgraph</span>(g1, <span class="fu">c</span>(<span class="dv">2</span>,<span class="dv">5</span>))</span>
 <span id="cb41-3"><a href="#cb41-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(g4)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>IGRAPH 63c4541 UN-- 2 1 -- 
+<pre><code>IGRAPH d441ebe UN-- 2 1 -- 
 + attr: name (v/c)
-+ edge from 63c4541 (vertex names):
++ edge from d441ebe (vertex names):
 [1] Donald Trump--John McCain</code></pre>
 </div>
 </div>
@@ -883,11 +883,11 @@ Packages used in this chapter
 <span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>                 <span class="at">mode =</span> <span class="fu">c</span>(<span class="st">"all"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
-+ 4/5 vertices, named, from a8ca25e:
++ 4/5 vertices, named, from 8526cd3:
 [1] Barack Obama    Hillary Clinton Donald Trump    John McCain    
 
 [[2]]
-+ 5/5 vertices, named, from a8ca25e:
++ 5/5 vertices, named, from 8526cd3:
 [1] Barack Obama    Bernie Sanders  Hillary Clinton Donald Trump   
 [5] John McCain    </code></pre>
 </div>
@@ -1073,7 +1073,7 @@ Packages used in this chapter
 </div>
 <div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">incident</span>(g1, <span class="fu">V</span>(g1)[<span class="st">"John McCain"</span>], <span class="at">mode=</span><span class="st">"all"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>+ 1/5 edge from a8ca25e (vertex names):
+<pre><code>+ 1/5 edge from 8526cd3 (vertex names):
 [1] Donald Trump--John McCain</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb74"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="fu">glue</span>(<span class="st">"Neighbors of John McCain in"</span>,</span>
@@ -1083,7 +1083,7 @@ Packages used in this chapter
 </div>
 <div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a><span class="fu">neighbors</span>(g1, <span class="fu">V</span>(g1)[<span class="st">"John McCain"</span>], <span class="at">mode=</span><span class="st">"all"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>+ 1/5 vertex, named, from a8ca25e:
+<pre><code>+ 1/5 vertex, named, from 8526cd3:
 [1] Donald Trump</code></pre>
 </div>
 </div>
@@ -1417,15 +1417,15 @@ Packages used in this chapter
 <div class="sourceCode cell-code" id="cb135"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb135-1"><a href="#cb135-1" aria-hidden="true" tabindex="-1"></a><span class="fu">max_cliques</span>(g1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>[[1]]
-+ 2/5 vertices, named, from a8ca25e:
++ 2/5 vertices, named, from 8526cd3:
 [1] Donald Trump John McCain 
 
 [[2]]
-+ 2/5 vertices, named, from a8ca25e:
++ 2/5 vertices, named, from 8526cd3:
 [1] Donald Trump    Hillary Clinton
 
 [[3]]
-+ 3/5 vertices, named, from a8ca25e:
++ 3/5 vertices, named, from 8526cd3:
 [1] Hillary Clinton Bernie Sanders  Barack Obama   </code></pre>
 </div>
 </div>
@@ -1498,8 +1498,8 @@ Packages used in this chapter
 <pre><code>Length 2
 Modularity: 0.22
 Membership:
- - {'Bernie Sanders', 'Barack Obama', 'Hillary Clinton'}
- - {'Donald Trump', 'John McCain'}</code></pre>
+ - {'Barack Obama', 'Hillary Clinton', 'Bernie Sanders'}
+ - {'John McCain', 'Donald Trump'}</code></pre>
 </div>
 </div>
 </div>
@@ -1557,8 +1557,8 @@ Membership:
 <pre><code>Length 2
 Modularity: 0.22
 Membership:
- - {'Bernie Sanders', 'Barack Obama', 'Hillary Clinton'}
- - {'Donald Trump', 'John McCain'}</code></pre>
+ - {'Barack Obama', 'Hillary Clinton', 'Bernie Sanders'}
+ - {'John McCain', 'Donald Trump'}</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -1571,8 +1571,8 @@ Membership:
 <pre><code>Length 2
 Modularity: 0.22
 Membership:
- - frozenset({'Bernie Sanders', 'Barack Obama', 'Hillary Clinton'})
- - frozenset({'Donald Trump', 'John McCain'})</code></pre>
+ - frozenset({'Barack Obama', 'Hillary Clinton', 'Bernie Sanders'})
+ - frozenset({'John McCain', 'Donald Trump'})</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -1582,11 +1582,10 @@ Membership:
 <span id="cb147-4"><a href="#cb147-4" aria-hidden="true" tabindex="-1"></a>cl_propagation <span class="op">=</span> <span class="bu">sorted</span>(cl_propagation, key<span class="op">=</span><span class="bu">len</span>, reverse<span class="op">=</span><span class="va">True</span>)</span>
 <span id="cb147-5"><a href="#cb147-5" aria-hidden="true" tabindex="-1"></a>summarize_clustering(g1, cl_propagation)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Length 2
-Modularity: 0.22
+<pre><code>Length 1
+Modularity: 0.00
 Membership:
- - {'Bernie Sanders', 'Barack Obama', 'Hillary Clinton'}
- - {'Donald Trump', 'John McCain'}</code></pre>
+ - {'John McCain', 'Hillary Clinton', 'Barack Obama', 'Bernie Sanders', 'Do...</code></pre>
 </div>
 </div>
 </div>
@@ -1616,11 +1615,10 @@ Membership:
 <span id="cb153-2"><a href="#cb153-2" aria-hidden="true" tabindex="-1"></a>cl_propagation <span class="ot">=</span> <span class="fu">cluster_label_prop</span>(g1) </span>
 <span id="cb153-3"><a href="#cb153-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summarize_clustering</span>(cl_propagation)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Length 2
-Modularity: 0.22
+<pre><code>Length 1
+Modularity: 0
 Membership:
- - Hillary Clinton, Bernie Sanders, Barack Obama
- - Donald Trump, John McCain</code></pre>
+[1] " - Hillary Clinton, Donald Trump, Bernie Sanders, Barack Obama, John M..."</code></pre>
 </div>
 </div>
 </div>
@@ -1779,7 +1777,7 @@ elenballesteros Unidadpopular__       kanciller JuanfranGuevara      CEARefugio
 </div>
 <div class="sourceCode cell-code" id="cb181"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb181-1"><a href="#cb181-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">glue</span>(<span class="st">"Modularity: {modularity(cluster5)}"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Modularity: 0.771994</code></pre>
+<pre><code>Modularity: 0.771998</code></pre>
 </div>
 </div>
 </div>
@@ -2044,6 +2042,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
+<script>
+  var python = [];
+  var r = [];
+  document.querySelectorAll('a[data-bs-toggle="tab"]').forEach((a) => {
+    var target = a.textContent == "Python code"?python:r;
+    target.push(new bootstrap.Tab(a));
+    a.addEventListener('shown.bs.tab', () => target.forEach((tab) => tab.show()));
+   });
+</script>
 
 
 

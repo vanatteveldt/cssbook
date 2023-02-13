@@ -1601,7 +1601,7 @@ saddam_hussein         29        5</code></pre>
 <span id="cb119-4"><a href="#cb119-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> <span class="kw">not</span> os.path.exists(glove_fn):</span>
 <span id="cb119-5"><a href="#cb119-5" aria-hidden="true" tabindex="-1"></a>    urllib.request.urlretrieve(url, glove_fn)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>('glove.6B.50d.10k.w2v.txt', &lt;http.client.HTTPMessage object at 0x7f17dd7ea710&gt;)</code></pre>
+<pre><code>('glove.6B.50d.10k.w2v.txt', &lt;http.client.HTTPMessage object at 0x7f4cb23ce6b0&gt;)</code></pre>
 </div>
 </div>
 <div class="cell">
@@ -1805,7 +1805,7 @@ Man is to football as woman is to: soccer</code></pre>
 <div class="callout-body-container">
 <div class="cell">
 <div class="cell-output cell-output-stdout">
-<pre><code>('english-ewt-ud-2.4-190531.udpipe', &lt;http.client.HTTPMessage object at 0x7f17e3ecd7b0&gt;)</code></pre>
+<pre><code>('english-ewt-ud-2.4-190531.udpipe', &lt;http.client.HTTPMessage object at 0x7f4cb8db5780&gt;)</code></pre>
 </div>
 </div>
 <div id="exm-udpipe" class="theorem example">
@@ -2176,6 +2176,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
+<script>
+  var python = [];
+  var r = [];
+  document.querySelectorAll('a[data-bs-toggle="tab"]').forEach((a) => {
+    var target = a.textContent == "Python code"?python:r;
+    target.push(new bootstrap.Tab(a));
+    a.addEventListener('shown.bs.tab', () => target.forEach((tab) => tab.show()));
+   });
+</script>
 
 
 

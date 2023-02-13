@@ -1897,7 +1897,7 @@ length: 4</code></pre>
 <div class="cell-output cell-output-stdout">
 <pre><code>As a generator:
 type: &lt;class 'generator'&gt;
-representation: &lt;generator object square2 at 0x7f2df004d770&gt;
+representation: &lt;generator object square2 at 0x7f58aa9bd770&gt;
 entries: [1225, 4, 215296, 16]
 second pass: []</code></pre>
 </div>
@@ -2073,6 +2073,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
+<script>
+  var python = [];
+  var r = [];
+  document.querySelectorAll('a[data-bs-toggle="tab"]').forEach((a) => {
+    var target = a.textContent == "Python code"?python:r;
+    target.push(new bootstrap.Tab(a));
+    a.addEventListener('shown.bs.tab', () => target.forEach((tab) => tab.show()));
+   });
+</script>
 
 
 

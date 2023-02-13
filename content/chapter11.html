@@ -619,13 +619,13 @@ Saving to reviewdata.pickle.bz2</code></pre>
 <span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sent =</span> pos <span class="sc">-</span> neg)</span>
 <span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a><span class="fu">head</span>(scores)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>                            doc_id pos neg sent
-1 test/pos/12431_8.txt/12431_8.txt   9  10   -1
-2  train/neg/3385_1.txt/3385_1.txt  25  13   12
-3  train/neg/4824_2.txt/4824_2.txt   3   4   -1
-4  train/neg/3605_1.txt/3605_1.txt   5   8   -3
-5   test/neg/8667_3.txt/8667_3.txt  20   9   11
-6   test/neg/9270_4.txt/9270_4.txt   8  11   -3</code></pre>
+<pre><code>                             doc_id pos neg sent
+1    test/pos/5946_7.txt/5946_7.txt  10   8    2
+2 train/neg/12332_3.txt/12332_3.txt   9   4    5
+3    test/pos/7273_8.txt/7273_8.txt  17   6   11
+4    test/pos/5299_8.txt/5299_8.txt  10   3    7
+5    test/neg/3199_1.txt/3199_1.txt   6   4    2
+6  test/pos/9506_10.txt/9506_10.txt   7   1    6</code></pre>
 </div>
 </div>
 </div>
@@ -1258,7 +1258,7 @@ Weight  Feature
 <span id="cb49-13"><a href="#cb49-13" aria-hidden="true" tabindex="-1"></a>    urllib.request.urlretrieve(url, fn)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Downloading embeddings from https://cssbook.net/d/w2v_320d_trimmed
-('w2v_320d_trimmed', &lt;http.client.HTTPMessage object at 0x7fbaa3f84820&gt;)</code></pre>
+('w2v_320d_trimmed', &lt;http.client.HTTPMessage object at 0x7f7a84800820&gt;)</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb51"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a>embeddings <span class="op">=</span> KeyedVectors.load_word2vec_format(fn)</span>
 <span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a>emb_matrix <span class="op">=</span> np.zeros((<span class="bu">len</span>(tokenizer.word_index) <span class="op">+</span> <span class="dv">1</span>, embeddings.vector_size))</span>
@@ -1379,7 +1379,7 @@ ________________________________________________________________________________
 <span id="cb55-9"><a href="#cb55-9" aria-hidden="true" tabindex="-1"></a>labels <span class="op">=</span> np.asarray([[x] <span class="cf">for</span> x <span class="kw">in</span> train_labels])</span>
 <span id="cb55-10"><a href="#cb55-10" aria-hidden="true" tabindex="-1"></a>m.fit(train_data, labels, epochs<span class="op">=</span><span class="dv">5</span>, batch_size<span class="op">=</span><span class="dv">128</span>, verbose<span class="op">=</span><span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;keras.callbacks.History object at 0x7fbaa6830fa0&gt;</code></pre>
+<pre><code>&lt;keras.callbacks.History object at 0x7f7a890aceb0&gt;</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb57"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb57-1"><a href="#cb57-1" aria-hidden="true" tabindex="-1"></a>output <span class="op">=</span> m.predict(test_data, verbose<span class="op">=</span><span class="dv">0</span>)</span>
 <span id="cb57-2"><a href="#cb57-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -1389,7 +1389,7 @@ ________________________________________________________________________________
 <span id="cb57-6"><a href="#cb57-6" aria-hidden="true" tabindex="-1"></a>acc <span class="op">=</span> <span class="bu">sum</span>(correct) <span class="op">/</span> <span class="bu">len</span>(pred)</span>
 <span id="cb57-7"><a href="#cb57-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"Accuracy: </span><span class="sc">{</span>acc<span class="sc">}</span><span class="ss">"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Accuracy: 0.570198105081826</code></pre>
+<pre><code>Accuracy: 0.5559862187769165</code></pre>
 </div>
 </div>
 </div>
@@ -1409,7 +1409,7 @@ ________________________________________________________________________________
 <span id="cb59-12"><a href="#cb59-12" aria-hidden="true" tabindex="-1"></a>eval<span class="ot">=</span><span class="fu">evaluate</span>(model, d_test<span class="sc">$</span>lemmata, d_test<span class="sc">$</span>value)</span>
 <span id="cb59-13"><a href="#cb59-13" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(<span class="fu">glue</span>(<span class="st">"Accuracy: {eval['accuracy']}"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>Accuracy: 0.439707159996033</code></pre>
+<pre><code>Accuracy: 0.443152457475662</code></pre>
 </div>
 </div>
 </div>
@@ -2004,6 +2004,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
+<script>
+  var python = [];
+  var r = [];
+  document.querySelectorAll('a[data-bs-toggle="tab"]').forEach((a) => {
+    var target = a.textContent == "Python code"?python:r;
+    target.push(new bootstrap.Tab(a));
+    a.addEventListener('shown.bs.tab', () => target.forEach((tab) => tab.show()));
+   });
+</script>
 
 
 

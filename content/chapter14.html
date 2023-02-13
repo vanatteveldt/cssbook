@@ -458,11 +458,11 @@ Packages used in this chapter
 <span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>)</span>
 <span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(myimg1)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;PIL.JpegImagePlugin.JpegImageFile image mode=RGB size=805x453 at 0x7F2AD01...</code></pre>
+<pre><code>&lt;PIL.JpegImagePlugin.JpegImageFile image mode=RGB size=805x453 at 0x7F46FA8...</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb7"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(myimg2)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>&lt;PIL.PngImagePlugin.PngImageFile image mode=RGBA size=1540x978 at 0x7F2AD01...</code></pre>
+<pre><code>&lt;PIL.PngImagePlugin.PngImageFile image mode=RGBA size=1540x978 at 0x7F46FA8...</code></pre>
 </div>
 </div>
 </div>
@@ -1102,19 +1102,19 @@ Call:
                      Number of trees: 100
 No. of variables tried at each split: 28
 
-        OOB estimate of  error rate: 3.46%
+        OOB estimate of  error rate: 3.5%
 Confusion matrix:
      0    1    2    3    4    5    6    7    8    9 class.error
-0 5830    2   10    4    5    6   22    3   36    5  0.01570150
-1    0 6648   37   10   10    3    7    9   14    4  0.01394245
-2   24    9 5753   25   36    2   23   33   43   10  0.03440752
-3    9   10   86 5796    6   75    4   50   66   29  0.05464035
-4   12   10   13    2 5646    2   27    7   15  108  0.03355015
-5   19    6    8   72   11 5188   41    6   43   27  0.04298100
-6   27   10    5    1   10   38 5806    0   21    0  0.01892531
-7    5   25   56    8   40    2    0 6046   13   70  0.03495611
-8   11   32   27   51   21   44   34    7 5558   66  0.05007691
-9   25    9   14   72   74   17    4   46   36 5652  0.04992436</code></pre>
+0 5834    1    5    3    7    6   27    1   35    4  0.01502617
+1    2 6646   33   13   11    8    3   11    9    6  0.01423910
+2   19   12 5751   33   30    4   17   41   41   10  0.03474320
+3    6    7   83 5794    4   71    9   47   73   37  0.05496656
+4   10   10   13    1 5655    2   24   10   17  100  0.03200959
+5   21    4   11   80   16 5179   54    2   32   22  0.04464121
+6   29   10    5    0   12   45 5799    0   17    1  0.02010814
+7    6   21   55    8   34    2    0 6039   14   86  0.03607342
+8    5   28   39   44   23   46   30    9 5565   62  0.04888053
+9   21   12   17   68   80   22    4   47   39 5639  0.05210960</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb72"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="fu">predict</span>(rf_clf, X_test[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
@@ -1127,7 +1127,7 @@ Levels: 0 1 2 3 4 5 6 7 8 9</code></pre>
 <span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(cm<span class="sc">$</span>overall[<span class="st">"Accuracy"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>Accuracy 
-  0.9708 </code></pre>
+  0.9698 </code></pre>
 </div>
 </div>
 </div>
@@ -1176,9 +1176,8 @@ Levels: 0 1 2 3 4 5 6 7 8 9</code></pre>
 Downloading data from https://storage.googleapis.com/tensorflow/tf-keras-datasets/train-images-idx3-ubyte.gz
 
     8192/26421880 [..............................] - ETA: 0s
- 2424832/26421880 [=&gt;............................] - ETA: 0s
- 5980160/26421880 [=====&gt;........................] - ETA: 0s
-19685376/26421880 [=====================&gt;........] - ETA: 0s
+ 4202496/26421880 [===&gt;..........................] - ETA: 0s
+18063360/26421880 [===================&gt;..........] - ETA: 0s
 26421880/26421880 [==============================] - 0s 0us/step
 Downloading data from https://storage.googleapis.com/tensorflow/tf-keras-datasets/t10k-labels-idx1-ubyte.gz
 
@@ -1186,7 +1185,6 @@ Downloading data from https://storage.googleapis.com/tensorflow/tf-keras-dataset
 Downloading data from https://storage.googleapis.com/tensorflow/tf-keras-datasets/t10k-images-idx3-ubyte.gz
 
    8192/4422102 [..............................] - ETA: 0s
-3375104/4422102 [=====================&gt;........] - ETA: 0s
 4422102/4422102 [==============================] - 0s 0us/step</code></pre>
 </div>
 <div class="sourceCode cell-code" id="cb78"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>class_names <span class="op">=</span> [<span class="st">"T-shirt/top"</span>, <span class="st">"Trouser"</span>, <span class="st">"Pullover"</span>,</span>
@@ -1331,7 +1329,7 @@ ________________________________________________________________________________
 </div>
 <div class="sourceCode cell-code" id="cb90"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb90-1"><a href="#cb90-1" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(model.evaluate(X_test, y_test, verbose<span class="op">=</span><span class="dv">0</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
-<pre><code>[0.45318570733070374, 0.8389999866485596]</code></pre>
+<pre><code>[0.44961240887641907, 0.8416000008583069]</code></pre>
 </div>
 </div>
 </div>
@@ -1343,13 +1341,13 @@ ________________________________________________________________________________
 <span id="cb92-4"><a href="#cb92-4" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(history<span class="sc">$</span>metrics)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>$loss
-[1] 0.7094564 0.4834971 0.4381777 0.4113837 0.3914989
+[1] 0.7192379 0.4907987 0.4446108 0.4176154 0.3960759
 
 $accuracy
-[1] 0.7619630 0.8332963 0.8472778 0.8570185 0.8624629
+[1] 0.7589259 0.8292593 0.8445741 0.8543704 0.8617592
 
 $val_loss
-[1] 0.5066357 0.4593185 0.4269423 0.4044238 0.4078897
+[1] 0.5482357 0.4669007 0.4407444 0.4069471 0.3922493
 
 ...</code></pre>
 </div>
@@ -1361,7 +1359,7 @@ $val_loss
 <div class="sourceCode cell-code" id="cb96"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb96-1"><a href="#cb96-1" aria-hidden="true" tabindex="-1"></a><span class="fu">print</span>(score)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="cell-output cell-output-stdout">
 <pre><code>     loss  accuracy 
-1768.8344    0.0822 </code></pre>
+1836.2014    0.0751 </code></pre>
 </div>
 </div>
 </div>
@@ -1437,18 +1435,14 @@ $val_loss
 <pre><code>Downloading data from https://storage.googleapis.com/tensorflow/keras-applications/resnet/resnet50_weights_tf_dim_ordering_tf_kernels.h5
 
      8192/102967424 [..............................] - ETA: 0s
-  2883584/102967424 [..............................] - ETA: 1s
- 12648448/102967424 [==&gt;...........................] - ETA: 0s
- 25739264/102967424 [======&gt;.......................] - ETA: 0s
- 36601856/102967424 [=========&gt;....................] - ETA: 0s
- 49922048/102967424 [=============&gt;................] - ETA: 0s
- 54198272/102967424 [==============&gt;...............] - ETA: 0s
- 64421888/102967424 [=================&gt;............] - ETA: 0s
- 76791808/102967424 [=====================&gt;........] - ETA: 0s
- 84361216/102967424 [=======================&gt;......] - ETA: 0s
- 91996160/102967424 [=========================&gt;....] - ETA: 0s
-101621760/102967424 [============================&gt;.] - ETA: 0s
-102967424/102967424 [==============================] - 1s 0us/step</code></pre>
+  4202496/102967424 [&gt;.............................] - ETA: 1s
+ 19865600/102967424 [====&gt;.........................] - ETA: 0s
+ 34889728/102967424 [=========&gt;....................] - ETA: 0s
+ 47996928/102967424 [============&gt;.................] - ETA: 0s
+ 61628416/102967424 [================&gt;.............] - ETA: 0s
+ 76505088/102967424 [=====================&gt;........] - ETA: 0s
+ 89833472/102967424 [=========================&gt;....] - ETA: 0s
+102967424/102967424 [==============================] - 0s 0us/step</code></pre>
 </div>
 </div>
 </div>
@@ -1844,6 +1838,15 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
   </div>
 </nav>
 </div> <!-- /content -->
+<script>
+  var python = [];
+  var r = [];
+  document.querySelectorAll('a[data-bs-toggle="tab"]').forEach((a) => {
+    var target = a.textContent == "Python code"?python:r;
+    target.push(new bootstrap.Tab(a));
+    a.addEventListener('shown.bs.tab', () => target.forEach((tab) => tab.show()));
+   });
+</script>
 
 
 
