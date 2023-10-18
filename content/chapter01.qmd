@@ -505,7 +505,7 @@ You can install Jupyter notebook directly using pip using the following command
 (executed in a terminal):
 
 ```
-pip3 install jupyter-notebook
+pip3 install notebook
 ```
 
 Now, you can run Jupyter by executing the following command on the terminal:
