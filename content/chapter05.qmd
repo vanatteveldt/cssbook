@@ -431,7 +431,7 @@ of the data are already known. Hence, such toy datasets are often
 even included in R and Python packages. Some of them are really
 well-known in teaching (e.g., the iris dataset containing measurements
 of some flowers; or the titanic dataset containing statistics on
-survival rates of passengers on the Titanic; MNIST for image classification; or the MPG dataset on car fuel consumption). Many of these are included
+survival rates of passengers on the Titanic;  MNIST for image classification; or the MPG dataset on car fuel consumption). Many of these are included
 in packages like *scikit-learn*, *seaborn*, or *ggplot2*-- and you can have a look at their documentation.
 
 For instance, the 20 Newsgroups dataset contains $18846$ posts from
