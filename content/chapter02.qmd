@@ -115,7 +115,7 @@ head(tw)
 :::
 
 As you can see, the dataset contains almost 10000 tweets, listing their
-sender, their location and language, the text, the number of retweets, and whether it was a reply (retweet).
+sender, their location and language, the text, the number of retweets, and whether it was a reply.
 You can read the start of the three most retweeted messages, which contain one (political) tweet from India
 and two seemingly political and factual tweets from the United States.
 
@@ -367,16 +367,16 @@ textplot_keyness(key, margin=0.2) +
 
 Twitter, of course, is a social network as well as a microblogging service:
 users are connected to other users because they follow each other and retweet and like each others' tweets.
-Using the `reply_to_screen_name` column, we can inspect the retweet network contained in the COVID tweet dataset.
+Using the `reply_to_screen_name` column, we can inspect the reply network contained in the COVID tweet dataset.
 Example [-@exm-fungraph] first uses the data summarization commands from <code>tidyverse</code>(R) and <code>pandas</code>(Python) to
-create a data frame of connections or `edges` listing how often each user retweets each other user.
+create a data frame of connections or `edges` listing how often each user replies each other user.
 The second code block shows how the *igraph* (R) and *networkx* (Python) packages are used to convert this edge list into a graph.
 From this graph, we select only the largest connected component and use a clustering algorithm to analyze which
 nodes (users) form cohesive subnetworks.
 Finally, a number of options are used to set the color and size of the edges, nodes, and labels,
 and the resulting network is plotted.
-As you can see, the central node is Donald Trump, who is retweeted by a large number of users,
-some of which are then retweeted by other users.
+As you can see, the central node is Donald Trump, who is replied by a large number of users,
+some of which are then replied by other users.
 You can play around with different settings for the plot options,
 or try to filter e.g. only tweets from a certain language. 
 You could also easily compute social network metrics such as centrality on this network,
@@ -386,7 +386,7 @@ and Chapter [-@sec-chap-datawrangling] for the summarization commands used to cr
 
 ::: {.callout-note appearance="simple" icon=false}
 ::: {#exm-fungraph}
-Retweet network in the COVID tweets.
+Reply network in the COVID tweets.
 
 ::: {.panel-tabset}
 ## Python code
