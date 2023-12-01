@@ -75,7 +75,7 @@ Now that you are familiar with data structures (Chapter [-@sec-chap-filetodata])
 
 As we outlined in Chapter [-@sec-chap-introduction], the computational analysis
 of communication can be  bottom-up or top-down, inductive or
-deductive.  Just as in traditional research methods @Bryman2012, sometimes, an inductive
+deductive.  Just as in traditional research methods (see @Bryman2012), sometimes, an inductive
 bottom-up approach is a goal in itself: after all, explorative
 analyses are invaluable for generating hypotheses that can be tested
 in follow-up research. But even when you are conducting a deductive,
@@ -96,7 +96,7 @@ Furthermore, before making any multivariate or inferential analysis we might wan
 To illustrate how to do this in R and Python, we will use existing representative survey data to analyze how support for migrants or refugees in Europe changes over time and differs per country.
  The Eurobarometer (freely available at the Leibniz Institute for the Social Sciences -- GESIS) has contained these specific questions since 2015. We might pose questions about the variation of a single variable or also describe the covariation of different variables to find patterns in our data. In this section, we will compute basic statistics to answer  these questions and in the next section we will visualize them by plotting *within* and *between* variable behaviors of a selected group of features of the Eurobarometer conducted in November 2017 to 33193 Europeans.
 
-For most of the EDA we will use *tidyverse* in R and *pandas* as well as *numpy* and *scipy* in Python (Example 7.1). After loading a clean version of the survey data[^1]  stored in a csv file (using the *tidyverse* function `read_csv` in R and the *pandas* function `read_csv` in R), checking the dimensions of our data frame (33193 x 17), we probably want to get a global picture of each of our variables by getting a frequency table. This table shows the frequency of different outcomes for every case in a distribution. This means that we can know how many cases we have for each number or category in the distribution of every variable, which is useful in order to have an initial understanding of our data.
+For most of the EDA we will use *tidyverse* in R and *pandas* as well as *numpy* and *scipy* in Python (Example [-@exm-load]). After loading a clean version of the survey data[^1]  stored in a csv file (using the *tidyverse* function `read_csv` in R and the *pandas* function `read_csv` in Python), checking the dimensions of our data frame (33193 x 17), we probably want to get a global picture of each of our variables by getting a frequency table. This table shows the frequency of different outcomes for every case in a distribution. This means that we can know how many cases we have for each number or category in the distribution of every variable, which is useful in order to have an initial understanding of our data.
 
 ::: {.callout-note icon=false collapse=true}
 ## pandas versus pure numpy/scipy
@@ -458,7 +458,7 @@ In *ggplot* (R), you can use the `facet_grid` function to automatically create s
 ::: {.callout-note appearance="simple" icon=false}
 
 ::: {#exm-combine}
-Creating subfigures)
+Creating subfigures
 
 ::: {.panel-tabset}
 ## Python code
@@ -483,12 +483,12 @@ ggplot(support_long, aes(x=date_n, y=support)) +
 :::
 :::
 
-Now if you want to explore the possible correlation between the average support for refugees (`mean_support_refugees_by_day`) and the average support to migrants by year (`mean_support_migrants_by_day`), you might need a scatterplot, which is a better way to visualize the type and strength of this relationship *scatter*.
+Now if you want to explore the possible correlation between the average support for refugees (`mean_support_refugees_by_day`) and the average support to migrants (`mean_support_migrants_by_day`), you might need a scatterplot, which is a better way to visualize the type and strength of this relationship *scatter*.
 
 ::: {.callout-note appearance="simple" icon=false}
 
 ::: {#exm-scatter}
-Scatterplot of average support for refugees and migrants by year
+Scatterplot of average support for refugees and migrants
 
 ::: {.panel-tabset}
 ## Python code
@@ -1225,7 +1225,7 @@ pca$rotation
 :::
 :::
 
-The generated object with the PCA contains different elements (in R `sdev`, `rotation`, `center`, `scale` and `x`) or attributes in Python (`components_`, `explained_variance_`, `explained_variance_ratio`, `singular_values_`, `mean_`, `n_components_`, `n_features_`, `n_samples_`, and `noise_variance_`). In the resulting object we can see the values of four principal components of each country, and the values of the loadings, technically called *eigenvalues*, for the variables in each principal component.  In our example we can see that support for refugees and migrants are more represented on PC1, while age and educational level are more represented on PC2. If we plot the first two principal components using base function `biplot` in R and the library *bioinfokit* in Python (Example [-@exm-plot_pca]), we can clearly see how the variables are associated with either PC1 or with PC2 (we might also want to plot any pair of the four components!). But we can also get a picture of how countries are grouped based only in these two new variables.
+The generated object with the PCA contains different elements (in R `sdev`, `rotation`, `center`, `scale` and `x`) or attributes (in Python `components_`, `explained_variance_`, `explained_variance_ratio`, `singular_values_`, `mean_`, `n_components_`, `n_features_`, `n_samples_`, and `noise_variance_`). In the resulting object we can see the values of four principal components of each country, and the values of the loadings, technically called *eigenvalues*, for the variables in each principal component.  In our example we can see that support for refugees and migrants are more represented on PC1, while age and educational level are more represented on PC2. If we plot the first two principal components using base function `biplot` in R and the library *bioinfokit* in Python (Example [-@exm-plot_pca]), we can clearly see how the variables are associated with either PC1 or with PC2 (we might also want to plot any pair of the four components!). But we can also get a picture of how countries are grouped based only in these two new variables.
 
 ::: {.callout-note appearance="simple" icon=false}
 
