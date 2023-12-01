@@ -19,7 +19,7 @@ We also plan to add a section on Encoder Representation / Transformer models, se
 **Keywords.** supervised machine learning
 
 **Objectives:**
- -  Understand the principles of supervised machine learning
+-  Understand the principles of supervised machine learning
  -  Be able to run a predictive model
  -  Be able to evaluate the performance of a predictive model
 
