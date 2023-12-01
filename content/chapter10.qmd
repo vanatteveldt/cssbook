@@ -699,7 +699,7 @@ Similarly, if you want to remove a term that would be split by the tokenization 
 if can be better to remove them before the tokenization occurs.
 
 Example [-@exm-noise] shows how we can use regular expressions to remove noise in Python and R.
-For clarity, it shows the result of each step, it shows the result of each processing step on a single tweet that exemplifies many of the problems described above.
+For clarity, it shows the result of each processing step on a single tweet that exemplifies many of the problems described above.
 To better understand the tokenization process, we print the tokens in that tweet separated by a vertical bar (`|`).
 As a first cleaning step, we will use a regular expression to remove hyperlinks and HTML entities like `&amp;` from the untokenized texts.
 Since both hyperlinks and HTML entities are split over multiple tokens, it would be hard to remove them after tokenization.
@@ -1523,7 +1523,7 @@ spacy_finalize()
 
 As you can see, nowadays there are a number of good and relatively easy to use linguistic toolkits that can be used.
 Especially *Stanza* [@stanza] is also a very good and flexible toolkit with support for multiple (human) languages and good integration especially with Python.
-If you want to learn more about natural language processing, the book *Speech and Language Processing* by Jurafsky and Martin is a very good starting point [@jurafsky][^2].
+If you want to learn more about natural language processing, the book *Speech and Language Processing* by Jurafsky and Martin is a very good starting point (@jurafsky)[^2].
 
 ## Which Preprocessing to Use?
 
