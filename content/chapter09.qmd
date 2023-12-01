@@ -89,7 +89,7 @@ This is reflected of course in the type name, with R calling it a *character* ve
 
 ::: {.callout-note appearance="simple" icon=false}
 ::: {#exm-text}
-Internal representation and of single and multiple texts.
+Internal representation of texts.
 
 ::: {.panel-tabset}
 ## Python code
@@ -149,7 +149,7 @@ In R, however, texts (like all objects) represent columns (or vectors) rather th
 Thus, `text[1]` in R is the first text in a series of text.
 To access individual characters in a text, you have to use a function such as `str_length` and `str_sub` that will be discussed in more detail below.
 This also means that in Python, if you have a column (or list) of strings that you need to apply an operation to,
-you either need to use one of /textitPandas' methods shown below or use a *for loop* or *list comprehension* to iterate over all the strings (see also section 3.2).
+you either need to use one of Pandas methods shown below or use a *for loop* or *list comprehension* to iterate over all the strings (see also section 3.2).
 
 ### Methods for Dealing With Text {#sec-textmethods}
 
@@ -289,7 +289,7 @@ For example, `a+` means one or more a's while `a?` means zero or one a, so `lo+l
 and `lo?l` matches `lol' or `ll'.
 This raises the question, of course, of how to look for actual occurrences of a plus, question mark, or period.
 The solution is to *escape* these special symbols by placing a backslash (`\`) before them:
-`a\+` matches the literal text "a+", and `\\w` (with a double backslash) matches the literal text "\w".
+`a\+` matches the literal text "a+", and `\\w` (with a double backslash) matches the literal text `"\w"`.
 
 Now, we can have another look at the example email address pattern given above.
 The first part, `[\w\.-]` creates a character class containing word characters, (literal) periods, and dashes.
@@ -397,7 +397,7 @@ Table [-@tbl-regexample] lists a number of regular expressions for common tasks 
 |E-mail address | `[\w\.-]+@[\w\.-]+\.\w+` | `me@example.com`|
 |HTML tags | `</?\w[^>]*>` | `</html>`|
 |HTML Character escapes | `&[^;]+;` | `&nbsp;`|
-: Regular expression syntax in Python and R {#tbl-regexample}
+: Regular expression syntax {#tbl-regexample}
 
 Please note that most of these patterns do not correctly distinguish all edge cases (and hence may lead to false negatives and/or false positives) and are provided for educational purposes only.
 
@@ -456,7 +456,7 @@ identifying matching texts, removing and replacing all matching text, extracting
 |Extract the first match of p in t | `str_extract(t, p)` | `re.search(p, t).group(1)` | `t.str.extract(p)`|
 |Extract all matches of p in t | `str_extract_all(t, p)` | `re.findall(p, t)` | `t.str.extractall(p)`|
 |Split t on matches of p | `str_split(t, p)` | `re.split(p, t)` | `t.str.split(p)`|
-: Regular expression syntax {#tbl-regextract}
+: Regular expression syntax in Python and R {#tbl-regextract}
 
 Note: if using Unicode character properties (`\p`), use the same functions in package *regex* instead of *re*
 
@@ -641,7 +641,7 @@ If there is only a single input text, it still returns a list, so we select the 
 In many cases, however, you are not working on a single text but rather on a series of texts loaded into a data frame,
 from tweets to news articles and open survey questions.
 In the example above, we extracted only the first url from each tweet.
-If we  want to extract e.g. all hash tags from each tweet, we cannot simply add a "tags" column,
+If we  want to extract e.g. all hashtags from each tweet, we cannot simply add a "tags" column,
 as there can be multiple tags in each tweet.
 Essentially, the problem is that the URLs per tweet are now nested in each row,
 creating a non-rectangular data structure.
@@ -649,7 +649,7 @@ creating a non-rectangular data structure.
 Although there are multiple ways of dealing with this,
 if you are working with data frames our advice is to normalize the data structure to a long format.
 In the example, that would mean that each tweet is now represented by multiple rows,
-namely one for each hash tag.
+namely one for each hashtag.
 Example [-@exm-splitlong] shows how this can be achieved in both R and Pandas.
 One thing to note is that in pandas,
 `t.str.extractall` automatically returns the desired long format,
