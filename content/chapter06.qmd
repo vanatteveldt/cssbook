@@ -356,7 +356,7 @@ This can be used to chain multiple commands together, e.g. `data = data %>% func
 ::: {.callout-note appearance="simple" icon=false}
 
 ::: {#exm-aggregate2}
-Combining multiple functions or methods. The result is identical to
+Combining multiple functions or methods. The result is identical to Example [-@exm-aggregate].
 
 ::: {.panel-tabset}
 ## Python code
@@ -845,7 +845,6 @@ manually specifying the number of header and footer rows to skip.
  Then, we pivot the columns into a  long format.
 In step 3, we split the header into two columns using `separate` (R) and `split` (Python). Finally, steps 4 and 5 take the desired subset and create a line plot.
 
-The missing step, splitting a header into two columns, is done using `separate` (R) and `split` (Python).
 
 ::: {.callout-note appearance="simple" icon=false}
 ::: {#exm-excel}
