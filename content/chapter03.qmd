@@ -347,7 +347,7 @@ you need to specify the encoding (usually UTF-8).
 However, both Python and R also allow you to work with the raw data
 (e.g. before decoding) in the form of *bytes* (Python) or *raw* (R) data,
 which is sometimes necessary if there are encoding problems.
-This is shown briefly in the bottom part of *var4*.
+This is shown briefly in the bottom part of example [-@exm-var4].
 Note that while R shows the underlying hexadecimal byte values of the raw data (so 54 is `T`, 68 is `h` and so on) and Python 
 displays the bytes as text characters, in both cases the underlying data type is the same: raw (non-decoded) bytes.
 
@@ -1459,16 +1459,16 @@ more insights into R and Python, respectively. In the next chapter, we
 will go deeper into the world of code in order to learn how and why
 you should re-use existing code, what to do if you get stuck during your
 programming journey and what are the best practices when coding.
+
+:::
 [^1]: In both R and Python, the equals
   sign (`=`) can be used to assign values. In R, however, the
   traditional way of doing this is using an arrow (`<-`). In
   this book we will use the equals sign for assignment in both
   languages, but remember that for R, `x=10` and
   `x<-10` are essentially the same.
-
 [^2]: This is related to the
 reason why Python starts counting with zero. If you are interested
 in this, have a look at [www.cs.utexas.edu/users/EWD/transcriptions/EWD08xx/EWD831.html](https://www.cs.utexas.edu/users/EWD/transcriptions/EWD08xx/EWD831.html)
-
 [^3]: Newer versions of Python actually do remember the order in which items are inserted into a dictionary. However, for the purpose of this introduction, you can assume that you hardly ever care about the order of elements in a dictionary.
 
