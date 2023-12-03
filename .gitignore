@@ -20,3 +20,4 @@ env
 
 /_book/
 /.vscode/
+.Rproj.user

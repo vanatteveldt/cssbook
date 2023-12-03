@@ -1,8 +1,12 @@
 # Network Data {#sec-chap-network}
 
 {{< include common_setup.qmd >}}
-
-
+```{=html}
+<!--# 
+Edit history 
+- WvA: renamed graph_number_of_cliques to number_of_cliques
+-->
+```
 **Abstract.**
 
 Many types of data, especially social media data, can often be represented as networks. This chapter introduces *igraph* (R and Python) and *networkx* (Python) to showcase how to deal with such data, perform Social Network Analysis (SNA), and represent it visually.
@@ -11,25 +15,27 @@ Many types of data, especially social media data, can often be represented as ne
 
 **Objectives:**
 
--  Understand how can networks be represented and visualized
- -  Conduct basic description of networks
- -  Perform Social Network Analysis
+-   Understand how can networks be represented and visualized
+-   Conduct basic description of networks
+-   Perform Social Network Analysis
 
-::: {.callout-note icon=false collapse=true}
+::: {.callout-note icon="false" collapse="true"}
 ## Packages used in this chapter
 
-This chapter uses functions from the package *igraph* in R and the package *networkx* in Python.
-  In Python we will also use the *python-louvain* packages which introduces the Louvain clustering functions in *community*.
+This chapter uses functions from the package *igraph* in R and the package *networkx* in Python. In Python we will also use the *python-louvain* packages which introduces the Louvain clustering functions in *community*.
 
-You can install these packages with the code below if needed  (see Section [-@sec-installing] for more details):
+You can install these packages with the code below if needed (see Section [-@sec-installing] for more details):
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python chapter13install-python}
 #| eval: false
 !pip3 install networkx matplotlib python-louvain community
 ```
+
 ## R code
+
 ```{r chapter13install-r}
 #| eval: false
 # Common packages used in this book
@@ -38,10 +44,12 @@ install.packages(c("glue", "tidyverse"))
 install.packages(c("igraph"))
 ```
 :::
- After installing, you need to import (activate) the packages every session:
 
-::: {.panel-tabset}
+After installing, you need to import (activate) the packages every session:
+
+::: panel-tabset
 ## Python code
+
 ```{python chapter13library-python}
 import urllib.request
 
@@ -52,7 +60,9 @@ import community
 import community.community_louvain as community_louvain
 
 ```
+
 ## R code
+
 ```{r chapter13library-r}
 library(glue)
 library(igraph)
@@ -63,26 +73,29 @@ library(tidyverse)
 
 ## Representing and Visualizing Networks {#sec-graph}
 
-How can networks help us to understand and represent social problems? How can we use social media as a source for small and large-scale network analysis? In the computational analysis of communication these questions become highly relevant given the huge amount of social media data produced every minute on the Internet.  In fact, although graph theory and SNA were already being used during the last two decades of the 20th century, we can say that the widespread adoption of the Internet and especially social networking services such as Twitter and Facebook really unleashed their potential. Firstly, computers made it easier to compute graph measures and visualize their general and communal structures. Secondly, the emergence of a big spectrum of social media network sites (i.e. Facebook, Twitter, Sina Weibo, Instagram, Linkedin, etc.) produced an unprecedented number of online social interactions, which still is certainly an excellent arena to apply this framework. Thus, the use of social media as a source for network analysis has become one of the most exciting and promising areas in the field of computational social science.
+How can networks help us to understand and represent social problems? How can we use social media as a source for small and large-scale network analysis? In the computational analysis of communication these questions become highly relevant given the huge amount of social media data produced every minute on the Internet. In fact, although graph theory and SNA were already being used during the last two decades of the 20th century, we can say that the widespread adoption of the Internet and especially social networking services such as Twitter and Facebook really unleashed their potential. Firstly, computers made it easier to compute graph measures and visualize their general and communal structures. Secondly, the emergence of a big spectrum of social media network sites (i.e. Facebook, Twitter, Sina Weibo, Instagram, Linkedin, etc.) produced an unprecedented number of online social interactions, which still is certainly an excellent arena to apply this framework. Thus, the use of social media as a source for network analysis has become one of the most exciting and promising areas in the field of computational social science.
 
 This section presents a brief overview of graph structures (nodes and edges) and types (directed, weighted, etc.), together with their representations in R and Python. We also include visual representations and basic graph analysis.
 
-A graph is a structure derived from a set of elements and their relationships. The element could be a neuron, a person, an organization, a street, or even a message, and the relationship could be a synapse, a trip, a commercial agreement, a drive connection or a content transmission. This is a different way to represent, model and analyze the world: instead of having rows and columns as in a typical data frame, in a graph we have *nodes* (components) and *edges* (relations).
-The mathematical representation of a graph $G=(V,E)$ is based on a set of nodes (also called vertices): $\{v_{1}, v_{2},\ldots v_{n}\}$ and the edges or pair of nodes: $\{(v_{1}, v_{2}), (v_{1}, v_{3}), (v_{2},v_{3}) \ldots (v_{m}, v_{n}) \in E\}$ As you may imagine, it is a very versatile procedure to represent many kinds of situations that include social, media, or political interactions. In fact, if we go back to 1934 we can see how graph theory (originally established in the 18th century) was first applied to the representation of social interactions [@moreno1934shall] in order to measure the attraction and repulsion of individuals of a social group[^1].
+A graph is a structure derived from a set of elements and their relationships. The element could be a neuron, a person, an organization, a street, or even a message, and the relationship could be a synapse, a trip, a commercial agreement, a drive connection or a content transmission. This is a different way to represent, model and analyze the world: instead of having rows and columns as in a typical data frame, in a graph we have *nodes* (components) and *edges* (relations). The mathematical representation of a graph $G=(V,E)$ is based on a set of nodes (also called vertices): $\{v_{1}, v_{2},\ldots v_{n}\}$ and the edges or pair of nodes: $\{(v_{1}, v_{2}), (v_{1}, v_{3}), (v_{2},v_{3}) \ldots (v_{m}, v_{n}) \in E\}$ As you may imagine, it is a very versatile procedure to represent many kinds of situations that include social, media, or political interactions. In fact, if we go back to 1934 we can see how graph theory (originally established in the 18th century) was first applied to the representation of social interactions [@moreno1934shall] in order to measure the attraction and repulsion of individuals of a social group[^chapter13-1].
 
-The network approach in social sciences has an enormous potential to model and predict *social actions*. There is empirical evidence that we can successfully apply this framework to explain distinct phenomena such as political opinions, obesity, and happiness, given the influence of our friends (or even of the friends of our friends) over our behavior [@christakis2009connected]. The network created by this sophisticated structure of human and social connections is an ideal scenario to understand how close we are to each other in terms of degrees of separation [@watts2004six] in small (e.g., a school) and large-scale (e.g., a global pandemic) social dynamics. Moreover, the network approach can help us to track the propagation either of a virus in epidemiology, or a fake news story in political and social sciences, such as in the work by
-@vosoughi2018spread.
+[^chapter13-1]: See also the mathematical problem of the *Seven Bridges of Königsberg*, formulated by Leonhard Euler in 1736, which is considered the basis of graph theory. Inspired by a city divided by a river and connected by several bridges, the problem consisted of walking through the whole city crossing each bridge exactly once.
 
-Now, let us show you how to create and visualize network structures in R and Python. As we mentioned above, the structure of a graph is based on nodes and edges, which are the fundamental components of any network. Suppose that we want to model the social network of five American politicians in 2017 (Donald Trump, Bernie Sanders, Hillary Clinton, Barack Obama and John McCain), based on their *imaginary* connections on Facebook (friending) and Twitter (following)[^2]. Technically, the base of any graph is a list of edges (written as pair of nodes that indicate the relationships) and a list of nodes (some nodes might be isolated without any connection!).  For instance, the friendship on Facebook between two politicians would normally be expressed as two strings separated by comma (e.g., "Hillary Clinton", "Donald Trump"). In Example [-@exm-graph] we use libraries *igraph* (R)[^3] and *networkx* (Python) to create from scratch a simple graph with five nodes and five edges, using the above-mentioned structure of pairs of nodes (notice that we only include the edges while the vertices are automatically generated).
+The network approach in social sciences has an enormous potential to model and predict *social actions*. There is empirical evidence that we can successfully apply this framework to explain distinct phenomena such as political opinions, obesity, and happiness, given the influence of our friends (or even of the friends of our friends) over our behavior [@christakis2009connected]. The network created by this sophisticated structure of human and social connections is an ideal scenario to understand how close we are to each other in terms of degrees of separation [@watts2004six] in small (e.g., a school) and large-scale (e.g., a global pandemic) social dynamics. Moreover, the network approach can help us to track the propagation either of a virus in epidemiology, or a fake news story in political and social sciences, such as in the work by @vosoughi2018spread.
 
-::: {.callout-note appearance="simple" icon=false}
+Now, let us show you how to create and visualize network structures in R and Python. As we mentioned above, the structure of a graph is based on nodes and edges, which are the fundamental components of any network. Suppose that we want to model the social network of five American politicians in 2017 (Donald Trump, Bernie Sanders, Hillary Clinton, Barack Obama and John McCain), based on their *imaginary* connections on Facebook (friending) and Twitter (following)[^chapter13-2]. Technically, the base of any graph is a list of edges (written as pair of nodes that indicate the relationships) and a list of nodes (some nodes might be isolated without any connection!). For instance, the friendship on Facebook between two politicians would normally be expressed as two strings separated by comma (e.g., "Hillary Clinton", "Donald Trump"). In Example [-@exm-graph] we use libraries *igraph* (R)[^chapter13-3] and *networkx* (Python) to create from scratch a simple graph with five nodes and five edges, using the above-mentioned structure of pairs of nodes (notice that we only include the edges while the vertices are automatically generated).
 
+[^chapter13-2]: The connections among these politicians on Facebook and Twitter in the examples are of course purely fictional and were created *ad hoc* to illustrate small social networks.
+
+[^chapter13-3]: You can use this library in Python with the adapted package *python-igraph*.
+
+::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-graph}
 Imaginary Facebook network of 5 American politicians
 
-::: {.panel-tabset}
-
+::: panel-tabset
 ## Python code
+
 ```{python graph-python}
 edges = [
     ("Hillary Clinton", "Donald Trump"),
@@ -96,7 +109,9 @@ g1.add_edges_from(edges)
 print("Nodes:", g1.number_of_nodes(), "Edges: ", g1.number_of_edges())
 print(g1.edges)
 ```
+
 ## R code
+
 ```{r graph-r}
 edges=c("Hillary Clinton", "Donald Trump", 
         "Bernie Sanders","Hillary Clinton", 
@@ -112,12 +127,13 @@ g1
 
 In both cases we generated a graph object `g1` which contains the structure of the network and different attributes (such as `number_of_nodes()` in *networkx*). You can add/remove nodes and edges to/from this initial graph, or even modify the names of the vertices. One of the most useful functions is the visualization of the network (`plot` in *igraph* and `draw` or `draw_networkx` in *networkx*). Example [-@exm-visgraph] shows a basic visualization of the imaginary network of friendships of five American politicians on Facebook.
 
-::: {.callout-note appearance="simple" icon=false}
+::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-visgraph}
 Visualization of a simple graph.
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python visgraph-python}
 #| results: hide
 nx.draw_networkx(g1)
@@ -132,7 +148,9 @@ plt.box(False)
 plt.show()
 
 ```
+
 ## R code
+
 ```{r visgraph-r}
 plot(g1)
 ```
@@ -142,15 +160,15 @@ plot(g1)
 
 Using network terminology, either nodes or edges can be *adjacent* or not. In the figure we can say that nodes representing Donald Trump and John McCain are adjacent because they are connected by an edge that depicts their friendship. Moreover, the edges representing the friendships between John McCain and Donald Trump, and Hillary Clinton and Donald Trump, are also adjacent because they share one node (Donald Trump).
 
-Now that you know the relevant terminology and basics of working with graphs, you might be wondering: what if I want to do the same with Twitter? Can I represent the relationships between users in the very same way as Facebook? Well, when you model networks it is extremely important that you have a clear definition of what you mean with nodes and edges, in order to maintain a coherent interpretation of the graph. In both, Facebook and Twitter, the nodes represent the users, but the edges might not be the same. In Facebook, an edge represents the friendship between two users and this link *has no direction* (once a user accepts a friend request, both users become friends). In the case of Twitter, an edge could represent various relationships. For example, it could mean that two users follow each other, or that one user is following another user, but not the other way around! In the latter case, the edge *has a direction*, which you can establish in the graph. When you give directions to the edges you are creating a *directed graph*. In Example [-@exm-directed] the directions are declared with the order of the pair of nodes: the first position is for the "from" and the second for the "to". In *igraph* (R) we  set the argument `directed` of the function `make_graph` to `TRUE`. In *networkx* (Python), you use the class `DiGraph` instead of `Graph` to create the object `g2`.
+Now that you know the relevant terminology and basics of working with graphs, you might be wondering: what if I want to do the same with Twitter? Can I represent the relationships between users in the very same way as Facebook? Well, when you model networks it is extremely important that you have a clear definition of what you mean with nodes and edges, in order to maintain a coherent interpretation of the graph. In both, Facebook and Twitter, the nodes represent the users, but the edges might not be the same. In Facebook, an edge represents the friendship between two users and this link *has no direction* (once a user accepts a friend request, both users become friends). In the case of Twitter, an edge could represent various relationships. For example, it could mean that two users follow each other, or that one user is following another user, but not the other way around! In the latter case, the edge *has a direction*, which you can establish in the graph. When you give directions to the edges you are creating a *directed graph*. In Example [-@exm-directed] the directions are declared with the order of the pair of nodes: the first position is for the "from" and the second for the "to". In *igraph* (R) we set the argument `directed` of the function `make_graph` to `TRUE`. In *networkx* (Python), you use the class `DiGraph` instead of `Graph` to create the object `g2`.
 
-::: {.callout-note appearance="simple" icon=false}
-
+::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-directed}
 Creating a directed graph
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python directed-python}
 edges += [
     ("Hillary Clinton", "Bernie Sanders"),
@@ -162,7 +180,9 @@ print("Nodes:", g2.number_of_nodes(), "Edges: ", g2.number_of_edges())
 print(g2.edges)
 
 ```
+
 ## R code
+
 ```{r directed-r}
 edges = c(edges, 
           "Hillary Clinton", "Bernie Sanders",
@@ -176,12 +196,13 @@ print(g2)
 
 In the new graph the edges represent the action of following a user on Twitter. The first declared edge indicates that Hillary Clinton follows Donald Trump, but does not indicate the opposite. In order to provide the directed graph with more *arrows* we included in `g2` two new edges (Obama following Clinton and Clinton following Sanders), so we can have a couple of reciprocal relationships besides the unidirectional ones. You can visualize the directed graph in Example [-@exm-visdirected] and see how the edges now contain useful arrows.
 
-::: {.callout-note appearance="simple" icon=false}
+::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-visdirected}
 Visualization of a directed graph.
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python visdirected-python}
 #| results: hide
 nx.draw_networkx(g2)
@@ -196,7 +217,9 @@ plt.box(False)
 plt.show()
 
 ```
+
 ## R code
+
 ```{r visdirected-r}
 plot(g2)
 ```
@@ -204,14 +227,15 @@ plot(g2)
 :::
 :::
 
-The edges and nodes of our graph can also have weights and features or attributes. When the edges have specific values that depict a feature of every pair of nodes (i.e., the distance between two cities) we say that we have a *weighted graph*. This type of graph is extremely useful for creating a more accurate representation of a network. For example, in our hypothetical network of American politicians on Twitter (`g2`) we can assign weights to the edges by including the number of likes that each politician has given to the followed user. This value  can serve as a measure of the distance between the nodes (i.e., the higher the number of likes the shorter the social distance). In Example [-@exm-weighted] we include the weights for each edge: Clinton has given five likes to Trumps' tweets, Sanders 20 to Clinton's messages, and so on. In the plot you can see how the sizes of the lines between the nodes change as a function of the weights.
+The edges and nodes of our graph can also have weights and features or attributes. When the edges have specific values that depict a feature of every pair of nodes (i.e., the distance between two cities) we say that we have a *weighted graph*. This type of graph is extremely useful for creating a more accurate representation of a network. For example, in our hypothetical network of American politicians on Twitter (`g2`) we can assign weights to the edges by including the number of likes that each politician has given to the followed user. This value can serve as a measure of the distance between the nodes (i.e., the higher the number of likes the shorter the social distance). In Example [-@exm-weighted] we include the weights for each edge: Clinton has given five likes to Trumps' tweets, Sanders 20 to Clinton's messages, and so on. In the plot you can see how the sizes of the lines between the nodes change as a function of the weights.
 
-::: {.callout-note appearance="simple" icon=false}
+::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-weighted}
 Visualization of a weighted graph
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python weighted-python}
 #| results: hide
 edges_w = [
@@ -252,7 +276,9 @@ plt.box(False)
 plt.show()
 
 ```
+
 ## R code
+
 ```{r weighted-r}
 E(g2)$weight = c(5, 20, 30, 40, 50, 10, 15)
 plot(g2, edge.label = E(g2)$weight)
@@ -261,14 +287,15 @@ plot(g2, edge.label = E(g2)$weight)
 :::
 :::
 
-You can include more properties of the components of your graph. Imagine you want to use the number of followers of each politician to determine the size of the nodes, or the gender of the user to establish a color. In Example [-@exm-weighted2] we added the variable *followers* to each of the nodes and asked the packages to plot the network using this value as the size parameter (in fact we multiplied the values by 0.001 to make it realistic on the screen, but you could also normalize these values when needed). We also included the variable *party* that was later recoded in a new one called *color* in order to represent Republicans with red and Democrats with blue.  You may need to add other features to the nodes or edges, but with this example you have an overview of what you can do.
+You can include more properties of the components of your graph. Imagine you want to use the number of followers of each politician to determine the size of the nodes, or the gender of the user to establish a color. In Example [-@exm-weighted2] we added the variable *followers* to each of the nodes and asked the packages to plot the network using this value as the size parameter (in fact we multiplied the values by 0.001 to make it realistic on the screen, but you could also normalize these values when needed). We also included the variable *party* that was later recoded in a new one called *color* in order to represent Republicans with red and Democrats with blue. You may need to add other features to the nodes or edges, but with this example you have an overview of what you can do.
 
-::: {.callout-note appearance="simple" icon=false}
+::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-weighted2}
 Visualization of a weighted graph including vertex sizes.
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python weighted2-python}
 #| results: hide
 attrs = {
@@ -302,7 +329,9 @@ plt.box(False)
 plt.show()
 
 ```
+
 ## R code
+
 ```{r weighted2-r}
 V(g2)$followers = c(100000, 200000,
                     50000,500000, 40000)
@@ -321,15 +350,15 @@ plot(g2, edge.label = E(g2)$weight,
 :::
 :::
 
-We can  mention a third type of graphs: the *induced subgraphs*, which are in fact subsets of nodes and edges of a bigger graph. We can represent these subsets as $G' = V', E'$. In Example [-@exm-subgraph] we extract two induced subgraphs from our original network of American politicians on Facebook (`g1`): the first (`g3`) is built with the edges that contain only Democrat nodes, and the second (`g4`) with edges formed by Republican nodes. There is also a special case of an induced subgraph, called a *clique*, which is an independent or complete subset of an undirected graph (each node of the clique must be connected to the rest of the nodes of the subgraph).
+We can mention a third type of graphs: the *induced subgraphs*, which are in fact subsets of nodes and edges of a bigger graph. We can represent these subsets as $G' = V', E'$. In Example [-@exm-subgraph] we extract two induced subgraphs from our original network of American politicians on Facebook (`g1`): the first (`g3`) is built with the edges that contain only Democrat nodes, and the second (`g4`) with edges formed by Republican nodes. There is also a special case of an induced subgraph, called a *clique*, which is an independent or complete subset of an undirected graph (each node of the clique must be connected to the rest of the nodes of the subgraph).
 
-::: {.callout-note appearance="simple" icon=false}
-
+::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-subgraph}
 Induced subgraphs for Democrats and Republicans
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python subgraph-python}
 # Democrats:
 g3 = g1.subgraph(["Hillary Clinton", "Bernie Sanders", "Barack Obama"])
@@ -342,7 +371,9 @@ print("Nodes:", g4.number_of_nodes(), "Edges: ", g4.number_of_edges())
 print(g4.edges)
 
 ```
+
 ## R code
+
 ```{r subgraph-r}
 # Democrats:
 g3 = induced_subgraph(g1, c(1,3,4))
@@ -358,15 +389,15 @@ print(g4)
 
 Keep in mind that in network visualization you can always configure the size, shape and color of your nodes or edges. It is out of the scope of this book to go into more technical details, but you can always check the online documentation of the recommended libraries.
 
-So far we have created networks from scratch, but most of the time you will have to create a graph from an existing data file. This means that you will need an input data file with the graph structure, and some functions to load them as objects onto your workspace in R or Python. You can import graph data from different specific formats (e.g., Graph Modeling Language (GML), GraphML, JSON, etc.), but one popular and standardized procedure is to obtain the data from a text file containing a list of edges or a matrix. In Example [-@exm-read]  we illustrate how to read graph data in *igraph* and *networkx* using a simple adjacency list that corresponds to our original imaginary Twitter network of American politicians (`g2`).
+So far we have created networks from scratch, but most of the time you will have to create a graph from an existing data file. This means that you will need an input data file with the graph structure, and some functions to load them as objects onto your workspace in R or Python. You can import graph data from different specific formats (e.g., Graph Modeling Language (GML), GraphML, JSON, etc.), but one popular and standardized procedure is to obtain the data from a text file containing a list of edges or a matrix. In Example [-@exm-read] we illustrate how to read graph data in *igraph* and *networkx* using a simple adjacency list that corresponds to our original imaginary Twitter network of American politicians (`g2`).
 
-::: {.callout-note appearance="simple" icon=false}
-
+::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-read}
 Reading a graph from a file
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python read-python}
 url = "https://cssbook.net/d/poltwit.csv"
 fn, _headers = urllib.request.urlretrieve(url)
@@ -374,7 +405,9 @@ g2 = nx.read_adjlist(fn, create_using=nx.DiGraph, delimiter=",")
 print("Nodes:", g2.number_of_nodes(), "Edges: ", g2.number_of_edges())
 
 ```
+
 ## R code
+
 ```{r read-r}
 edges = read_csv(
 "https://cssbook.net/d/poltwit.csv",
@@ -394,15 +427,15 @@ This section gives an overview of the existing measures to conduct Social Networ
 
 ### Paths and Reachability {#sec-paths}
 
-The first idea that comes to  mind when analyzing a graph is to understand how their nodes are connected. When multiple edges create a network we can observe how the vertices constitute one or many paths that can be described. In this sense, a `sequence` between node *x* and node *y* is a path where each node is `adjacent` to the previous. In the imaginary social network of friendship of American politicians contained in the undirected graph `g1`, we can determine the sequences or simple paths between any pair of politicians. As shown in Example [-@exm-path] we can use the function `all_simple_paths` contained in both *igraph* (R) and *networkx* (Python), to obtain the two possible routes between Barack Obama and John McCain. The shortest path includes the nodes Hillary Clinton and Donald Trump; and the longer includes Sanders, Clinton, and Trump.
+The first idea that comes to mind when analyzing a graph is to understand how their nodes are connected. When multiple edges create a network we can observe how the vertices constitute one or many paths that can be described. In this sense, a `sequence` between node *x* and node *y* is a path where each node is `adjacent` to the previous. In the imaginary social network of friendship of American politicians contained in the undirected graph `g1`, we can determine the sequences or simple paths between any pair of politicians. As shown in Example [-@exm-path] we can use the function `all_simple_paths` contained in both *igraph* (R) and *networkx* (Python), to obtain the two possible routes between Barack Obama and John McCain. The shortest path includes the nodes Hillary Clinton and Donald Trump; and the longer includes Sanders, Clinton, and Trump.
 
-::: {.callout-note appearance="simple" icon=false}
-
+::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-path}
 Possible paths between two nodes in the imaginary Facebook network of American politicians
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python path-python}
 for path in nx.all_simple_paths(
     g1, source="Barack Obama", target="John McCain"
@@ -410,7 +443,9 @@ for path in nx.all_simple_paths(
     print(path)
 
 ```
+
 ## R code
+
 ```{r path-r}
 all_simple_paths(g1, "Barack Obama","John McCain",
                  mode = c("all"))
@@ -421,12 +456,13 @@ all_simple_paths(g1, "Barack Obama","John McCain",
 
 One specific type of path is the one in which the initial node is the same than the final node. This closed path is called a *circuit*. To understand this concept let us recover the inducted subgraph of Democrat politicians (`g3`) in which we only have three nodes. If you plot this graph, as we do in Example [-@exm-circuit], you can clearly visualize how a circuit works.
 
-::: {.callout-note appearance="simple" icon=false}
+::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-circuit}
 Visualization of a circuit.
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python circuit-python}
 #| results: hide
 nx.draw_networkx(g3)
@@ -440,7 +476,9 @@ plt.box(False)
 plt.show()
 
 ```
+
 ## R code
+
 ```{r circuit-r}
 plot(g3)
 ```
@@ -448,14 +486,15 @@ plot(g3)
 :::
 :::
 
-In SNA it is extremely important to be able to describe the possible paths since they help us to estimate the reachability of the vertices. For instance, if we go back to our original graph of American politicians on Facebook (`g1`) visualized in Example [-@exm-visgraph], we can see that Sanders is reachable from McCain because there is a path between them (McCain--Trump--Clinton--Sanders).  Moreover, we observe that this social network is fully *connected* because you can reach any given node from any other node in the graph. But it might not always be that way. Imagine that we remove the friendship of Clinton and Trump by deleting that specific edge. As you can observe in Example [-@exm-component], when we create and visualize the graph `g6` without this edge we can see that the network is no longer fully connected and it has two *components*. Technically speaking, we would say for example that the subgraph of Republicans is a connected component of the network of American politicians, given that this connected subgraph is part of the bigger graph while not connected to it.
+In SNA it is extremely important to be able to describe the possible paths since they help us to estimate the reachability of the vertices. For instance, if we go back to our original graph of American politicians on Facebook (`g1`) visualized in Example [-@exm-visgraph], we can see that Sanders is reachable from McCain because there is a path between them (McCain--Trump--Clinton--Sanders). Moreover, we observe that this social network is fully *connected* because you can reach any given node from any other node in the graph. But it might not always be that way. Imagine that we remove the friendship of Clinton and Trump by deleting that specific edge. As you can observe in Example [-@exm-component], when we create and visualize the graph `g6` without this edge we can see that the network is no longer fully connected and it has two *components*. Technically speaking, we would say for example that the subgraph of Republicans is a connected component of the network of American politicians, given that this connected subgraph is part of the bigger graph while not connected to it.
 
-::: {.callout-note appearance="simple" icon=false}
+::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-component}
 Visualization of connected components.
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python component-python}
 #| results: hide
 # Remove the friendship between Clinton and Trump
@@ -472,7 +511,9 @@ plt.box(False)
 plt.show()
 
 ```
+
 ## R code
+
 ```{r component-r}
 #Remove the friendship between Clinton and Trump
 g6 = delete.edges(g1, E(g1, P=
@@ -483,15 +524,15 @@ plot(g6)
 :::
 :::
 
-When analyzing paths and reachability you may be interested in knowing the distances in your graph. One common question is what is the average path length of a social network, or in other words, what is the average of the shortest distance between each pair of vertices in the graph? This *mean distance* can tell you a lot about how close the nodes in the network are: the shorter the distance the closer the nodes are. Moreover, you can estimate the specific distance (shortest path) between two specific nodes.  As shown in Example [-@exm-distance] we can estimate the average path length (1.7) in our imaginary Facebook network of American politicians using the functions `mean_distance` in *igraph* and `average_shortest_path_length` in *networkx*. In this example we also estimate the specific distance in the network between Obama and McCain (3) using the function `distances` in *igraph* and estimating the length (`len`) of the shortest path (first result of `shortest_simple_paths` minus 1) in *networkx*.
+When analyzing paths and reachability you may be interested in knowing the distances in your graph. One common question is what is the average path length of a social network, or in other words, what is the average of the shortest distance between each pair of vertices in the graph? This *mean distance* can tell you a lot about how close the nodes in the network are: the shorter the distance the closer the nodes are. Moreover, you can estimate the specific distance (shortest path) between two specific nodes. As shown in Example [-@exm-distance] we can estimate the average path length (1.7) in our imaginary Facebook network of American politicians using the functions `mean_distance` in *igraph* and `average_shortest_path_length` in *networkx*. In this example we also estimate the specific distance in the network between Obama and McCain (3) using the function `distances` in *igraph* and estimating the length (`len`) of the shortest path (first result of `shortest_simple_paths` minus 1) in *networkx*.
 
-::: {.callout-note appearance="simple" icon=false}
-
+::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-distance}
 Estimating distances in the network
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python distance-python}
 print(
     "Average path length in Facebook network: ",
@@ -501,7 +542,9 @@ paths = list(nx.shortest_simple_paths(g1, "Barack Obama", "John McCain"))
 print("Distance between Obama and McCain", len(paths[0]) - 1)
 
 ```
+
 ## R code
+
 ```{r distance-r}
 glue("Average path length in Facebook network: ",
      mean_distance(g1, directed = T))
@@ -514,21 +557,23 @@ glue("Distance between Obama and McCain",
 :::
 :::
 
-In terms of distance, we can also wonder what  the edges or nodes that share a border with any given vertex are. In the first case, we can identify the *incident edges* that go out or into one vertex. As shown in Example [-@exm-incident], by using the functions `incident` in *igraph* and `edges` in *networkx* we can easily get incident edges of John McCain in the Facebook Network (`g1`), which is just one single edge that joins Trump with McCain. In the second case, we can also identify its adjacent nodes, or in other words its *neighbors*. In the very same example, we use `neighbors` (same function in *igraph* and *networkx*) to obtain all the nodes one step away from McCain (in this case only Trump).
+In terms of distance, we can also wonder what the edges or nodes that share a border with any given vertex are. In the first case, we can identify the *incident edges* that go out or into one vertex. As shown in Example [-@exm-incident], by using the functions `incident` in *igraph* and `edges` in *networkx* we can easily get incident edges of John McCain in the Facebook Network (`g1`), which is just one single edge that joins Trump with McCain. In the second case, we can also identify its adjacent nodes, or in other words its *neighbors*. In the very same example, we use `neighbors` (same function in *igraph* and *networkx*) to obtain all the nodes one step away from McCain (in this case only Trump).
 
-::: {.callout-note appearance="simple" icon=false}
-
+::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-incident}
 Incident edges and neighbors of J. McCain the imaginary Facebook Network
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python incident-python}
 print("Incident edges of John McCain:", g1.edges("John McCain"))
 print("Neighbors of John McCain", [n for n in g1.neighbors("John McCain")])
 
 ```
+
 ## R code
+
 ```{r incident-r}
 #mode: all, out, in
 glue("Incident edges of John McCain in",
@@ -544,42 +589,49 @@ neighbors(g1, V(g1)["John McCain"], mode="all")
 
 There are some other interesting descriptors of social networks. One of the most common measures is the *density* of the graph, which accounts for the proportion of edges relative to all possible ties in the network. In simpler words, the density tells us from 0 to 1 how much connected the nodes of a graph are. This can be estimated for both undirected and directed graphs. Using the functions `edge_density` in *igraph* and `density` in *networkx* we obtain a density of 0.5 (middle level) in the imaginary Facebook network of American politicians (undirected graph) and 0.35 in the Twitter network (directed graph).
 
-In undirected graphs we can also measure *transitivity* (also known as *clustering coefficient*) and *diameter*. The first is a key property of social networks that refers to the ratio of triangles over the total amount of connected triples. It is to say that we wonder how likely it is that two nodes are connected if they share a mutual neighbor. Applying the function `transitivity` (included in *igraph* and *networkx*) to `g1` we can see that this tendency is of 0.5 in the Facebook network (there is a 50\% probability that two politicians
-are friends when they have a common contact). The second descriptor, the diameter, depicts the length of the network in terms of the longest geodesic distance[^4]. We use the function `diameter` (included in *igraph* and *networkx*) in the Facebook network and get a diameter of 3, which you can also check if you go back to the visualization of `g1` in Example [-@exm-visgraph].
+In undirected graphs we can also measure *transitivity* (also known as *clustering coefficient*) and *diameter*. The first is a key property of social networks that refers to the ratio of triangles over the total amount of connected triples. It is to say that we wonder how likely it is that two nodes are connected if they share a mutual neighbor. Applying the function `transitivity` (included in *igraph* and *networkx*) to `g1` we can see that this tendency is of 0.5 in the Facebook network (there is a 50% probability that two politicians are friends when they have a common contact). The second descriptor, the diameter, depicts the length of the network in terms of the longest geodesic distance[^chapter13-4]. We use the function `diameter` (included in *igraph* and *networkx*) in the Facebook network and get a diameter of 3, which you can also check if you go back to the visualization of `g1` in Example [-@exm-visgraph].
+
+[^chapter13-4]: The *geodesic distance* is the shortest number of edges between two vertices
 
 Additionally, in directed graphs we can calculate the *reciprocity*, which is just the proportion of reciprocal ties in a social network and can be computed with the function `reciprocity` (included in *igraph* and *networkx*). For the imaginary Twitter network (directed graph) we get a reciprocity of 0.57 (which is not bad for a Twitter graph where important people usually have much more followers than follows!).
 
 In Example [-@exm-density] we show how to estimate these four measures in R and Python. Notice that in some of the network descriptors you have to decide whether or not to include the edge weights for computation (in the provided examples we did not take these weights into account).
 
-::: {.callout-note appearance="simple" icon=false}
-
+::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-density}
 Estimations of density, transitivity, diameter and reciprocity
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python density-python}
 # Density in Facebook network:
 nx.density(g1)
 ```
+
 ```{python density-python2}
 # Density in Twitter network:
 nx.density(g2)
 ```
+
 ```{python density-python3}
 # Transitivity in Facebook network:
 nx.transitivity(g1)
 ```
+
 ```{python density-python4}
 # Diameter in Facebook network
 nx.diameter(g1, e=None, usebounds=False)
 ```
+
 ```{python density-python5}
 # Reciprocity in Twitter network:
 nx.reciprocity(g2)
 
 ```
+
 ## R code
+
 ```{r density-r}
 # Density in Facebook network:
 edge_density(g1)
@@ -600,34 +652,41 @@ reciprocity(g2)
 
 Now let us move to *centrality measures*. Centrality is probably the most common, popular, or known measure in the analysis of social networks because it gives you a clear idea of the importance of any of the nodes within a graph. Using its measures you can pose many questions such as which is the most central person in a network of friends on Facebook, who can be considered an opinion leader on Twitter or who is an influencer on Instagram. Moreover, knowing the specific importance of every node of the network can help us to visualize or label only certain vertices that overpass a previously determined threshold, or to use the color or size to distinguish the most central nodes from the others. There are four typical centrality measures: *degree*, *closeness*, *eigenvector* and *betweenness*.
 
-The *degree* of a node refers to the number of ties of that vertex, or in other words, to the number of edges that are incident to that node. This definition is constant for undirected graphs in which the directions of the links are not declared. In the case of directed graphs, you will have three options to measure the degree. First, you can think of the number of edges pointing *into* a node, which we call *indegree*; second, we have the number of edges pointing *out* of a node, or *outdegree*. In addition, we could also have the total number of edges pointing (in and out) any node. Degree, as well as other measures of centrality mentioned below, can be expressed in absolute numbers, but we can also *normalize*[^5]  these measures for better interpretation and comparison. We will prefer this latter approach in our examples, which is also the default option in many SNA packages.
+The *degree* of a node refers to the number of ties of that vertex, or in other words, to the number of edges that are incident to that node. This definition is constant for undirected graphs in which the directions of the links are not declared. In the case of directed graphs, you will have three options to measure the degree. First, you can think of the number of edges pointing *into* a node, which we call *indegree*; second, we have the number of edges pointing *out* of a node, or *outdegree*. In addition, we could also have the total number of edges pointing (in and out) any node. Degree, as well as other measures of centrality mentioned below, can be expressed in absolute numbers, but we can also *normalize*[^chapter13-5] these measures for better interpretation and comparison. We will prefer this latter approach in our examples, which is also the default option in many SNA packages.
+
+[^chapter13-5]: The approach is to divide by the maximum possible number of vertices ($N$) minus 1, or by $N-1$. We may also estimate the `weighted degree` of a node, which is the same degree but ponderated by the weight of the edges.
 
 We can then estimate the degree of two of our example networks. In Example [-@exm-centrality1], we first estimate the degree of each of the five American politicians in the imaginary Facebook network, which is an undirected graph; and then the total degree in the Twitter network, which is a directed graph. For both cases, we use the functions `degree` in *igraph* (R) and `degree_centrality` in *networkx* (Python). We later compute the `in` and `out` degree for the Twitter network. Using *igraph* we again used the function `degree` but now adjust the parameter `mode` to `in` or `out`, respectively. Using *networkx*, we employ the functions `in_degree_centrality` and `out_degree_centrality`.
 
-::: {.callout-note appearance="simple" icon=false}
-
+::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-centrality1}
 Computing degree centralities in undirected and directed graphs
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python centrality1-python}
 # Degree centrality of Facebook network (undirected):
 print(nx.degree_centrality(g1))
 ```
+
 ```{python centrality1-python2}
 # Degree centrality of Twitter network (directed):
 print(nx.degree_centrality(g2))
 ```
+
 ```{python centrality1-python3}
 # In degree centrality of Twitter network (directed):
 print(nx.in_degree_centrality(g2))
 ```
+
 ```{python centrality1-python4}
 # Out degree centrality of Twitter network (directed):
 print(nx.out_degree_centrality(g2))
 ```
+
 ## R code
+
 ```{r centrality1-r}
 # Degree centrality of Facebook network (undirected):
 print(degree(g1, normalized = T))
@@ -649,26 +708,30 @@ There are three other types of centrality measures. *Closeness centrality* refer
 
 As shown in Example [-@exm-centrality2], we can obtain these three measures from undirected graphs using the functions `closeness`, `eigen_centrality` and `betweenness` in *igraph*, and `closeness_centrality`, `eigenvector_centrality` and `betweenness_centrality` in *networkx*. If we take a look to the centrality measures for every politician of the imaginary Facebook network we see that Clinton seems to be a very important and central node of the graph, just coinciding with the above-mentioned findings based on the degree. It is not a rule that we obtain the very same trend in each of the centrality measures but it is likely that they have similar results although they are looking for different dimensions of the same construct.
 
-::: {.callout-note appearance="simple" icon=false}
-
+::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-centrality2}
 Estimations of closeness, eigenvector and betweenness centralities
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python centrality2-python}
 # Closeness centrality of Facebook network (undirected):
 print(nx.closeness_centrality(g1))
 ```
+
 ```{python centrality2-python2}
 # Eigenvector centrality of Facebook network (undirected):
 print(nx.eigenvector_centrality(g1))
 ```
+
 ```{python centrality2-python3}
 # Betweenness centrality of Facebook network (undirected):
 print(nx.betweenness_centrality(g1))
 ```
+
 ## R code
+
 ```{r centrality2-r}
 # Closeness centrality of Facebook network (undirected):
 print(closeness(g1, normalized = T))
@@ -683,12 +746,13 @@ print(betweenness(g1, normalized = T))
 
 We can use these centrality measures in many ways. For example, you can take the degree centrality as a parameter of the node size and labeling when plotting the network. This may be of great utility since the reader can visually identify the most important nodes of the network while minimizing the visual impact of those that are less central. In Example [-@exm-plotsize] we decided to specify the size of the nodes (parameters `vertex.size` in *igraph* and `node_size` in *networkx*) with the degree centrality of each of the American politicians in the Twitter network (directed graph) contained in `g2`. We also used the degree centrality to filter the labels in the graph, and then included only those that overpassed a threshold of 0.5 (parameters `vertex.label` in *igraph* and `labels` in *networkx*). These two simple parameters of the plot give you a fair image of the potential of the centrality measures to describe and understand your social network.
 
-::: {.callout-note appearance="simple" icon=false}
+::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-plotsize}
 Using the degree centrality to change the size and labels of the nodes
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python plotsize-python}
 #| results: hide
 size = list(nx.degree_centrality(g2).values())
@@ -710,7 +774,9 @@ plt.box(False)
 plt.show()
 
 ```
+
 ## R code
+
 ```{r plotsize-r}
 plot(g2, vertex.label.cex = 2, 
      vertex.size= degree(g2, normalized = T)*40,
@@ -723,24 +789,26 @@ plot(g2, vertex.label.cex = 2,
 
 ### Clustering and Community Detection {#sec-communitydetection}
 
-One of the greatest potentials of SNA is the ability to identify how nodes are interconnected and thus define *communities* within a graph. This is to say that most of the time the nodes and edges in our network are not distributed homogeneously, but they tend to form clusters that can  later be interpreted. In a social network you can think for example of the principle of *homophily*, which is the tendency of human beings to associate and interact with similar individuals; or you can think of extrinsic factors (e.g., economic or legal) that may generate the cohesion of small groups of citizens that belong to a wider social structure. While it is of course difficult to make strong claims regarding the underlying causes, we can use different computational approaches to model and detect possible communities that emerge from social networks and even interpret and label those groups. The creation of clusters as an unsupervised machine learning technique was introduced in Section [-@sec-clustering] for structured data and in Section [-@sec-unsupervised] for text analysis (topic modeling). We will use some similar unsupervised approaches for community detection in social networks.
+One of the greatest potentials of SNA is the ability to identify how nodes are interconnected and thus define *communities* within a graph. This is to say that most of the time the nodes and edges in our network are not distributed homogeneously, but they tend to form clusters that can later be interpreted. In a social network you can think for example of the principle of *homophily*, which is the tendency of human beings to associate and interact with similar individuals; or you can think of extrinsic factors (e.g., economic or legal) that may generate the cohesion of small groups of citizens that belong to a wider social structure. While it is of course difficult to make strong claims regarding the underlying causes, we can use different computational approaches to model and detect possible communities that emerge from social networks and even interpret and label those groups. The creation of clusters as an unsupervised machine learning technique was introduced in Section [-@sec-clustering] for structured data and in Section [-@sec-unsupervised] for text analysis (topic modeling). We will use some similar unsupervised approaches for community detection in social networks.
 
-Many social and communication questions may arise when clustering a network. The identification of subgroups can tell us how diverse and fragmented a network is, or how the behavior of a specific community relates to other groups and to the entire graph. Moreover, the concentration of edges in some nodes of the graph would let us know about the social structure of the networks which in turn would mean a better understanding of its inner dynamic.  It is true that the computational analyst will need more than the provided algorithms when labeling the groups to understand the communities, which means that you must become familiar with the way the graph has been built and what the nodes, edges or weights represent.
+Many social and communication questions may arise when clustering a network. The identification of subgroups can tell us how diverse and fragmented a network is, or how the behavior of a specific community relates to other groups and to the entire graph. Moreover, the concentration of edges in some nodes of the graph would let us know about the social structure of the networks which in turn would mean a better understanding of its inner dynamic. It is true that the computational analyst will need more than the provided algorithms when labeling the groups to understand the communities, which means that you must become familiar with the way the graph has been built and what the nodes, edges or weights represent.
 
-A first step towards an analysis of subgroups within a network is to find the available complete subgraphs in an undirected graph. As we briefly explained at the end of [@sec-graph], these independent subgraphs are called `cliques` and refer to subgroups where every vertex is connected to every other vertex. We can find the `maximal cliques` (a clique is maximal when it cannot be extended to a  bigger clique) in the imaginary undirected graph of American politicians on Facebook (`g1`) by using the functions `max_cliques` in *igraph* [@eppstein2010listing] and `max_cliques` in *networkx* [@cazals2008note]. As you can see in [@exm-cliques], we obtain a total of three subgraphs, one representing the Democrats, another the Republicans, and one more the connector of the two parties (Clinton--Trump).
+A first step towards an analysis of subgroups within a network is to find the available complete subgraphs in an undirected graph. As we briefly explained at the end of [@sec-graph], these independent subgraphs are called `cliques` and refer to subgroups where every vertex is connected to every other vertex. We can find the `maximal cliques` (a clique is maximal when it cannot be extended to a bigger clique) in the imaginary undirected graph of American politicians on Facebook (`g1`) by using the functions `max_cliques` in *igraph* [@eppstein2010listing] and `max_cliques` in *networkx* [@cazals2008note]. As you can see in [@exm-cliques], we obtain a total of three subgraphs, one representing the Democrats, another the Republicans, and one more the connector of the two parties (Clinton--Trump).
 
-::: {.callout-note appearance="simple" icon=false}
-
+::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-cliques}
 Finding all the maximal cliques in an undirected graph
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python cliques-python}
-print(f"Number of cliques: {nx.graph_number_of_cliques(g1)}")
+print(f"Number of cliques: {nx.number_of_cliques(g1)}")
 print(f"Cliques: {list(nx.find_cliques(g1))}")
 ```
+
 ## R code
+
 ```{r cliques-r}
 glue("Number of cliques: {clique_num(g1)}")
 max_cliques(g1)
@@ -749,19 +817,22 @@ max_cliques(g1)
 :::
 :::
 
-Now, in order to properly detect communities we will apply some common algorithms to obtain the most likely subgroups in a social network. The first of these models is the so called *edge-between* or Girvan--Newman algorithm [@newman2004finding]. This algorithm is based on divisive hierarchical clustering (explained in [@sec-clustering]) by breaking down the graph into pieces and iteratively removing edges from the original one. Specifically,  the Girvan--Newman approach uses the betweenness centrality measure to remove the most central edge at each iteration. You can easily visualize this splitting process in a dendogram, as we do in [@exm-girvan], where we estimated `cl_girvan` to detect possible communities in the Facebook network. We used the functions `cluster_edge_betweenness` in *igraph* and `girvan_newman` in *networkx*.
+Now, in order to properly detect communities we will apply some common algorithms to obtain the most likely subgroups in a social network. The first of these models is the so called *edge-between* or Girvan--Newman algorithm [@newman2004finding]. This algorithm is based on divisive hierarchical clustering (explained in [@sec-clustering]) by breaking down the graph into pieces and iteratively removing edges from the original one. Specifically, the Girvan--Newman approach uses the betweenness centrality measure to remove the most central edge at each iteration. You can easily visualize this splitting process in a dendogram, as we do in [@exm-girvan], where we estimated `cl_girvan` to detect possible communities in the Facebook network. We used the functions `cluster_edge_betweenness` in *igraph* and `girvan_newman` in *networkx*.
 
-::: {.callout-note appearance="simple" icon=false}
+::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-girvan}
 Clustering with Girvan--Newman.
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python girvan-python}
 cl_girvan = nxcom.girvan_newman(g1)
 # Note: see R output for a nice visualization
 ```
+
 ## R code
+
 ```{r girvan-r}
 cl_girvan = cluster_edge_betweenness(g1) 
 dendPlot(cl_girvan, mode="hclust")
@@ -774,16 +845,15 @@ When you look at the figure you will notice that the final leaves correspond to 
 
 With community detection algorithms we can then estimate the length (number of suggested clusters), membership (to which cluster belongs each node) and modularity (how good is the clustering). In the case of *igraph* in R we apply the functions `length` (base), `membership` and `modularity` over the produced clustering object (i.e., `cl_girvan`). In the case of *networkx* in Python we first have to specify that we want to use the first component of the divisions (out of four) using the function `next`. Then, we can apply the functions `len` (base) and `modularity` to get the descriptors, and print the first division (stored as `communities1`) to obtain the membership.
 
-These functions are demonstrated in @exm-girvan2. Note that since we will be showing these properties for multiple clustering algorithms below,
-we create a convenience function `summarize_clustering` to display them. 
+These functions are demonstrated in @exm-girvan2. Note that since we will be showing these properties for multiple clustering algorithms below, we create a convenience function `summarize_clustering` to display them.
 
-::: {.callout-note appearance="simple" icon=false}
-
+::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-girvan2}
 Community detection with Girvan--Newman
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python girvan2-python}
 def summarize_clustering(graph, clustering):
     print(f"Length {len(clustering)}")
@@ -795,7 +865,9 @@ def summarize_clustering(graph, clustering):
 c1 = next(cl_girvan)
 summarize_clustering(g1, c1)
 ```
+
 ## R code
+
 ```{r girvan2-r}
 summarize_clustering = function(clustering) {
     print(glue("Length {length(clustering)}"))
@@ -815,15 +887,17 @@ summarize_clustering(cl_girvan)
 
 We can estimate the communities for our network using many other more clustering algorithms, such as the *Louvain algorithm*, the *Propagating Label algorithm*, and *Greedy Optimization*, among others. Similar to Girvan--Newman, the Louvain algorithm uses the measure of modularity to obtain a multi-level optimization [@blondel2008fast] and its goal is to obtain optimized clusters which minimize the number of edges between the communities and maximize the number of edges within the same community. For its part, the Greedy Optimization algorithm is also based on the modularity indicator [@clauset2004finding]. It does not consider the edges' weights and works by initially setting each vertex in its own community and then joining two communities to increase modularity until obtaining the maximum modularity. Finally, the Propagating Label algorithm -- which takes into account edges' weights -- initializes each node with a unique label and then iteratively each vertex adopts the label of its neighbors until all nodes have the most common label of their neighbors [@raghavan2007near]. The process can be conducted asynchronously (as done in our example), synchronously or semi-synchronously (it might produce different results).
 
-In [@exm-clustalgo] we use `cluster_louvain`, `cluster_fast_greedy` and `cluster_label_prop` in *igrapgh* (R) and `best_partition`, `greedy_modularity_communities` and `asyn_lpa_communities` in *networkx* (Python). You can see  that the results are quite similar[^6]  and it is pretty clear that there are two communities in the Facebook network: Democrats and Republicans!
+In [@exm-clustalgo] we use `cluster_louvain`, `cluster_fast_greedy` and `cluster_label_prop` in *igrapgh* (R) and `best_partition`, `greedy_modularity_communities` and `asyn_lpa_communities` in *networkx* (Python). You can see that the results are quite similar[^chapter13-6] and it is pretty clear that there are two communities in the Facebook network: Democrats and Republicans!
 
-::: {.callout-note appearance="simple" icon=false}
+[^chapter13-6]: This similarity is because our example network is extremely small. In larger networks, the results might not be that similar.
 
+::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-clustalgo}
 Community detection with Louvain Propagating Label and Greedy Optimization
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python clustalgo-python}
 # Louvain:
 # (Note that the Louvain output is a dict of {member: cluster} rather than a 
@@ -833,6 +907,7 @@ cl_louvain= [{k for (k,v) in cl_louvain.items() if v == cluster}
              for cluster in set(cl_louvain.values())]
 summarize_clustering(g1, cl_louvain)
 ```
+
 ```{python clustalgo-python2}
 # Greedy optimization:
 # (Note that the nxcom output is a generator, sorting it turns it into a list)
@@ -840,6 +915,7 @@ cl_greedy = nxcom.greedy_modularity_communities(g1)
 cl_greedy = sorted(cl_greedy, key=len, reverse=True)
 summarize_clustering(g1, cl_greedy)
 ```
+
 ```{python clustalgo-python3}
 # Propagating label:
 cl_propagation = nxcom.asyn_lpa_communities(g1)
@@ -847,7 +923,9 @@ cl_propagation = nxcom.asyn_lpa_communities(g1)
 cl_propagation = sorted(cl_propagation, key=len, reverse=True)
 summarize_clustering(g1, cl_propagation)
 ```
+
 ## R code
+
 ```{r clustalgo-r}
 # Louvain:
 cl_louvain = cluster_louvain(g1) 
@@ -867,13 +945,13 @@ summarize_clustering(cl_propagation)
 
 We can plot each of those clusters for better visualization of the communities. In Example [-@exm-plotcluster] we generate the plots with the *Greedy Optimization* algorithm in R and the *Louvain* algorithm in Python, and we get two identical results.
 
-::: {.callout-note appearance="simple" icon=false}
-
+::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-plotcluster}
 Plotting clusters with Greedy optimization in R and Louvain in Python
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python plotcluster-python}
 #| results: hide
 # From which cluster does each node originate?
@@ -892,7 +970,9 @@ nx.draw_networkx_edges(g1, pos, alpha=0.3)
 plt.show(g1)
 
 ```
+
 ## R code
+
 ```{r plotcluster-r}
 plot(cl_louvain, g1)
 ```
@@ -904,15 +984,17 @@ There are more ways to obtain subgraphs of your network (such as the `K-core dec
 
 So far we have seen how to conduct SNA over "artificial" graphs for the sake of simplicity. However, the representation and analysis of "real world" networks will normally be more challenging because of their size or their complexity. To conclude this chapter we will show you how to apply some of the explained concepts to real data.
 
-Using the Twitter API (see Section [-@sec-apis]), we retrieved the names of the first 100 followers of the five most important politicians in Spain by 2017 (Mariano Rajoy, Pedro Sánchez, Albert Rivera, Alberto Garzón and Pablo Iglesias). With this information we produced an undirected graph[^7] of the "friends" of these Spanish politicians in order to understand how these leaders where connected through their followers. In Example [-@exm-friends1] we load the data into a graph object `g_friends` that contains the 500 edges of the network. As we may imagine the five mentioned politicians were normally the most central nodes, but if we look at the degree, betweenness and closeness centralities we can easily get some of the relevant nodes of the Twitter network: CEARefugio, elenballesteros or Unidadpopular. These accounts deserve special attention since they contribute to the connection of the main leaders of that country. In fact, if we conduct clustering analysis using Louvain algorithm we will find a high modularity (0.77, which indicates that the clusters are well separated) and not surprisingly five clusters.
+Using the Twitter API (see Section [-@sec-apis]), we retrieved the names of the first 100 followers of the five most important politicians in Spain by 2017 (Mariano Rajoy, Pedro Sánchez, Albert Rivera, Alberto Garzón and Pablo Iglesias). With this information we produced an undirected graph[^chapter13-7] of the "friends" of these Spanish politicians in order to understand how these leaders where connected through their followers. In Example [-@exm-friends1] we load the data into a graph object `g_friends` that contains the 500 edges of the network. As we may imagine the five mentioned politicians were normally the most central nodes, but if we look at the degree, betweenness and closeness centralities we can easily get some of the relevant nodes of the Twitter network: CEARefugio, elenballesteros or Unidadpopular. These accounts deserve special attention since they contribute to the connection of the main leaders of that country. In fact, if we conduct clustering analysis using Louvain algorithm we will find a high modularity (0.77, which indicates that the clusters are well separated) and not surprisingly five clusters.
 
-::: {.callout-note appearance="simple" icon=false}
+[^chapter13-7]: We deliberately omitted the directions of the edges given their impossible reciprocity.
 
+::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-friends1}
 Loading and analyzing a real network of Spanish politicians and their followers on Twitter
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python friends1-python}
 url = "https://cssbook.net/d/friends3.csv"
 fn, _headers = urllib.request.urlretrieve(url)
@@ -920,27 +1002,33 @@ g_friends = nx.read_adjlist(fn, create_using=nx.Graph, delimiter=";")
 print(f"Nodes: {g_friends.number_of_nodes()}, "
       f"Edges: {g_friends.number_of_edges()}")
 ```
+
 ```{python friends1-python2}
 # Degree centrality:
 def sort_by_value(dict):
     return sorted(dict.items(), key=lambda item: item[1], reverse=True)
 print(sort_by_value(nx.degree_centrality(g_friends)))
 ```
+
 ```{python friends1-python3}
 # Betweenness centrality: 
 print(sort_by_value(nx.betweenness_centrality(g_friends)))
 ```
+
 ```{python friends1-python4}
 # Closeness centrality: 
 print(sort_by_value(nx.closeness_centrality(g_friends)))
 ```
+
 ```{python friends1-python5}
 # Clustering with Louvain: 
 cluster5 = community_louvain.best_partition(g_friends)
 print("Length: ", len(set(cluster5.values())))
 print("Modularity: " f"{community_louvain.modularity(cluster5,g_friends):.2f}")
 ```
+
 ## R code
+
 ```{r friends1-r}
 edges = read_delim("https://cssbook.net/d/friends3.csv",
                    col_names=FALSE, delim=";")
@@ -964,13 +1052,13 @@ print(glue("Modularity: {modularity(cluster5)}"))
 
 When we visualize the clusters in the network (Example [-@exm-friends2]) using the degree centrality for the size of the node, we can locate the five politicians in the center of the clusters (depicted with different colors). More interesting, we can see that even when some users follow two of the political leaders, they are just assigned to one of the clusters. This the case of the node joining Garzón and Sánchez who is assigned to the Sánchez's cluster, or the node joining Garzón and Rajoy who is assigned to Rajoy's cluster. In the plot you can also see two more interesting facts. First, we can see a triangle that groups Sánchez, Garzón and Iglesias, which are leaders of the left-wing parties in Spain. Second, some pair of politicians (such as Iglesias--Garzón or Sánchez--Rivera) share more friends than the other possible pairs.
 
-::: {.callout-note appearance="simple" icon=false}
-
+::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-friends2}
 Visualizing the network of Spanish politicians and their followers on Twitter and plotting its clusters
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python friends2-python}
 #| results: hide
 pos = nx.spring_layout(g_friends)
@@ -998,7 +1086,9 @@ nx.draw_networkx_edges(g_friends, pos, alpha=0.5)
 plt.show(g_friends)
 
 ```
+
 ## R code
+
 ```{r friends2-r}
 plot(cluster5, g_friends, vertex.label.cex = 2,
    vertex.size=degree(g_friends, normalized=T)*40,
@@ -1009,18 +1099,3 @@ plot(cluster5, g_friends, vertex.label.cex = 2,
 :::
 :::
 :::
-
-[^1]: See also the mathematical problem of the *Seven Bridges of Königsberg*, formulated by Leonhard Euler in 1736, which is considered the basis of graph theory. Inspired by a city divided by a river and connected by several bridges, the problem consisted of walking through the whole city crossing each bridge exactly once.
-
-[^2]: The connections among these politicians on Facebook and Twitter in the examples are of course purely fictional and were created *ad hoc* to illustrate small social networks.
-
-[^3]: You can use this library in Python with the adapted package *python-igraph*.
-
-[^4]: The *geodesic distance* is the shortest number of edges between two vertices
-
-[^5]: The approach is to divide by the maximum possible number of vertices ($N$) minus 1, or by $N-1$. We may also estimate the `weighted degree` of a node, which is the same degree but ponderated by the weight of the edges.
-
-[^6]: This similarity is because our example network is extremely small. In larger networks, the results might not be that similar.
-
-[^7]: We deliberately omitted the directions of the edges given their impossible reciprocity.
-

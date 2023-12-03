@@ -1,6 +1,6 @@
 {
   "R": {
-    "Version": "4.2.2",
+    "Version": "4.3.1",
     "Repositories": [
       {
         "Name": "CRAN",
@@ -9,7 +9,7 @@
     ]
   },
   "Python": {
-    "Version": "3.10.6",
+    "Version": "3.10.12",
     "Type": "virtualenv",
     "Name": "./renv/python/virtualenvs/renv-python-3.10"
   },
@@ -526,10 +526,10 @@
     },
     "class": {
       "Package": "class",
-      "Version": "7.3-20",
+      "Version": "7.3-22",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "da09d82223e669d270e47ed24ac8686e",
+      "Hash": "f91f6b29f38b8c280f2b9477787d4bb2",
       "Requirements": [
         "MASS"
       ]
@@ -2278,10 +2278,10 @@
     },
     "reticulate": {
       "Package": "reticulate",
-      "Version": "1.28",
+      "Version": "1.34.0",
       "Source": "Repository",
       "Repository": "CRAN",
-      "Hash": "86c441bf33e1d608db773cb94b848458",
+      "Hash": "a69f815bcba8a055de0b08339b943f9e",
       "Requirements": [
         "Matrix",
         "Rcpp",
@@ -2290,6 +2290,7 @@
         "jsonlite",
         "png",
         "rappdirs",
+        "rlang",
         "withr"
       ]
     },

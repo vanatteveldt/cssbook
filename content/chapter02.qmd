@@ -5,50 +5,46 @@
 import warnings; warnings.filterwarnings('ignore')
 ```
 
-**Abstract.**
-  This chapter is a lightning tour of some of the cool (and informative) things you can do with R and Python.
-  Starting from a dataset of tweets about COVID-19, we show how you can analyze this data using
-  text analysis, network analysis, and using geographic information.
-  The goal of this chapter is not to teach you all these techniques in detail,
-  rather, each of the examples showcases a possibility and guides you to the chapter where it will be explained in more detail.
-  So don't worry too much about understanding every line of code, but relax and enjoy the ride!
+**Abstract.** This chapter is a lightning tour of some of the cool (and informative) things you can do with R and Python. Starting from a dataset of tweets about COVID-19, we show how you can analyze this data using text analysis, network analysis, and using geographic information. The goal of this chapter is not to teach you all these techniques in detail, rather, each of the examples showcases a possibility and guides you to the chapter where it will be explained in more detail. So don't worry too much about understanding every line of code, but relax and enjoy the ride!
 
-**Keywords.** basics of programming,  data analysis
+**Keywords.** basics of programming, data analysis
 
 **Objectives:**
 
--  Get an overview of the possibilities of R and Python for data analysis and visualization
- -  Understand how different aspects of data gathering, cleaning, and analysis work together
- -  Have fun with data and visualizations!
+-   Get an overview of the possibilities of R and Python for data analysis and visualization
+-   Understand how different aspects of data gathering, cleaning, and analysis work together
+-   Have fun with data and visualizations!
 
-::: {.callout-note icon=false collapse=true}
+::: {.callout-note icon="false" collapse="true"}
 ## Packages used in this chapter
 
-Since this chapter showcases a wide variety of possibilities,
-  it relies on quite a number of third party packages.
-  If needed, you can install these packages with the code below
-  (see Section [-@sec-installing] for more details):
+Since this chapter showcases a wide variety of possibilities, it relies on quite a number of third party packages. If needed, you can install these packages with the code below (see Section [-@sec-installing] for more details):
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python chapter02install-python}
 #| eval: false
-!pip3 install pandas matplotlib  geopandas 
+!pip3 install pandas matplotlib  geopandas
 !pip3 install descartes shifterator
 !pip3 install wordcloud gensim nltk networkx
 ```
+
 ## R code
+
 ```{r chapter02install-r}
 #| eval: false
 install.packages(c("tidyverse", "igraph","maps",
-    "quanteda", "quanteda.textplots", 
+    "quanteda", "quanteda.textplots",
     "quanteda.textstats", "topicmodels"))
 ```
 :::
- After installing, you need to import (activate) the packages every session:
 
-::: {.panel-tabset}
+After installing, you need to import (activate) the packages every session:
+
+::: panel-tabset
 ## Python code
+
 ```{python chapter02library-python}
 import re
 import pandas as pd
@@ -63,7 +59,9 @@ from nltk.corpus import stopwords
 import networkx as nx
 
 ```
+
 ## R code
+
 ```{r chapter02library-r}
 library(tidyverse)
 library(lubridate)
@@ -79,33 +77,25 @@ library(maps)
 
 ## Fun With Tweets {#sec-funtweets}
 
-The goal of this chapter is to showcase how you can use R or Python to quickly and easily
-run some impressive analyses of real world data.
-For this purpose, we will be using a dataset of tweets about the COVID pandemic that is
-engulfing much of the world at the time this book is written.
-Of course, tweets are probably only representative for what is said on Twitter,
-but the data are (semi-)public and rich, containing text, location, and network characteristics.
-This makes them ideal for exploring the many ways in which we can analyze and visualize information
-with Python and R.
+The goal of this chapter is to showcase how you can use R or Python to quickly and easily run some impressive analyses of real world data. For this purpose, we will be using a dataset of tweets about the COVID pandemic that is engulfing much of the world at the time this book is written. Of course, tweets are probably only representative for what is said on Twitter, but the data are (semi-)public and rich, containing text, location, and network characteristics. This makes them ideal for exploring the many ways in which we can analyze and visualize information with Python and R.
 
-Example [-@exm-funtweets] shows how you can read this dataset into memory using a single command.
-Note that this does not retrieve the tweets from Twitter itself, but rather downloads
-our cached version of the tweets.
-In Chapter [-@sec-chap-scraping] we will show how you can download tweets and location data yourself, but to make sure
-we can get down to business immediately we will start from this cached version.
+Example [-@exm-funtweets] shows how you can read this dataset into memory using a single command. Note that this does not retrieve the tweets from Twitter itself, but rather downloads our cached version of the tweets. In Chapter [-@sec-chap-scraping] we will show how you can download tweets and location data yourself, but to make sure we can get down to business immediately we will start from this cached version.
 
-::: {.callout-note appearance="simple" icon=false}
+::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-funtweets}
 Retrieving cached tweets about COVID
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python tweets-python}
 tw = pd.read_csv("https://cssbook.net/d/covid.csv")
 tw.head()
 
 ```
+
 ## R code
+
 ```{r tweets-r}
 tw = read_csv("https://cssbook.net/d/covid.csv")
 head(tw)
@@ -114,28 +104,17 @@ head(tw)
 :::
 :::
 
-As you can see, the dataset contains almost 10000 tweets, listing their
-sender, their location and language, the text, the number of retweets, and whether it was a reply.
-You can read the start of the three most retweeted messages, which contain one (political) tweet from India
-and two seemingly political and factual tweets from the United States.
+As you can see, the dataset contains almost 10000 tweets, listing their sender, their location and language, the text, the number of retweets, and whether it was a reply. You can read the start of the three most retweeted messages, which contain one (political) tweet from India and two seemingly political and factual tweets from the United States.
 
-**My first bar plot.** Before diving into the textual, network, and geographic data in the dataset,
-let's first make a simple visualization of the date on which the tweets were posted.
-Example [-@exm-funtime] does this in two steps:
-first, the number of tweets per hour is counted with an aggregation command.
-Next, a bar plot is made of this calculated value with some options to make it look relatively clean and professional.
-If you want to play around with this, you can for example try to plot the number of tweets per language,
-or create a line plot instead of a bar plot. 
-For more information on visualization, please see Chapter [-@sec-chap-eda].
-See Chapter [-@sec-chap-datawrangling] for an in-depth explanation of the aggregation command.
+**My first bar plot.** Before diving into the textual, network, and geographic data in the dataset, let's first make a simple visualization of the date on which the tweets were posted. Example [-@exm-funtime] does this in two steps: first, the number of tweets per hour is counted with an aggregation command. Next, a bar plot is made of this calculated value with some options to make it look relatively clean and professional. If you want to play around with this, you can for example try to plot the number of tweets per language, or create a line plot instead of a bar plot. For more information on visualization, please see Chapter [-@sec-chap-eda]. See Chapter [-@sec-chap-datawrangling] for an in-depth explanation of the aggregation command.
 
-::: {.callout-note appearance="simple" icon=false}
-
+::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-funtime}
 Barplot of tweets over time
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python funtime-python}
 #| results: hide
 tw.index = pd.DatetimeIndex(tw["created_at"])
@@ -143,13 +122,15 @@ tw["status_id"].groupby(pd.Grouper(freq="H")).count().plot(kind="bar")
 # (note the use of \ to split a long line)
 
 ```
+
 ## R code
+
 ```{r funtime-r}
-tweets_per_hour = tw %>% 
-  mutate(hour=round_date(created_at, "hour")) %>% 
-  group_by(hour) %>% summarize(n=n()) 
-ggplot(tweets_per_hour, aes(x=hour, y=n)) + 
-  geom_col() + theme_classic() + 
+tweets_per_hour = tw %>%
+  mutate(hour=round_date(created_at, "hour")) %>%
+  group_by(hour) %>% summarize(n=n())
+ggplot(tweets_per_hour, aes(x=hour, y=n)) +
+  geom_col() + theme_classic() +
   xlab("Time") + ylab("# of tweets") +
   ggtitle("Number of COVID tweets over time")
 ```
@@ -159,26 +140,15 @@ ggplot(tweets_per_hour, aes(x=hour, y=n)) +
 
 ## Fun With Textual Data {#sec-funtext}
 
-**Corpus Analysis.** Next, we can analyze which hashtags are most frequently used in this dataset.
-Example [-@exm-funcloud] does this by creating a *document-term matrix* using the package *quanteda* (in R)
-or by manually counting the words using a defaultdict (in Python).
-The code shows a number of steps that are made to create the final results, each of which represent
-researcher choices about which data to keep and which to discard as noise.
-In this case,  we select English tweets, convert text to lower case,  remove stop words, and keep only words that start with \#,
-while dropping words starting with `#corona` and `#covid`.
-To play around with this example,
-see if you can adjust the code to e.g. include all words or only at-mentions instead of the hashtags
-and make a different selection of tweets, for example Spanish language tweets or only popular (retweeted) tweets.
-Please see Chapter [-@sec-chap-dtm] if you want to learn more about corpus analysis,
-and see Chapter [-@sec-chap-datawrangling] for more information on how to select subsets of your data.
+**Corpus Analysis.** Next, we can analyze which hashtags are most frequently used in this dataset. Example [-@exm-funcloud] does this by creating a *document-term matrix* using the package *quanteda* (in R) or by manually counting the words using a defaultdict (in Python). The code shows a number of steps that are made to create the final results, each of which represent researcher choices about which data to keep and which to discard as noise. In this case, we select English tweets, convert text to lower case, remove stop words, and keep only words that start with #, while dropping words starting with `#corona` and `#covid`. To play around with this example, see if you can adjust the code to e.g. include all words or only at-mentions instead of the hashtags and make a different selection of tweets, for example Spanish language tweets or only popular (retweeted) tweets. Please see Chapter [-@sec-chap-dtm] if you want to learn more about corpus analysis, and see Chapter [-@sec-chap-datawrangling] for more information on how to select subsets of your data.
 
-::: {.callout-note appearance="simple" icon=false}
-
+::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-funcloud}
 My First Tag Cloud
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python funcloud-python}
 #| results: hide
 freq = defaultdict(int)
@@ -189,44 +159,32 @@ for tweet in tw["text"]:
 wc = WordCloud().generate_from_frequencies(freq)
 plt.imshow(wc, interpolation="bilinear")
 plt.axis("off")
-
+plt.show()
 ```
+
 ## R code
+
 ```{r funcloud-r}
-dtm_tags = filter(tw, lang=="en") %>% 
-  corpus() %>% tokens() %>% 
-  dfm(tolower = T) %>% 
-  dfm_select(pattern = "#*") %>% 
-  dfm_remove(c("#corona*", "#covid*")) 
+dtm_tags = filter(tw, lang=="en") %>%
+  corpus() %>% tokens() %>%
+  dfm(tolower = T) %>%
+  dfm_select(pattern = "#*") %>%
+  dfm_remove(c("#corona*", "#covid*"))
 textplot_wordcloud(dtm_tags, max_words=100)
 ```
 :::
 :::
 :::
 
-**Topic Model.**
-Where a word cloud (or tag cloud) shows which words occur most frequently,
-a `topic model` analysis shows which words co-occur in the same documents.
-Using the most common topic modeling algorithm, Latent Dirichlet Allocation or LDA,
-Example [-@exm-funlda] explores the tweets by automatically clustering the tags selected earlier into 10 *topics*.
-Topic modeling is non-deterministic -- if you run it again you can get slightly different topics,
-and topics are swapped around randomly as the topic numbers have no special meaning.
-By setting the computer's *random seed* you can ensure that if you run it again you get the same results.
-As you can see, some topics seem easily interpretable (such as topic 2 about social distancing,
-and topic 8 on health care), it is always recommended that you inspect the clustered documents
-and edge cases in addition to the top words (or tags) as shown here.
-You can play around with this example by using a different selection of words
-(modifying the code in Example [-@exm-funcloud]) or changing the number of topics.
-You can also change (or remove) the random seed and see how running the same model multiple times will give different results. 
-See @sec-unsupervised for more information about fitting, interpreting, and validating topic models.
+**Topic Model.** Where a word cloud (or tag cloud) shows which words occur most frequently, a `topic model` analysis shows which words co-occur in the same documents. Using the most common topic modeling algorithm, Latent Dirichlet Allocation or LDA, Example [-@exm-funlda] explores the tweets by automatically clustering the tags selected earlier into 10 *topics*. Topic modeling is non-deterministic -- if you run it again you can get slightly different topics, and topics are swapped around randomly as the topic numbers have no special meaning. By setting the computer's *random seed* you can ensure that if you run it again you get the same results. As you can see, some topics seem easily interpretable (such as topic 2 about social distancing, and topic 8 on health care), it is always recommended that you inspect the clustered documents and edge cases in addition to the top words (or tags) as shown here. You can play around with this example by using a different selection of words (modifying the code in Example [-@exm-funcloud]) or changing the number of topics. You can also change (or remove) the random seed and see how running the same model multiple times will give different results. See @sec-unsupervised for more information about fitting, interpreting, and validating topic models.
 
-::: {.callout-note appearance="simple" icon=false}
-
+::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-funlda}
 Topic Model of the COVID tags
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python funlda-python}
 tags = [
     [tag.lower() for tag in re.findall("#\w+", tweet)] for tweet in tw["text"]
@@ -240,10 +198,12 @@ for topic, words in m.print_topics(num_words=3):
     print(f"{topic}: {words}")
 
 ```
+
 ## R code
+
 ```{r funlda-r}
 set.seed(1)
-m = convert(dtm_tags, to="topicmodel") %>% 
+m = convert(dtm_tags, to="topicmodel") %>%
   LDA(10, method="Gibbs")
 terms(m, 5)
 ```
@@ -252,31 +212,20 @@ terms(m, 5)
 :::
 
 ## Fun With Visualizing Geographic Information {#sec-fungeo}
-For the final set of examples, we will use the location information contained in the Twitter data.
-This information is based on what Twitter users enter into their profile, and as such it is incomplete and noisy
-with many users giving a nonsensical location such as `Ethereally here' or not filling in any location at all.
-However, if we assume that most users that do enter a proper location (such as Lahore or Florida in the top tweets displayed above),
-we can use it to map where most tweets are coming from.
 
-The first step in this analysis is to resolve a name such as `Lahore, Pakistan' to its geographical coordinates (in this case, about 31 degrees north and 74 degrees east). This is called geocoding, and both Google maps and Open Street Maps can be used
-to perform this automatically.
-As with the tweets themselves, we will use a cached version of the geocoding results here so we can proceed directly.
-Please see https://cssbook.net/datasets for the code that was used to create this file so you can play around with it as well.
+For the final set of examples, we will use the location information contained in the Twitter data. This information is based on what Twitter users enter into their profile, and as such it is incomplete and noisy with many users giving a nonsensical location such as \`Ethereally here' or not filling in any location at all. However, if we assume that most users that do enter a proper location (such as Lahore or Florida in the top tweets displayed above), we can use it to map where most tweets are coming from.
 
-Example [-@exm-funmap] shows how this data can be used to create a map of Twitter activity.
-First, the cached user data is retrieved, showing the correct location for Lahore but also
-illustrating the noisiness of the data with the location "Un peu partout".
-Next, this data is `joined` to the Twitter data, so the coordinates are filled in where known.
-Finally, we plot this information on a map, showing tweets with more retweets as larger dots.
-See Chapter [-@sec-chap-eda] for more information on visualization.
+The first step in this analysis is to resolve a name such as \`Lahore, Pakistan' to its geographical coordinates (in this case, about 31 degrees north and 74 degrees east). This is called geocoding, and both Google maps and Open Street Maps can be used to perform this automatically. As with the tweets themselves, we will use a cached version of the geocoding results here so we can proceed directly. Please see https://cssbook.net/datasets for the code that was used to create this file so you can play around with it as well.
 
-::: {.callout-note appearance="simple" icon=false}
+Example [-@exm-funmap] shows how this data can be used to create a map of Twitter activity. First, the cached user data is retrieved, showing the correct location for Lahore but also illustrating the noisiness of the data with the location "Un peu partout". Next, this data is `joined` to the Twitter data, so the coordinates are filled in where known. Finally, we plot this information on a map, showing tweets with more retweets as larger dots. See Chapter [-@sec-chap-eda] for more information on visualization.
 
+::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-funmap}
 Location of COVID tweets
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python funmap-python}
 #| results: hide
 url = "https://cssbook.net/d/covid_users.csv"
@@ -289,44 +238,38 @@ gdf.plot(ax=ax, color="red", alpha=0.2, markersize=tw["retweet_count"])
 plt.show()
 
 ```
+
 ## R code
+
 ```{r funmap-r}
 url = "https://cssbook.net/d/covid_users.csv"
 users = read_csv(url)
 tw2 = left_join(tw, users)
 ggplot(mapping=aes(x=long, y=lat)) +
-  geom_polygon(aes(group=group), 
-    data=map_data("world"), 
+  geom_polygon(aes(group=group),
+    data=map_data("world"),
     fill="lightgray", colour = "white") +
-  geom_point(aes(size=retweet_count, 
-                 alpha=retweet_count), 
-             data=tw2, color="red") + 
-  theme_void() + theme(aspect.ratio=1) + 
-  guides(alpha=FALSE, size=FALSE) + 
-  ggtitle("Location of COVID tweets", 
+  geom_point(aes(size=retweet_count,
+                 alpha=retweet_count),
+             data=tw2, color="red") +
+  theme_void() + theme(aspect.ratio=1) +
+  guides(alpha=FALSE, size=FALSE) +
+  ggtitle("Location of COVID tweets",
           "Size indicates number of retweets")
 ```
 :::
 :::
 :::
 
-**Combining textual and structured information.**
-Since we know the location of a subset of our tweet's users,
-we can differentiate between e.g. American, European, and Asian tweets.
-Example [-@exm-funcompare] creates a very rough identification of North American tweets,
-and uses that to compute the relative frequency of words in those tweets compared to the rest.
-Not surprisingly, those tweets are much more about American politics, locations, and institutions.
-The other tweets talk about UK politics but also use a variety of names to refer to the pandemic.
-To play around with this, see if you can isolate e.g. Asian or South American tweets,
-or compare Spanish tweets from different locations.
+**Combining textual and structured information.** Since we know the location of a subset of our tweet's users, we can differentiate between e.g. American, European, and Asian tweets. Example [-@exm-funcompare] creates a very rough identification of North American tweets, and uses that to compute the relative frequency of words in those tweets compared to the rest. Not surprisingly, those tweets are much more about American politics, locations, and institutions. The other tweets talk about UK politics but also use a variety of names to refer to the pandemic. To play around with this, see if you can isolate e.g. Asian or South American tweets, or compare Spanish tweets from different locations.
 
-::: {.callout-note appearance="simple" icon=false}
-
+::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-funcompare}
 Corpus comparison: North American tweets vs. the rest
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python funcompare-python}
 #| results: hide
 nltk.download("stopwords")
@@ -338,24 +281,27 @@ for k in stopwords.words("english"):
     del cn[k]
     del cr[k]
 key = sh.ProportionShift(type2freq_1=cn, type2freq_2=cr)
-key.get_shift_graph().plot()
+# WvA: It looks like shifterator is not working anymore?
+# key.get_shift_graph().plot()
 
 ```
+
 ## R code
+
 ```{r funcompare-r}
 dfm = tw2 %>% mutate(northamerica=ifelse(
     long < -60 & lat > 25,"N. America","Rest"))%>%
-  filter(lang=="en") %>% 
-  corpus(docid_field="status_id") %>% 
+  filter(lang=="en") %>%
+  corpus(docid_field="status_id") %>%
   tokens(remove_punct=T) %>%
   tokens_group(northamerica) %>%
-  dfm(tolower=T) %>% 
+  dfm(tolower=T) %>%
   dfm_remove(stopwords("en")) %>%
   dfm_select(min_nchar=4)
 key = textstat_keyness(dfm, target="N. America")
 textplot_keyness(key, margin=0.2) +
-  ggtitle("Words preferred by North Americans", 
-          "(Only English-language tweets)") + 
+  ggtitle("Words preferred by North Americans",
+          "(Only English-language tweets)") +
   theme_void()
 
 ```
@@ -365,31 +311,15 @@ textplot_keyness(key, margin=0.2) +
 
 ## Fun With Networks {#sec-funnet}
 
-Twitter, of course, is a social network as well as a microblogging service:
-users are connected to other users because they follow each other and retweet and like each others' tweets.
-Using the `reply_to_screen_name` column, we can inspect the reply network contained in the COVID tweet dataset.
-Example [-@exm-fungraph] first uses the data summarization commands from <code>tidyverse</code>(R) and <code>pandas</code>(Python) to
-create a data frame of connections or `edges` listing how often each user replies each other user.
-The second code block shows how the *igraph* (R) and *networkx* (Python) packages are used to convert this edge list into a graph.
-From this graph, we select only the largest connected component and use a clustering algorithm to analyze which
-nodes (users) form cohesive subnetworks.
-Finally, a number of options are used to set the color and size of the edges, nodes, and labels,
-and the resulting network is plotted.
-As you can see, the central node is Donald Trump, who is replied by a large number of users,
-some of which are then replied by other users.
-You can play around with different settings for the plot options,
-or try to filter e.g. only tweets from a certain language. 
-You could also easily compute social network metrics such as centrality on this network,
-and/or export the network for further analysis in specialized social network analysis software.
-See Chapter [-@sec-chap-network] for more information on network analysis,
-and Chapter [-@sec-chap-datawrangling] for the summarization commands used to create the edge list.
+Twitter, of course, is a social network as well as a microblogging service: users are connected to other users because they follow each other and retweet and like each others' tweets. Using the `reply_to_screen_name` column, we can inspect the reply network contained in the COVID tweet dataset. Example [-@exm-fungraph] first uses the data summarization commands from <code>tidyverse</code>(R) and <code>pandas</code>(Python) to create a data frame of connections or `edges` listing how often each user replies each other user. The second code block shows how the *igraph* (R) and *networkx* (Python) packages are used to convert this edge list into a graph. From this graph, we select only the largest connected component and use a clustering algorithm to analyze which nodes (users) form cohesive subnetworks. Finally, a number of options are used to set the color and size of the edges, nodes, and labels, and the resulting network is plotted. As you can see, the central node is Donald Trump, who is replied by a large number of users, some of which are then replied by other users. You can play around with different settings for the plot options, or try to filter e.g. only tweets from a certain language. You could also easily compute social network metrics such as centrality on this network, and/or export the network for further analysis in specialized social network analysis software. See Chapter [-@sec-chap-network] for more information on network analysis, and Chapter [-@sec-chap-datawrangling] for the summarization commands used to create the edge list.
 
-::: {.callout-note appearance="simple" icon=false}
+::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-fungraph}
 Reply network in the COVID tweets.
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python fungraph-python}
 edges = tw2[["screen_name", "reply_to_screen_name"]]
 edges = edges.dropna().rename(
@@ -398,20 +328,23 @@ edges = edges.dropna().rename(
 edges.groupby(["from", "to"]).size().head()
 
 ```
+
 ## R code
+
 ```{r fungraph-r}
-edges = tw2 %>% 
-  select(from=screen_name, 
-         to=reply_to_screen_name) %>% 
+edges = tw2 %>%
+  select(from=screen_name,
+         to=reply_to_screen_name) %>%
   filter(to != "") %>%
-  group_by(to, from) %>% 
+  group_by(to, from) %>%
   summarize(n=n())
 head(edges)
 ```
 :::
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python fungraphb-python}
 #| results: hide
 g1 = nx.Graph()
@@ -429,7 +362,9 @@ nx.draw_networkx_edges(g2, pos)
 plt.show()
 
 ```
+
 ## R code
+
 ```{r fungraphb-r}
 # create igraph and select largest component
 g = graph_from_data_frame(edges)
@@ -443,7 +378,7 @@ V(g2)$frame.color = V(g2)$color
 # Set node (user) and edge (arrow) size
 V(g2)$size = degree(g2)^.5
 V(g2)$label.cex = V(g2)$size/3
-V(g2)$label = ifelse(degree(g2)<=1,"",V(g2)$name) 
+V(g2)$label = ifelse(degree(g2)<=1,"",V(g2)$name)
 E(g2)$width = E(g2)$n
 E(g2)$arrow.size= E(g2)$width/10
 plot(g2)
@@ -452,22 +387,15 @@ plot(g2)
 :::
 :::
 
-**Geographic networks.**
-In the final example of this chapter, we will combine the geographic and network information to
-show which regions of the world interact with each other.
-For this, in Example [-@exm-fungeonet] we join the user information to the edges data frame created above twice:
-once for the sender, once for the replied-to user.
-Then, we adapt the earlier code for plotting the map by adding a line for each node in the network.
-As you can see, users in the main regions (US, EU, India) mostly interact with each other,
-with almost all regions also interacting with the US.
+**Geographic networks.** In the final example of this chapter, we will combine the geographic and network information to show which regions of the world interact with each other. For this, in Example [-@exm-fungeonet] we join the user information to the edges data frame created above twice: once for the sender, once for the replied-to user. Then, we adapt the earlier code for plotting the map by adding a line for each node in the network. As you can see, users in the main regions (US, EU, India) mostly interact with each other, with almost all regions also interacting with the US.
 
-::: {.callout-note appearance="simple" icon=false}
-
+::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-fungeonet}
 Reply Network of Tweets
 
-::: {.panel-tabset}
+::: panel-tabset
 ## Python code
+
 ```{python fungeonet-python}
 #| results: hide
 u = users.drop(["location"], axis=1)
@@ -505,25 +433,26 @@ py = lambda point: point.y
 # plt.show()
 
 ```
+
 ## R code
+
 ```{r fungeonet-r}
-edges2 = edges %>% 
+edges2 = edges %>%
   inner_join(users, by=c("from"="screen_name"))%>%
-  inner_join(users, by=c("to"="screen_name"), 
-             suffix=c("", ".to")) %>% 
+  inner_join(users, by=c("to"="screen_name"),
+             suffix=c("", ".to")) %>%
   filter(lat != lat.to | long != long.to )
 ggplot(mapping=aes(x = long, y = lat)) +
   geom_polygon(aes(group=group),map_data("world"),
     fill="lightgray", colour = "white") +
-  geom_point(aes(size=retweet_count, 
+  geom_point(aes(size=retweet_count,
   alpha=retweet_count), data=tw2, color="red")+
   geom_curve(aes(xend=long.to,yend=lat.to,size=n),
              edges2, curvature=.1, alpha=.5) +
   theme_void() + guides(alpha=FALSE, size=FALSE) +
-  ggtitle("Retweet network of COVID tweets", 
+  ggtitle("Retweet network of COVID tweets",
   "Bubble size indicates total no. of retweets")
 ```
 :::
 :::
 :::
-

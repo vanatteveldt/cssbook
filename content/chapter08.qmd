@@ -7,8 +7,8 @@
 
 At the time of writing this chapter for the published book, `caret` was the state of the art Machine Learning package for R.
 We now think that the (newer) `tidymodels` package is a better choice in many regards.
-For this reason, we are planning to rewrite this chapter using that package. 
-See the [relevant github issue](https://github.com/vanatteveldt/cssbook/issues/6) for more information. 
+For this reason, we are planning to rewrite this chapter using that package.
+See the [relevant github issue](https://github.com/vanatteveldt/cssbook/issues/6) for more information.
 
 We also plan to add a section on Encoder Representation / Transformer models, see the [relevant github issue](https://github.com/vanatteveldt/cssbook/issues/4)
 :::
@@ -114,7 +114,7 @@ in the computational analysis of communication.
 
 In this chapter, we focus on *supervised* machine learning (SML)
 -- a form of machine learning, where we aim to predict a variable
-that, for at least a part of our data, is known. SML is usually applied to *classification* and *regression*  problems. To illustrate the 
+that, for at least a part of our data, is known. SML is usually applied to *classification* and *regression*  problems. To illustrate the
 idea, imagine that you are interested in predicting gender, based
 on Twitter biographies. You determine the gender for some of the
 biographies yourself and hand these examples over to the computer. The
@@ -193,7 +193,7 @@ mod.params
 df = read.csv("https://cssbook.net/d/media.csv")
 mod = lm(formula = "newspaper ~ age + gender",
          data = df)
-# summary(mod) would give a lot more info, 
+# summary(mod) would give a lot more info,
 # but we only care about the coefficients:
 mod
 ```
@@ -368,7 +368,7 @@ print(f"We have {len(X_train)} training and " f"{len(X_test)} test cases.")
 ```{r preparedata-r}
 df = read.csv("https://cssbook.net/d/media.csv")
 df = na.omit(df %>% mutate(
-    usesinternet=recode(internet, 
+    usesinternet=recode(internet,
             .default="user", `0`="non-user")))
 
 set.seed(42)
@@ -380,10 +380,10 @@ split = initial_split(df, prop = .8)
 traindata = training(split)
 testdata  = testing(split)
 
-X_train = select(traindata, 
+X_train = select(traindata,
                  c("age", "gender", "education"))
 y_train = traindata$usesinternet
-X_test = select(testdata, 
+X_test = select(testdata,
                 c("age", "gender", "education"))
 y_test = testdata$usesinternet
 
@@ -419,7 +419,7 @@ y_pred = myclassifier.predict(X_test)
 ```
 ## R code
 ```{r nb-r}
-myclassifier = train(x = X_train, y = y_train, 
+myclassifier = train(x = X_train, y = y_train,
                      method = "naive_bayes")
 y_pred = predict(myclassifier, newdata = X_test)
 ```
@@ -577,7 +577,7 @@ calculate $P(features)$ and $P(features|label)$ by just
 multiplying the probabilities of each individual feature.  Let's
 assume we have three features, $x_1, x_2, x_3$.  We now simply
 calculate the percentage of *all* cases that contain these
-features: $P(x_1)$, $P(x_2)$ and $P(x_3)$. 
+features: $P(x_1)$, $P(x_2)$ and $P(x_3)$.
 
 Then we do the same for the
 conditional probabilities and calculate the percentage of cases
@@ -788,13 +788,13 @@ y_pred = myclassifier.predict(X_test_scaled)
 ## R code
 ```{r svm-r}
 #| cache: true
-# !!! We normalize our features to have M=0 and 
-# SD=1. This is necessary as our features are not 
+# !!! We normalize our features to have M=0 and
+# SD=1. This is necessary as our features are not
 # measured on the same scale, which SVM requires.
 # Alternatively, rescale to [0:1] or [-1:1]
 
-myclassifier = train(x = X_train, y = y_train, 
-    preProcess = c("center", "scale"), 
+myclassifier = train(x = X_train, y = y_train,
+    preProcess = c("center", "scale"),
                      method = "svmLinear3")
 y_pred = predict(myclassifier, newdata = X_test)
 ```
@@ -892,7 +892,7 @@ y_pred = myclassifier.predict(X_test)
 ## R code
 ```{r randomforest-r}
 #| cache: true
-myclassifier = train(x = X_train, y = y_train, 
+myclassifier = train(x = X_train, y = y_train,
                      method = "rf")
 y_pred = predict(myclassifier, newdata = X_test)
 ```
@@ -1034,7 +1034,7 @@ Similarly, [@sec-chap-image] will show how a similar technique can be used to ex
 This involves creating a two-dimensional window over pixels rather than a unidimensional window over words, and often multiple convolutional layers are chained to detect features in increasingly large areas of the image.
 The underlying technique of convolutional networks, however, is the same in both cases.
 
-## Validation and Best Practices {#sec-validation} 
+## Validation and Best Practices {#sec-validation}
 ### Finding a Balance Between Precision and Recall {#sec-balance}
 
 In the previous sections, we have learned how to fit different models:
@@ -1119,8 +1119,8 @@ One approach is to print a table with three columns: the false
 positive rate, the true positive rate, and the threshold value. You
 then decide which FPR--TPR combination is most appealing to you, and
 use the corresponding threshold value. Alternatively, you can find the threshold value
-with the maximum distance between TPR and FPR, an approach also known as Yoden's J (Example 8.9). 
-Plotting the ROC curve can also help interpreting which 
+with the maximum distance between TPR and FPR, an approach also known as Yoden's J (Example 8.9).
+Plotting the ROC curve can also help interpreting which
 TPR/FPR combination is most promising (i.e., closest to the upper left corner).
 
 ::: {.callout-note appearance="simple" icon=false}
@@ -1141,11 +1141,11 @@ print(confusion_matrix(y_test, y_pred))
 ```
 ## R code
 ```{r cutoffpoint-r}
-m = glm(usesinternet ~ age + gender + education, 
+m = glm(usesinternet ~ age + gender + education,
         data=traindata, family="binomial")
 y_pred = predict(m, newdata = testdata,
                  type = "response")
-pred_default = as.factor(ifelse(y_pred>0.5, 
+pred_default = as.factor(ifelse(y_pred>0.5,
                             "user", "non-user"))
 
 print("Confusion matrix, default threshold (0.5)")
@@ -1323,7 +1323,7 @@ print(f"M={acc.mean():.2f}, SD={acc.std():.3f}")
 myclassifier = train(x = X_train, y = y_train,
     method = "glm", family="binomial",
     metric="Accuracy", trControl = trainControl(
-     method = "cv", number = 5, 
+     method = "cv", number = 5,
      returnResamp ="all", savePredictions=TRUE),)
 print(myclassifier$resample)
 print(myclassifier$results)
@@ -1413,7 +1413,7 @@ print(classification_report(y_test, search.predict(X_test_scaled)))
 ::: {.callout-note appearance="simple" icon=false}
 
 ::: {#exm-gridsearch3}
-A gridsearch in R. 
+A gridsearch in R.
 ## R code
 ```{r gridsearch3-r}
 #| cache: true
@@ -1421,12 +1421,12 @@ A gridsearch in R.
 grid = expand.grid(Loss=c("L1","L2"),
                    cost=c(100,1000))
 
-# Train the model using our previously defined 
+# Train the model using our previously defined
 # parameters
 gridsearch = train(x = X_train, y = y_train,
-    preProcess = c("center", "scale"), 
-    method = "svmLinear3", 
-    trControl = trainControl(method = "cv", 
+    preProcess = c("center", "scale"),
+    method = "svmLinear3",
+    trControl = trainControl(method = "cv",
             number = 5),
     tuneGrid = grid)
 gridsearch
@@ -1484,4 +1484,3 @@ While in the end, you can find a supervised machine learning
   sampling.
 
 [^6]: ([jakevdp.github.io/PythonDataScienceHandbook/05.07-support-vector-machines.html](https://jakevdp.github.io/PythonDataScienceHandbook/05.07-support-vector-machines.html))
-

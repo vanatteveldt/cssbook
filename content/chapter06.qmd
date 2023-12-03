@@ -80,7 +80,7 @@ This means that the original `d` is overwritten.
 ::: {.callout-note icon=false collapse=true}
 
 In R, the *tidyverse* function `select` is quite versatile.
-  You can specify multiple columns using `select(d, column1, column2)` 
+  You can specify multiple columns using `select(d, column1, column2)`
   or by specifying a range of columns: `select(d, column1:column3)`.
   Both commands keep only the specified columns.
   As in the example, you can also specify a negative selection with the minus sign:
@@ -129,7 +129,7 @@ d2
 ```{r data-filter-r}
 url="https://cssbook.net/d/guns-polls.csv"
 d = read_csv(url)
-d = rename(d, rep=`Republican Support`, 
+d = rename(d, rep=`Republican Support`,
            dem=`Democratic Support`)
 d = select(d, -URL)
 
@@ -195,15 +195,15 @@ d2 = pd.read_csv(url)
 # Note that when creating a new column,
 # you have to use df["col"] rather than df.col
 d2["rep2"] = d2.rep.str.replace("[^0-9\\.]", "")
-d2["rep2"] = pd.to_numeric(d2.rep2)
-d2["Support2"] = d2.Support.fillna(d.Support.mean())
+d2["rep2"] = pd.to_numeric(d2.rep2, errors='coerce')
+d2["Support2"] = d2.Support.fillna(d2.Support.mean())
 
 # Alternatively, clean with .assign
 # Note the need to use an anonymous function
 # (lambda) to chain calculations
 cleaned = d2.assign(
     rep2=d2.rep.str.replace("[^0-9\\.]", ""),
-    rep3=lambda d2: pd.to_numeric(d2.rep2),
+    rep3=lambda d2: pd.to_numeric(d2.rep2, errors='coerce'),
     Support2=d2.Support.fillna(d2.Support.mean()),
 )
 
@@ -222,20 +222,20 @@ cleaned.head()
 url="https://cssbook.net/d/guns-polls-dirty.csv"
 d2 = read_csv(url)
 
-# Option 1: clean with direct assignment. 
+# Option 1: clean with direct assignment.
 # Note the need to specify d2$ everywhere
 d2$rep2=str_replace_all(d2$rep, "[^0-9\\.]", "")
 d2$rep2 = as.numeric(d2$rep2)
-d2$Support2 = replace_na(d2$Support, 
+d2$Support2 = replace_na(d2$Support,
                         mean(d2$Support, na.rm=T))
 
 # Alternative, clean with mutate
-# No need to specify d2$, 
+# No need to specify d2$,
 # and we can assign to a new or existing object
-cleaned = mutate(d2, 
+cleaned = mutate(d2,
     rep2 = str_replace_all(rep, "[^0-9\\.]", ""),
     rep2 = as.numeric(rep2),
-    Support2 = replace_na(Support, 
+    Support2 = replace_na(Support,
         mean(Support, na.rm=TRUE)))
 
 # Finally, you can create your own function
@@ -270,7 +270,7 @@ Note that all these versions work fine and produce the same result.
 In the end, it is up to the researcher to determine which feels most natural given the circumstances.
 As noted above, in R we would generally prefer `mutate` over direct assignment,
 mostly because it fits nicely into the *tidyverse* workflow and you do not need to repeat the data frame name.
-In Python, we would generally prefer the direct assignment, unless a copy of the data with the changes made is convenient, 
+In Python, we would generally prefer the direct assignment, unless a copy of the data with the changes made is convenient,
 in which case `assign` can be more useful.
 
 ## Grouping and Aggregating {#sec-grouping}
@@ -366,7 +366,7 @@ d.groupby("Question").agg({"Support": ["mean", "std"]})
 ```
 ## R code
 ```{r aggregate2-r}
-d %>% group_by(Question) %>% 
+d %>% group_by(Question) %>%
   summarize(m=mean(Support), sd=sd(Support))
 ```
 :::
@@ -403,8 +403,8 @@ d.head()
 ```
 ## R code
 ```{r transform-r}
-d = d %>% group_by(Question) %>% 
-  mutate(mean = mean(Support), 
+d = d %>% group_by(Question) %>%
+  mutate(mean = mean(Support),
          deviation=Support - mean)
 head(d)
 ```
@@ -523,9 +523,9 @@ capital_fr.head()
 ```
 ## R code
 ```{r capital_1-r}
-private_fr = private %>% 
+private_fr = private %>%
     select(Year, fr_private=France)
-public_fr = public %>% 
+public_fr = public %>%
     select(Year, fr_public=France)
 capital_fr = full_join(private_fr, public_fr)
 # Data for Figure 3.6 (Piketty, 2014, p 128)
@@ -544,7 +544,7 @@ print(f"Pearson correlation: rho={r:.2},p={p:.3}")
 ## R code
 ```{r capital_2-r}
 # Are private and public capital correlated?
-cor.test(capital_fr$fr_private, 
+cor.test(capital_fr$fr_private,
          capital_fr$fr_public)
 ```
 :::
@@ -645,7 +645,7 @@ results.head()
 ## R code
 ```{r primary-r}
 r="https://cssbook.net/d/2016_primary_results.csv"
-results = read_csv(r) 
+results = read_csv(r)
 head(results)
 ```
 :::
@@ -695,10 +695,10 @@ r.head()
 ```
 ## R code
 ```{r nested-r}
-c = counties %>% 
+c = counties %>%
   select("fips", "area_name", "Race_black_pct")
-r = results %>% 
-  filter(candidate == "Hillary Clinton") %>% 
+r = results %>%
+  filter(candidate == "Hillary Clinton") %>%
   select(fips, votes, fraction_votes)
 r = inner_join(r, c)
 cor.test(r$Race_black_pct, r$fraction_votes)
@@ -796,15 +796,15 @@ d = bind_rows(
     private %>% add_column(type="private"),
     public %>% add_column(type="public"))
 countries = c("Germany", "France", "U.K.")
-d %>% filter(country %in% countries) %>% 
-  ggplot(aes(x=Year, y=capital, 
-             color=country, lty=type)) + 
-  geom_line()+ 
+d %>% filter(country %in% countries) %>%
+  ggplot(aes(x=Year, y=capital,
+             color=country, lty=type)) +
+  geom_line()+
   ylab("Capital (% of national income)") +
-  guides(colour=guide_legend("Country"), 
-         linetype=guide_legend("Capital")) + 
-  theme_classic() + 
-  ggtitle("Capital in Europe, 1970 - 2010", 
+  guides(colour=guide_legend("Country"),
+         linetype=guide_legend("Capital")) +
+  theme_classic() +
+  ggtitle("Capital in Europe, 1970 - 2010",
     "Partial reproduction of Piketty fig 4.4")
 
 ```
@@ -880,14 +880,14 @@ d = read_excel(dest,sheet="TS8.2",skip=4)
 d = d%>% rename("year"=1)
 
 #2 Reshape: Pivoting to long, dropping missing
-d = d%>%pivot_longer(-year, values_to="share")%>% 
+d = d%>%pivot_longer(-year, values_to="share")%>%
         na.omit()
 
 #3 Normalize
 cols = c(NA,"percent","type",NA,"capital_gains")
 d = d %>% separate(name, into=cols,
-   sep=" ", extra="merge", fill="right") %>% 
-  mutate(year=as.numeric(year), 
+   sep=" ", extra="merge", fill="right") %>%
+  mutate(year=as.numeric(year),
          capital_gains=!is.na(capital_gains))
 head(d)
 ```
@@ -910,13 +910,13 @@ plt.set(xlabel="Year", ylabel="Share of income going to top-1%")
 ## R code
 ```{r excel2-r}
 #4 Filter for the desired data
-subset = d %>% filter(year >=1910, 
-                      percent=="1%", 
+subset = d %>% filter(year >=1910,
+                      percent=="1%",
                       capital_gains==F)
 
 #5 Analyze and/or visualization
 ggplot(subset, aes(x=year, y=share, color=type)) +
-  geom_line() + xlab("Year") + 
+  geom_line() + xlab("Year") +
 ylab("Share of income going to top-1%") +
   theme_classic()
 
@@ -936,4 +936,3 @@ ylab("Share of income going to top-1%") +
 [^5]: See Section [-@sec-datatypes] for more information on working with dictionaries
 
 [^6]: Of course, the fact that this is time series data means that the independence assumption of regular correlation is violated badly, so this should be interpreted as a descriptive statistic, e.g. in the years with high private capital there is low public capital and the other way around.
-
