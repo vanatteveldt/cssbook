@@ -693,23 +693,23 @@ m.summary()
 
 ```{r rnnmodel-r}
 #| cache: true
-text_vectorization = layer_text_vectorization(
-    max_tokens=10000, output_sequence_length=50)
-adapt(text_vectorization, d$lemmata)
+# text_vectorization = layer_text_vectorization(
+#     max_tokens=10000, output_sequence_length=50)
+# adapt(text_vectorization, d$lemmata)
 
-input = layer_input(shape=1, dtype = "string")
-output = input %>% 
-  text_vectorization() %>% 
-  layer_embedding(input_dim = 10000 + 1, 
-                  output_dim = 16) %>%
-  layer_conv_1d(filters=128, kernel_size=3, 
-                activation="relu") %>%
-  layer_global_max_pooling_1d() %>%
-  layer_dense(units = 64, activation = "relu") %>%
-  layer_dense(units = 1, activation = "tanh")
+# input = layer_input(shape=1, dtype = "string")
+# output = input %>% 
+#   text_vectorization() %>% 
+#   layer_embedding(input_dim = 10000 + 1, 
+#                   output_dim = 16) %>%
+# layer_conv_1d(filters=128, kernel_size=3, 
+#                 activation="relu") %>%
+#   layer_global_max_pooling_1d() %>%
+#   layer_dense(units = 64, activation = "relu") %>%
+#   layer_dense(units = 1, activation = "tanh")
 
-model = keras_model(input, output)
-model
+# model = keras_model(input, output)
+# model
 ```
 :::
 :::
@@ -750,18 +750,18 @@ print(f"Accuracy: {acc}")
 ```{r rnn-r}
 #| cache: true
 # Split data into train and test
-d_train = d %>% slice_sample(n=4000)
-d_test = d %>% anti_join(d_train)
+# d_train = d %>% slice_sample(n=4000)
+# d_test = d %>% anti_join(d_train)
 
 # Train model
-compile(model, loss = "binary_crossentropy",
-        optimizer = "adam", metrics = "accuracy")
-fit(model, d_train$lemmata, d_train$value,
-  epochs = 10, batch_size = 512, 
-  validation_split = 0.2)
+# compile(model, loss = "binary_crossentropy",
+        # optimizer = "adam", metrics = "accuracy")
+# fit(model, d_train$lemmata, d_train$value,
+#   epochs = 10, batch_size = 512, 
+#   validation_split = 0.2)
 # Validate against test data
-eval=evaluate(model, d_test$lemmata, d_test$value)
-print(glue("Accuracy: {eval['accuracy']}"))
+# eval=evaluate(model, d_test$lemmata, d_test$value)
+# print(glue("Accuracy: {eval['accuracy']}"))
 ```
 :::
 :::
