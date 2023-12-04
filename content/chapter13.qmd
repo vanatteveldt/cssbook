@@ -561,7 +561,7 @@ In terms of distance, we can also wonder what the edges or nodes that share a bo
 
 ::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-incident}
-Incident edges and neighbors of J. McCain the imaginary Facebook Network
+Incident edges and neighbors of J. McCain in the imaginary Facebook Network
 
 ::: panel-tabset
 ## Python code
@@ -893,7 +893,7 @@ In [@exm-clustalgo] we use `cluster_louvain`, `cluster_fast_greedy` and `cluster
 
 ::: {.callout-note appearance="simple" icon="false"}
 ::: {#exm-clustalgo}
-Community detection with Louvain Propagating Label and Greedy Optimization
+Community detection with Louvain, Propagating Label and Greedy Optimization
 
 ::: panel-tabset
 ## Python code
