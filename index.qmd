@@ -55,14 +55,14 @@ If you are willing to contribute in a more major way (e.g. rewrite or add an ent
 
 To cite this book, use:
 
-Van Atteveldt, W., Trilling, D., & Calderón, C. A. (2022). *Computational Analysis of Communication*. Wiley Blackwell.
+Van Atteveldt, W., Trilling, D., & Arcila Calderón, C. (2022). *Computational Analysis of Communication*. Wiley Blackwell.
 
 Bibtex:
 
 ```
 @book{vanatteveldt2022computational,
   title={Computational Analysis of Communication},
-  author={{Van Atteveldt}, Wouter and Trilling, Damian and Calder{\'o}n, Carlos Arc{\'\i}la},
+  author={{Van Atteveldt}, Wouter and Trilling, Damian and Arcila Calder{\'o}n, Carlos},
   year={2022},
   publisher={Wiley Blackwell}
 }
