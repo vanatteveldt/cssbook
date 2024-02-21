@@ -194,7 +194,7 @@ d2 = pd.read_csv(url)
 # Option 1: clean with direct assignment
 # Note that when creating a new column,
 # you have to use df["col"] rather than df.col
-d2["rep2"] = d2.rep.str.replace("[^0-9\\.]", "")
+d2["rep2"] = d2.rep.str.replace("[^0-9\\.]", "", regex=True)
 d2["rep2"] = pd.to_numeric(d2.rep2, errors='coerce')
 d2["Support2"] = d2.Support.fillna(d2.Support.mean())
 
@@ -202,7 +202,7 @@ d2["Support2"] = d2.Support.fillna(d2.Support.mean())
 # Note the need to use an anonymous function
 # (lambda) to chain calculations
 cleaned = d2.assign(
-    rep2=d2.rep.str.replace("[^0-9\\.]", ""),
+    rep2=d2.rep.str.replace("[^0-9\\.]", "", regex=True),
     rep3=lambda d2: pd.to_numeric(d2.rep2, errors='coerce'),
     Support2=d2.Support.fillna(d2.Support.mean()),
 )
